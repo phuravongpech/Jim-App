@@ -1,9 +1,9 @@
-import { Entity, Column,PrimaryColumn, OneToMany } from "typeorm";
-import { WorkoutExercise } from "src/typeorm/entities/workoutexercises.entity";
+import { Entity, Column, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { WorkoutExercise } from './workoutexercise.entity';
 
-@Entity()
+@Entity('workout')
 export class Workout{
-    @PrimaryColumn()
+    @PrimaryGeneratedColumn()
     id: number;
 
     @Column()

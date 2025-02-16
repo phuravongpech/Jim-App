@@ -1,9 +1,9 @@
-import { Entity, PrimaryColumn, Column, OneToMany } from 'typeorm';
-import { WorkoutExercise } from 'src/typeorm/entities/workoutexercises.entity';
+import { Entity, Column, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { WorkoutExercise } from './workoutexercise.entity';
 
-@Entity('exercises')
+@Entity('exercise')
 export class Exercise {
-    @PrimaryColumn()
+    @PrimaryGeneratedColumn()
     id: string;
 
     @Column()
@@ -21,7 +21,7 @@ export class Exercise {
     @Column()
     name: string;
     
-    @Column()
+    @Column('text')
     instruction: string;
 
     @OneToMany(()=> WorkoutExercise, workoutExercise => workoutExercise.exercise)

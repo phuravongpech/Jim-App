@@ -1,11 +1,11 @@
-import { ActivityLog } from "src/typeorm/entities/activitylog.entity";
-import { Exercise } from "src/typeorm/entities/exercise.entity";
-import { Workout } from "src/typeorm/entities/workout.enity";
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
+import { Entity, Column, ManyToOne, OneToMany, JoinColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { Exercise } from './exercise.entity';
+import { ActivityLog } from './activitylog.entity';
+import { Workout } from './workout.entity';
 
-@Entity('workoutexercise')
+@Entity('workout_exercise')
 export class WorkoutExercise{
-    @PrimaryColumn()
+    @PrimaryGeneratedColumn()
     id:number;
 
     @ManyToOne(()=> Workout, (workout) => workout.workoutExercises , { onDelete: 'CASCADE' })

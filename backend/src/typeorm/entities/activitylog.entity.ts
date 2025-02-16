@@ -1,9 +1,9 @@
-import { Entity, Column, ManyToOne, PrimaryColumn } from 'typeorm';
-import { WorkoutExercise } from 'src/typeorm/entities/workoutexercises.entity';
+import { Entity, Column, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { WorkoutExercise } from './workoutexercise.entity';
 
-@Entity()
+@Entity('activity_log')
 export class ActivityLog {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   id: number;
 
   @ManyToOne(() => WorkoutExercise, { onDelete: 'CASCADE' })
