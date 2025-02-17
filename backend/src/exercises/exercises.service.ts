@@ -1,7 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
 import axios from 'axios';
 
 @Injectable()
