@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
 import { WorkoutsService } from './workouts.service';
 import { CreateWorkoutDto } from './dto/create-workout.dto';
 
@@ -19,5 +19,10 @@ export class WorkoutsController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.workoutsService.findOne(+id);
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.workoutsService.remove(+id);
   }
 }

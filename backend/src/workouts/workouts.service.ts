@@ -3,37 +3,68 @@ import { CreateWorkoutDto } from './dto/create-workout.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Workout } from '../typeorm/entities/workout.entity';
+import { ResponseService, ResponsePayload } from '../common/services/response.service';
 
 @Injectable()
 export class WorkoutsService {
   constructor(
     @InjectRepository(Workout)
     private readonly workoutRepository: Repository<Workout>,
+    private readonly responseService: ResponseService,
   ) { }
 
-  async create(createWorkoutDto: CreateWorkoutDto): Promise<Workout> {
-    const workout = this.workoutRepository.create(createWorkoutDto);
-    return this.workoutRepository.save(workout);
-  }
+  async create(createWorkoutDto: CreateWorkoutDto): Promise<ResponsePayload<Workout>> {
+    try {
+      const workout = this.workoutRepository.create(createWorkoutDto);
+      const savedWorkout = await this.workoutRepository.save(workout);
 
-  async findAll(): Promise<Workout[]> {
-    const workouts = this.workoutRepository.find();
-    return workouts;
-  }
+      return this.responseService.created(savedWorkout, 'Workout created successfully');
 
-  async findOne(id: number): Promise<Workout | null> {
-    const workout = this.workoutRepository.findOne({
-      where: { id }
-    });
-
-    if (!workout) {
-      throw new NotFoundException(`Workout with ID ${id} not found`);
+    } catch (error) {
+      return this.responseService.error('Failed to create workout', error.status || 500);
     }
-
-    return workout;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} workout`;
+  async findAll(): Promise<ResponsePayload<Workout[]>> {
+    try {
+      const workouts = await this.workoutRepository.find();
+
+      return this.responseService.success(workouts, 'All workouts fetched successfully');
+
+    } catch (error) {
+      return this.responseService.error('Failed request all workouts', error.status || 500);
+    }
+  }
+
+  async findOne(id: number): Promise<ResponsePayload<Workout | null>> {
+    try {
+      const workout = await this.workoutRepository.findOne({ where: { id } });
+
+      if (!workout) {
+        return this.responseService.notFound('Workout');
+      }
+
+      return this.responseService.success(workout, 'Workout fetched successfully');
+
+    } catch (error) {
+      return this.responseService.error('Failed request all workouts', error.status || 500);
+    }
+  }
+
+  async remove(id: number): Promise<ResponsePayload<Workout | null>> {
+    try {
+      const workout = await this.workoutRepository.findOne({ where: { id } });
+
+      if (!workout) {
+        return this.responseService.notFound('Workout');
+      }
+
+      await this.workoutRepository.remove(workout);
+
+      return this.responseService.success(null, 'Workout deleted successfully');
+
+    } catch (error) {
+      return this.responseService.error('Failed to delete workout', error.status || 500);
+    }
   }
 }
