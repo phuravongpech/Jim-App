@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateWorkoutDto } from './dto/create-workout.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -13,15 +13,24 @@ export class WorkoutsService {
 
   async create(createWorkoutDto: CreateWorkoutDto): Promise<Workout> {
     const workout = this.workoutRepository.create(createWorkoutDto);
-    return await this.workoutRepository.save(workout);
+    return this.workoutRepository.save(workout);
   }
 
-  findAll() {
-    return `This action returns all workouts`;
+  async findAll(): Promise<Workout[]> {
+    const workouts = this.workoutRepository.find();
+    return workouts;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} workout`;
+  async findOne(id: number): Promise<Workout | null> {
+    const workout = this.workoutRepository.findOne({
+      where: { id }
+    });
+
+    if (!workout) {
+      throw new NotFoundException(`Workout with ID ${id} not found`);
+    }
+
+    return workout;
   }
 
   remove(id: number) {
