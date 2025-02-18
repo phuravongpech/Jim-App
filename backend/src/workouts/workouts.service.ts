@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Workout } from '../typeorm/entities/workout.entity';
 import { ResponseService, ResponsePayload } from '../common/services/response.service';
+import { UpdateWorkoutDto } from './dto/update-workout.dto';
 
 @Injectable()
 export class WorkoutsService {
@@ -50,6 +51,23 @@ export class WorkoutsService {
       return this.responseService.error('Failed request all workouts', error.status || 500);
     }
   }
+
+  async update(id: number, updateWorkoutDto: UpdateWorkoutDto): Promise<ResponsePayload<Workout | null>> {
+          try {
+              const workout = await this.workoutRepository.findOne({ where: { id } });
+  
+              if (!workout) {
+                  return this.responseService.notFound('Workout exercise');
+              }
+  
+              Object.assign(workout, updateWorkoutDto);
+              const updatedWorkout = await this.workoutRepository.save(workout);
+  
+              return this.responseService.success(updatedWorkout, 'Workout updated successfully');
+          } catch (error) {
+              return this.responseService.error('Failed to update workout', error.status || 500);
+          }
+      }
 
   async remove(id: number): Promise<ResponsePayload<Workout | null>> {
     try {

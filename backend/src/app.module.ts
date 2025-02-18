@@ -6,6 +6,8 @@ import { AppConfig, DatabaseConfig } from './config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ExercisesModule } from './exercises/exercises.module';
 import { WorkoutsModule } from './workouts/workouts.module';
+import { ActivitylogService } from './activitylog/activitylog.service';
+import { ActivitylogModule } from './activitylog/activitylog.module';
 
 @Module({
   imports: [
@@ -22,9 +24,10 @@ import { WorkoutsModule } from './workouts/workouts.module';
       inject: [ConfigService],
     }),
     ExercisesModule,
-    WorkoutsModule
+    WorkoutsModule,
+    ActivitylogModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, ActivitylogService],
 })
 export class AppModule { }
