@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { Workout } from '../typeorm/entities/workout.entity';
 import { ResponseService, ResponsePayload } from '../common/services/response.service';
 import { UpdateWorkoutDto } from './dto/update-workout.dto';
+import { WorkoutExerciseService } from '@src/workoutexercise/workoutexercise.service';
 
 @Injectable()
 export class WorkoutsService {
@@ -12,14 +13,24 @@ export class WorkoutsService {
     @InjectRepository(Workout)
     private readonly workoutRepository: Repository<Workout>,
     private readonly responseService: ResponseService,
+    private readonly workoutExerciseService: WorkoutExerciseService
   ) { }
 
-  async create(createWorkoutDto: CreateWorkoutDto): Promise<ResponsePayload<Workout>> {
+  async create(createWorkoutDto: CreateWorkoutDto): Promise<ResponsePayload<CreateWorkoutDto>> {
     try {
-      const workout = this.workoutRepository.create(createWorkoutDto);
+      const { exercises, ...workoutData } = createWorkoutDto;
+
+      const workout = this.workoutRepository.create(workoutData);
       const savedWorkout = await this.workoutRepository.save(workout);
 
-      return this.responseService.created(savedWorkout, 'Workout created successfully');
+      for (const exercise of exercises) {
+        await this.workoutExerciseService.create({
+          ...exercise,
+          workoutId: savedWorkout.id
+        })
+      }
+
+      return this.responseService.created(createWorkoutDto, 'Workout created successfully');
 
     } catch (error) {
       return this.responseService.error('Failed to create workout', error.status || 500);
@@ -53,21 +64,21 @@ export class WorkoutsService {
   }
 
   async update(id: number, updateWorkoutDto: UpdateWorkoutDto): Promise<ResponsePayload<Workout | null>> {
-          try {
-              const workout = await this.workoutRepository.findOne({ where: { id } });
-  
-              if (!workout) {
-                  return this.responseService.notFound('Workout exercise');
-              }
-  
-              Object.assign(workout, updateWorkoutDto);
-              const updatedWorkout = await this.workoutRepository.save(workout);
-  
-              return this.responseService.success(updatedWorkout, 'Workout updated successfully');
-          } catch (error) {
-              return this.responseService.error('Failed to update workout', error.status || 500);
-          }
+    try {
+      const workout = await this.workoutRepository.findOne({ where: { id } });
+
+      if (!workout) {
+        return this.responseService.notFound('Workout exercise');
       }
+
+      Object.assign(workout, updateWorkoutDto);
+      const updatedWorkout = await this.workoutRepository.save(workout);
+
+      return this.responseService.success(updatedWorkout, 'Workout updated successfully');
+    } catch (error) {
+      return this.responseService.error('Failed to update workout', error.status || 500);
+    }
+  }
 
   async remove(id: number): Promise<ResponsePayload<Workout | null>> {
     try {

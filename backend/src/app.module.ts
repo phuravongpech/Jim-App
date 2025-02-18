@@ -28,6 +28,6 @@ import { ActivitylogModule } from './activitylog/activitylog.module';
     ActivitylogModule
   ],
   controllers: [AppController],
-  providers: [AppService, ActivitylogService],
+  providers: [AppService],
 })
 export class AppModule { }
