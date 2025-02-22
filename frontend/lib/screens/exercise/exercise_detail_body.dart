@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/common/colors.dart';
+import 'package:frontend/common/theme.dart';
 import 'package:frontend/controller/exercise_detail_controller.dart';
 
 class ExerciseDetailBody extends StatelessWidget {
@@ -75,7 +75,7 @@ class ExerciseDetailBody extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: const Color(0xFFF5F7FA),
+            color: AppColor.white,
             borderRadius: BorderRadius.circular(16),
           ),
           child: Column(
@@ -116,7 +116,7 @@ class ExerciseDetailBody extends StatelessWidget {
             color: AppColor.primary,
             borderRadius: BorderRadius.circular(12),
           ),
-          child: Icon(icon, color: const Color(0xFF2D3142), size: 24),
+          child: Icon(icon, color: AppColor.black, size: 24),
         ),
         const SizedBox(width: 16),
         Expanded(
@@ -126,7 +126,7 @@ class ExerciseDetailBody extends StatelessWidget {
               Text(
                 title,
                 style: const TextStyle(
-                  color: Color(0xFF9BA3B2),
+                  color: AppColor.black,
                   fontSize: 14,
                 ),
               ),
@@ -136,7 +136,7 @@ class ExerciseDetailBody extends StatelessWidget {
                     .map((word) => word[0].toUpperCase() + word.substring(1))
                     .join(' '),
                 style: const TextStyle(
-                  color: Color(0xFF2D3142),
+                  color: AppColor.black,
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
                 ),
@@ -157,14 +157,14 @@ class ExerciseDetailBody extends StatelessWidget {
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
-            color: Color(0xFF2D3142),
+            color: AppColor.black,
           ),
         ),
         const SizedBox(height: 16),
         Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: const Color(0xFFF5F7FA),
+            color: AppColor.white,
             borderRadius: BorderRadius.circular(16),
           ),
           child: Row(
@@ -177,7 +177,7 @@ class ExerciseDetailBody extends StatelessWidget {
                 ),
                 child: const Icon(
                   Icons.fitness_center,
-                  color: Color(0xFF2D3142),
+                  color: AppColor.black,
                   size: 24,
                 ),
               ),
@@ -185,7 +185,7 @@ class ExerciseDetailBody extends StatelessWidget {
               Text(
                 controller.formattedEquipment,
                 style: const TextStyle(
-                  color: Color(0xFF2D3142),
+                  color: AppColor.black,
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
                 ),

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:frontend/common/colors.dart';
-import 'package:frontend/screens/exercise/exercise_screen.dart';
+import 'package:frontend/common/theme.dart';
+import 'package:frontend/routes/route_manager.dart';
+import 'package:frontend/screens/workout/workout_screen.dart';
 import 'package:get/get.dart';
 
 void main() async {
@@ -12,7 +13,8 @@ void main() async {
   }
   runApp(GetMaterialApp(
     debugShowCheckedModeBanner: false,
+    getPages: routes,
     color: AppColor.primaryBackground,
-    home: ExerciseScreen(),
+    home: WorkoutScreen(),
   ));
 }

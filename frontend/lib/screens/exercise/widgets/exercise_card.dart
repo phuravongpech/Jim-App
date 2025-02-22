@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/common/colors.dart';
+import 'package:frontend/common/theme.dart';
 import 'package:frontend/models/exercise.dart';
-import 'package:frontend/screens/exercise/exercise_detail_screen.dart';
+import 'package:get/get.dart';
 
 class ExerciseCard extends StatelessWidget {
   const ExerciseCard({
@@ -16,14 +16,7 @@ class ExerciseCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ExerciseDetail(
-              exercise: exercise,
-            ),
-          ),
-        );
+        Get.toNamed('/exercise-detail', arguments: exercise);
       },
       child: Card(
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -48,7 +41,7 @@ class ExerciseCard extends StatelessWidget {
                   height: 200,
                   fit: BoxFit.cover,
                   placeholder: (context, url) => Container(
-                    height: 180,
+                    height: 200,
                     color: AppColor.white,
                     child: const Center(
                       child: CircularProgressIndicator(
@@ -57,15 +50,20 @@ class ExerciseCard extends StatelessWidget {
                       ),
                     ),
                   ),
+                  errorWidget: (context, url, error) => Container(
+                    height: 200,
+                    color: Colors.grey[300],
+                    child: const Icon(Icons.error, color: AppColor.warning),
+                  ),
                 ),
               ),
             ),
-            // Exercise Details
             Padding(
               padding: const EdgeInsets.only(left: 14, top: 8, bottom: 8),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Exercise Name
                   Text(
                     exercise.name
                         .split(' ')
@@ -78,13 +76,15 @@ class ExerciseCard extends StatelessWidget {
                       color: AppColor.textPrimary,
                     ),
                   ),
+                  // Target and Secondary Muscles
                   Text(
-                    "${exercise.target}, ${exercise.secondaryMuscles!.join(', ')}",
+                    "${exercise.target}${exercise.secondaryMuscles != null && exercise.secondaryMuscles!.isNotEmpty ? ', ${exercise.secondaryMuscles!.join(', ')}' : ''}",
                     style: const TextStyle(
                       fontSize: 14,
                       color: AppColor.textSecondary,
                     ),
                   ),
+                  // Equipment
                   Text(
                     exercise.equipment,
                     style: const TextStyle(

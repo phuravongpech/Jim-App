@@ -4,48 +4,70 @@ import 'package:get/get.dart';
 
 class ExerciseController extends GetxController {
   final ExerciseService _exerciseService = ExerciseService();
+
   RxList<Exercise> exercises = <Exercise>[].obs;
-  RxBool isLoading = true.obs;
+  RxBool isLoading = false.obs;
   RxString selectedBodyPart = 'chest'.obs;
   RxInt page = 0.obs;
-  final int limit = 10;
+
+  final int limit = 10; // Number of exercises per page
 
   @override
   void onInit() {
     super.onInit();
-    fetchExercises();
+    fetchExercises(); // Fetch exercises on initialization
   }
 
-  Future<void> fetchExercises() async {
+  Future<void> fetchExercises({bool reset = false}) async {
+    if (reset) {
+      exercises.clear();
+      page.value = 0; // Reset to the first page
+    }
+
     try {
       isLoading.value = true;
+
       final fetchedExercises = await _exerciseService.getExercises(
         page: page.value,
         limit: limit,
         bodyPart: selectedBodyPart.value,
       );
 
-      exercises.value = fetchedExercises;
+      if (fetchedExercises.isNotEmpty) {
+        exercises.addAll(fetchedExercises);
+        page.value++; // Increment page for the next fetch
+      } else {
+        Get.snackbar('End of List', 'No more exercises available.');
+      }
     } catch (e) {
       print('Error loading exercises: $e');
+      Get.snackbar('Error', 'Failed to load exercises: $e');
     } finally {
       isLoading.value = false;
     }
   }
 
   Future<void> searchExercises(String query) async {
+    if (query.isEmpty) {
+      fetchExercises(reset: true);
+      return;
+    }
+
     try {
       isLoading.value = true;
-      final searchedExercises =
-          await _exerciseService.searchExercises(query: query);
 
-      if (searchedExercises.isNotEmpty) {
-        exercises.value = searchedExercises
-            .where((exercise) =>
-                exercise.name.toLowerCase().contains(query.toLowerCase()))
-            .toList();
-      } else {
-        exercises.clear();
+      final allExercises = await _exerciseService.getExercises(
+        page: 0,
+        limit: 100, // Fetch a large number of exercises for searching
+        bodyPart: selectedBodyPart.value,
+      );
+
+      exercises.value = allExercises
+          .where((exercise) =>
+              exercise.name.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+
+      if (exercises.isEmpty) {
         Get.snackbar('No Results', 'No exercises found for "$query".');
       }
     } catch (e) {

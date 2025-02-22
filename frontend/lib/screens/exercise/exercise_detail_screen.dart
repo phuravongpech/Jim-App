@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/common/colors.dart';
+import 'package:frontend/common/theme.dart';
 import 'package:frontend/controller/exercise_detail_controller.dart';
 import 'package:frontend/models/exercise.dart';
 import 'package:frontend/screens/exercise/exercise_detail_body.dart';

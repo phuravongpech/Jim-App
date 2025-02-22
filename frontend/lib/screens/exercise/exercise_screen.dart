@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/common/theme.dart';
 import 'package:frontend/controller/exercise_controller.dart';
 import 'package:frontend/screens/exercise/widgets/exercise_card.dart';
+import 'package:frontend/widgets/ButtomNavigationBar/custom_bottom_navbar.dart';
 import 'package:get/get.dart';
 
 class ExerciseScreen extends StatelessWidget {
   ExerciseScreen({super.key});
 
-  final exerciseController = Get.put(ExerciseController());
+  final ExerciseController exerciseController = Get.put(ExerciseController());
   final TextEditingController _searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColor.primaryBackground,
       appBar: _buildAppBar(),
       body: Column(
         children: [
@@ -27,10 +30,11 @@ class ExerciseScreen extends StatelessWidget {
                 return const Center(child: Text('No exercises found.'));
               }
 
+              final exercisesList = exerciseController.exercises.toList();
               return ListView.builder(
-                itemCount: exerciseController.exercises.length,
+                itemCount: exercisesList.length,
                 itemBuilder: (context, index) {
-                  final exercise = exerciseController.exercises[index];
+                  final exercise = exercisesList[index];
                   return ExerciseCard(exercise: exercise);
                 },
               );
@@ -38,6 +42,7 @@ class ExerciseScreen extends StatelessWidget {
           ),
         ],
       ),
+      bottomNavigationBar: const CustomBottomNavBar(),
     );
   }
 
@@ -55,13 +60,14 @@ class ExerciseScreen extends StatelessWidget {
 
   Widget _buildSearchExercise() {
     return Card(
+      color: AppColor.white,
       margin: const EdgeInsets.only(left: 16, right: 16, top: 8),
       elevation: 3,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.0),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
         child: TextField(
           controller: _searchController,
           decoration: InputDecoration(
@@ -70,7 +76,7 @@ class ExerciseScreen extends StatelessWidget {
               icon: const Icon(Icons.clear),
               onPressed: () {
                 _searchController.clear();
-                exerciseController.fetchExercises(); // Reset the list
+                exerciseController.fetchExercises(reset: true);
               },
             ),
             prefixIcon: const Icon(Icons.search),
@@ -79,6 +85,8 @@ class ExerciseScreen extends StatelessWidget {
           onSubmitted: (value) {
             if (value.isNotEmpty) {
               exerciseController.searchExercises(value);
+            } else {
+              exerciseController.fetchExercises(reset: true);
             }
           },
         ),

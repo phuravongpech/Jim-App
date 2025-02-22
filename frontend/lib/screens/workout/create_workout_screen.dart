@@ -1,0 +1,139 @@
+import 'package:flutter/material.dart';
+import 'package:frontend/common/theme.dart';
+import 'package:get/get.dart';
+
+class CreateWorkoutScreen extends StatelessWidget {
+  const CreateWorkoutScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColor.primaryBackground,
+      appBar: _buildAppBar(),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Workout Title',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                  color: AppColor.textPrimary),
+            ),
+            const TextField(
+              decoration: InputDecoration(
+                hintText: 'Input Workout Title',
+                labelStyle: TextStyle(
+                    color: AppColor.textSecondary,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 12),
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 24),
+            const Text(
+              'Description (Optional)',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                  color: AppColor.textPrimary),
+            ),
+            const TextField(
+              maxLines: 3,
+              decoration: InputDecoration(
+                hintText: 'Description...',
+                labelStyle: TextStyle(
+                    color: AppColor.textSecondary,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 12),
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 24),
+            const Text(
+              'Exercises',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Expanded(
+              child: Center(
+                child: Text(
+                  'No exercises added yet',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: AppColor.textSecondary,
+                  ),
+                ),
+              ),
+            ),
+            _buildAddButton(),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+AppBar _buildAppBar() {
+  return AppBar(
+    centerTitle: true,
+    backgroundColor: AppColor.white,
+    elevation: 0,
+    leading: IconButton(
+      icon: const Icon(
+        Icons.arrow_back,
+        color: AppColor.black,
+      ),
+      onPressed: () {
+        Get.back();
+      },
+    ),
+    title: const Text(
+      'Create Workout',
+      style: TextStyle(
+        color: AppColor.black,
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+    actions: [
+      TextButton(
+        onPressed: () {},
+        child: const Text(
+          'Save',
+          style: TextStyle(
+              color: AppColor.primary,
+              fontWeight: FontWeight.bold,
+              fontSize: 16),
+        ),
+      ),
+    ],
+  );
+}
+
+Widget _buildAddButton() {
+  return SizedBox(
+    width: double.infinity,
+    child: ElevatedButton.icon(
+      onPressed: () {},
+      icon: const Icon(
+        Icons.add,
+        color: AppColor.white,
+      ),
+      label: const Text('Add Exercises'),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColor.primary,
+        foregroundColor: AppColor.white,
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        textStyle: const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    ),
+  );
+}
