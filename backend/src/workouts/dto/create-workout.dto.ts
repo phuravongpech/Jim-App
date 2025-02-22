@@ -1,20 +1,19 @@
-import { IsArray, IsString, ValidateNested } from "class-validator";
-import { Type } from "class-transformer";
-import { CreateWorkoutExerciseDto } from "@src/workoutexercise/dto/create-workoutexercise.dto";
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateWorkoutDto {
+  @ApiProperty({ description: 'The name of the workout' })
+  @IsNotEmpty()
+  @IsString()
+  name: string;
 
-    @IsString()
-    name: string;
+  @ApiProperty({ description: 'A description of the workout', required: false })
+  @IsOptional()
+  @IsString()
+  description?: string;
 
-    @IsString()
-    description: string;
-
-    @IsString()
-    category: string;
-
-    @IsArray()
-    @ValidateNested({ each: true })
-    @Type(() => CreateWorkoutExerciseDto)
-    exercises: CreateWorkoutExerciseDto[];
+  @ApiProperty({ description: 'The category of the workout' })
+  @IsNotEmpty()
+  @IsString()
+  category: string;
 }

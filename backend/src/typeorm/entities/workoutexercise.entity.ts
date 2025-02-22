@@ -22,6 +22,6 @@ export class WorkoutExercise{
     @Column({ type: 'int' })
     setCount: number;
 
-    @OneToMany(() => ActivityLog, (activityLog) => activityLog.workoutExercise)
+    @OneToMany(() => ActivityLog, (activityLog) => activityLog.workoutExerciseId)
     activityLogs: ActivityLog[];
 }

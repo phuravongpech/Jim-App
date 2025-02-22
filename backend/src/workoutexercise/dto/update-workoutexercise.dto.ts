@@ -1,11 +1,14 @@
-import { IsNumber, IsOptional } from "class-validator";
+import { ApiProperty } from '@nestjs/swagger';
+import { IsInt, IsNumber, IsOptional } from 'class-validator';
 
 export class UpdateWorkoutExerciseDto {
-    @IsOptional()
-    @IsNumber()
-    restTimeSecond?: number;
+  @ApiProperty({ description: 'The rest time in seconds', required: false })
+  @IsOptional()
+  @IsInt()
+  restTimeSecond?: number;
 
-    @IsOptional()
-    @IsNumber()
-    set_count?: number;
+  @ApiProperty({ description: 'The number of sets', required: false })
+  @IsOptional()
+  @IsInt()
+  setCount?: number;
 }

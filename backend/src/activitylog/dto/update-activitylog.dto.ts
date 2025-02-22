@@ -1,15 +1,19 @@
-import { IsNumber, IsOptional } from "class-validator";
+import { ApiProperty } from "@nestjs/swagger";
+import { IsInt, IsOptional } from "class-validator";
 
 export class UpdateActivityLogDto {
-    @IsOptional()
-    @IsNumber()
-    weight?: number;
+  @ApiProperty({ description: 'The weight used', required: false })
+  @IsOptional()
+  @IsInt()
+  weight?: number;
 
-    @IsOptional()
-    @IsNumber()
-    rep?: number;
+  @ApiProperty({ description: 'The number of repetitions', required: false })
+  @IsOptional()
+  @IsInt()
+  rep?: number;
 
-    @IsOptional()
-    @IsNumber()
-    setNumber?: number;
+  @ApiProperty({ description: 'The set number', required: false })
+  @IsOptional()
+  @IsInt()
+  setNumber?: number;
 }

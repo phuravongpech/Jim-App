@@ -1,90 +1,82 @@
-import { Injectable, Logger } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ResponsePayload, ResponseService } from '@src/common/services/response.service';
-import { WorkoutExercise } from '@src/typeorm/entities/workoutexercise.entity';
 import { Repository } from 'typeorm';
 import { CreateWorkoutExerciseDto } from './dto/create-workoutexercise.dto';
+import { WorkoutExercise } from '@src/typeorm/entities/workoutexercise.entity';
 import { UpdateWorkoutExerciseDto } from './dto/update-workoutexercise.dto';
 
 @Injectable()
 export class WorkoutExerciseService {
-  private readonly logger = new Logger(WorkoutExerciseService.name);
-
   constructor(
     @InjectRepository(WorkoutExercise)
     private readonly workoutExerciseRepository: Repository<WorkoutExercise>,
-    private readonly responseService: ResponseService
-  ) { }
+  ) {}
 
-  async create(createWorkoutExerciseDto: CreateWorkoutExerciseDto): Promise<ResponsePayload<WorkoutExercise>> {
+  async create(
+    createWorkoutExerciseDto: CreateWorkoutExerciseDto,
+  ): Promise<WorkoutExercise> {
     try {
-      const workoutExercise = new WorkoutExercise();
-      Object.assign(workoutExercise, createWorkoutExerciseDto);
-      const savedWorkoutExercise = await this.workoutExerciseRepository.save(workoutExercise);
-
-      return this.responseService.created(savedWorkoutExercise, 'Workout exercise created successfully');
-    } catch (error) {
-      this.logger.error('Error creating workout exercise', error);
-      return this.responseService.error('Failed to create workout exercise', error.status || 500);
-    }
-  }
-
-  async findAll(): Promise<ResponsePayload<WorkoutExercise[]>> {
-    try {
-      const workoutExercises = await this.workoutExerciseRepository.find();
-      return this.responseService.success(workoutExercises, 'All workout exercises fetched successfully');
-    } catch (error) {
-      this.logger.error('Error fetching workout exercises', error);
-      return this.responseService.error('Failed to fetch workout exercises', error.status || 500);
-    }
-  }
-
-  async findByWorkoutId(workoutId: number): Promise<ResponsePayload<WorkoutExercise | null>> {
-    try {
-      const workoutExercises = await this.workoutExerciseRepository.findOne({ where: { id: workoutId } });
-
-      if (!workoutExercises) {
-        return this.responseService.notFound('Workout exercises for the given workout ID');
+      const workoutExercise = this.workoutExerciseRepository.create(
+        createWorkoutExerciseDto,
+      );
+      return this.workoutExerciseRepository.save(workoutExercise);
+    } catch (e) {
+      console.error(e);
+      if (e.code === 'ER_DUP_ENTRY') {
+        throw new ConflictException(
+          'Workout Exercise with this name already exist',
+        );
       }
-
-      return this.responseService.success(workoutExercises, 'Workout exercises fetched successfully');
-    } catch (error) {
-      this.logger.error('Error fetching workout exercises by workout ID', error);
-      return this.responseService.error('Failed to fetch workout exercises', error.status || 500);
+      throw new InternalServerErrorException(
+        'Failed to Create workoutExercise',
+      );
     }
   }
 
-  async update(id: number, updateWorkoutExerciseDto: UpdateWorkoutExerciseDto): Promise<ResponsePayload<WorkoutExercise | null>> {
+  async findAll(): Promise<WorkoutExercise[]> {
+    return this.workoutExerciseRepository.find();
+  }
+
+  async findOne(id: number): Promise<WorkoutExercise> {
+    const workoutExercise = await this.workoutExerciseRepository.findOne({
+      where: { id },
+    });
+    if (!workoutExercise) {
+      throw new NotFoundException(`Workout Exercise with ID ${id} Not Found`);
+    }
+    return workoutExercise;
+  }
+
+  async update(
+    id: number,
+    updateWorkoutExerciseDto: UpdateWorkoutExerciseDto,
+  ): Promise<WorkoutExercise> {
     try {
-      const workoutExercise = await this.workoutExerciseRepository.findOne({ where: { id } });
-
-      if (!workoutExercise) {
-        return this.responseService.notFound('Workout exercise');
+      const result = await this.workoutExerciseRepository.update(
+        id,
+        updateWorkoutExerciseDto,
+      );
+      if (result.affected === 0) {
+        throw new NotFoundException(`Workout Exercise with ID ${id} not found`);
       }
-
-      Object.assign(workoutExercise, updateWorkoutExerciseDto);
-      const updatedWorkoutExercise = await this.workoutExerciseRepository.save(workoutExercise);
-
-      return this.responseService.success(updatedWorkoutExercise, 'Workout exercise updated successfully');
-    } catch (error) {
-      this.logger.error('Error updating workout exercise', error);
-      return this.responseService.error('Failed to update workout exercise', error.status || 500);
+      return this.findOne(id);
+    } catch (e) {
+      console.error(e);
+      throw new InternalServerErrorException(
+        'Failed to update Workout Exercise',
+      );
     }
   }
 
-  async remove(id: number): Promise<ResponsePayload<WorkoutExercise | null>> {
-    try {
-      const workoutExercise = await this.workoutExerciseRepository.findOne({ where: { id } });
-
-      if (!workoutExercise) {
-        return this.responseService.notFound('Workout exercise');
-      }
-
-      await this.workoutExerciseRepository.remove(workoutExercise);
-      return this.responseService.success(null, 'Workout exercise deleted successfully');
-    } catch (error) {
-      this.logger.error('Error deleting workout exercise', error);
-      return this.responseService.error('Failed to delete workout exercise', error.status || 500);
+  async delete(id: number): Promise<void> {
+    const result = await this.workoutExerciseRepository.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException(`Workout Exercise with ID ${id} not found`);
     }
   }
 }

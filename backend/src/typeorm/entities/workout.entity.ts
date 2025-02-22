@@ -18,6 +18,4 @@ export class Workout{
     @OneToMany(() => WorkoutExercise, workoutExercise => workoutExercise.workout, { cascade: true })
     workoutExercises: WorkoutExercise[];
 
-    @CreateDateColumn({ type: "timestamp" })
-    createdAt: Date;
 }

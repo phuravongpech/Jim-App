@@ -1,15 +1,24 @@
-import { IsNumber } from "class-validator";
+import { ApiProperty } from "@nestjs/swagger";
+import { IsInt, IsNotEmpty, IsNumber } from "class-validator";
 
 export class CreateActivityLogDto {
-    @IsNumber()
-    workout_exercise_id: number; 
+  @ApiProperty({ description: 'The ID of the workout exercise' })
+  @IsNotEmpty()
+  @IsNumber()
+  workoutExerciseId: number;
 
-    @IsNumber()
-    weight: number;
+  @ApiProperty({ description: 'The weight used' })
+  @IsNotEmpty()
+  @IsInt()
+  weight: number;
 
-    @IsNumber()
-    rep: number;
+  @ApiProperty({ description: 'The number of repetitions' })
+  @IsNotEmpty()
+  @IsInt()
+  rep: number;
 
-    @IsNumber()
-    setNumber: number;
+  @ApiProperty({ description: 'The set number' })
+  @IsNotEmpty()
+  @IsInt()
+  setNumber: number;
 }

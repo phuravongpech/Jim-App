@@ -1,20 +1,24 @@
-import { IsNotEmpty, IsInt } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsInt, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreateWorkoutExerciseDto {
+  @ApiProperty({ description: 'The ID of the workout' })
   @IsNotEmpty()
-  @IsInt()
+  @IsNumber()
   workoutId: number;
 
+  @ApiProperty({ description: 'The ID of the exercise' })
+  @IsNotEmpty()
+  @IsString()
+  exerciseId: string;
+
+  @ApiProperty({ description: 'The rest time in seconds' })
   @IsNotEmpty()
   @IsInt()
-  exerciseId: number;
+  restTimeSecond: number;
 
+  @ApiProperty({ description: 'The number of sets' })
+  @IsNotEmpty()
   @IsInt()
-  sets: number;
-
-  @IsInt()
-  reps: number;
-
-  @IsInt()
-  restTimeInSeconds: number;
+  setCount: number;
 }

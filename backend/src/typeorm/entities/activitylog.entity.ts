@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, ManyToOne, PrimaryGeneratedColumn, JoinColumn } from 'typeorm';
 import { WorkoutExercise } from './workoutexercise.entity';
 
 @Entity('activity_log')
@@ -7,7 +7,8 @@ export class ActivityLog {
   id: number;
 
   @ManyToOne(() => WorkoutExercise, { onDelete: 'CASCADE' })
-  workoutExercise: WorkoutExercise;
+  @JoinColumn({ name: 'workoutExerciseId' })
+  workoutExerciseId: WorkoutExercise;
 
   @Column({ type: 'int' })
   weight: number;

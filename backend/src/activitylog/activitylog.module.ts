@@ -3,11 +3,12 @@ import { ActivitylogController } from './activitylog.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ActivitylogService } from './activitylog.service';
 import { ActivityLog } from '@src/typeorm/entities/activitylog.entity';
-import { ResponseService } from '@src/common/services/response.service';
+import { WorkoutExercise } from '@src/typeorm/entities/workoutexercise.entity';
+import { WorkoutexerciseModule } from '@src/workoutexercise/workoutexercise.module';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([ActivityLog])],
+    imports: [TypeOrmModule.forFeature([ActivityLog, WorkoutExercise]), WorkoutexerciseModule],
     controllers: [ActivitylogController],
-    providers: [ActivitylogService, ResponseService],
+    providers: [ActivitylogService],
 })
 export class ActivitylogModule {}
