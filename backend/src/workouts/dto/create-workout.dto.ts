@@ -12,8 +12,8 @@ export class CreateWorkoutDto {
   @IsString()
   description?: string;
 
-  @ApiProperty({ description: 'The category of the workout' })
+  @ApiProperty({ description: 'List of exercises in the workout' })
   @IsNotEmpty()
-  @IsString()
-  category: string;
+  @IsString({ each: true })
+  exercises: string[];
 }

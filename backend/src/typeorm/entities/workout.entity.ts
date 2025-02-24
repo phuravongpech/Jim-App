@@ -11,11 +11,13 @@ export class Workout{
     
     @Column({ nullable: true })
     description: string;
+
+    @CreateDateColumn()
+    createdAt: Date;
     
-    @Column()
-    category: string;
-    
+    @CreateDateColumn()
+    updatedAt: Date;
+
     @OneToMany(() => WorkoutExercise, workoutExercise => workoutExercise.workout, { cascade: true })
     workoutExercises: WorkoutExercise[];
-
 }

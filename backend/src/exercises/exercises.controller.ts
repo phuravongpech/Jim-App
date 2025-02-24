@@ -23,7 +23,7 @@ import { UpdateExerciseDto } from './dto/update-exercises.dto';
 //defince route exercises
 @Controller('exercises')
 export class ExercisesController {
-  constructor(private readonly exerciseService: ExercisesService) {}
+  constructor(private readonly exerciseService: ExercisesService) { }
 
   @Get('api')
   async getAllExercise() {
