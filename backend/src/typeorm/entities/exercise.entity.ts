@@ -8,22 +8,22 @@ export class Exercise {
 
     @Column()
     gifUrl: string;
-    
+
     @Column()
     bodyPart: string;
 
     @Column()
     target: string;
-    
+
     @Column()
     equipment: string;
-    
+
     @Column()
     name: string;
-    
+
     @Column('text')
     instruction: string;
 
-    @OneToMany(()=> WorkoutExercise, workoutExercise => workoutExercise.exercise)
+    @OneToMany(() => WorkoutExercise, workoutExercise => workoutExercise.exercise)
     workoutExercises: WorkoutExercise[];
 }

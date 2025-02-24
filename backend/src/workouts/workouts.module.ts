@@ -3,12 +3,12 @@ import { WorkoutsService } from './workouts.service';
 import { WorkoutsController } from './workouts.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Workout } from '@src/typeorm/entities/workout.entity';
-import { WorkoutExercise } from '@src/typeorm/entities/workoutexercise.entity';
+import { ExercisesService } from '@src/exercises/exercises.service';
+import { Exercise } from '@src/typeorm/entities/exercise.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Workout])], 
+  imports: [TypeOrmModule.forFeature([Workout, Exercise])],
   controllers: [WorkoutsController],
-  providers: [WorkoutsService],
-  exports: [TypeOrmModule.forFeature([WorkoutExercise])]
+  providers: [WorkoutsService, ExercisesService],
 })
-export class WorkoutsModule {}
+export class WorkoutsModule { }

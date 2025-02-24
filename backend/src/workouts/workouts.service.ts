@@ -9,17 +9,26 @@ import { Workout } from '../typeorm/entities/workout.entity';
 import { Repository } from 'typeorm';
 import { CreateWorkoutDto } from './dto/create-workout.dto';
 import { UpdateWorkoutDto } from './dto/update-workout.dto';
+import { ExercisesService } from '@src/exercises/exercises.service';
 
 @Injectable()
 export class WorkoutsService {
   constructor(
     @InjectRepository(Workout)
     private workoutRepository: Repository<Workout>,
-  ) {}
+    private readonly exerciseService: ExercisesService,
+  ) { }
 
   async create(createWorkoutDto: CreateWorkoutDto): Promise<Workout> {
     try {
-      const workout = this.workoutRepository.create(createWorkoutDto);
+      const { exercises, ...workoutDetails } = createWorkoutDto;
+      
+      for (const exercise of exercises) {
+        await this.exerciseService.create(exercise);
+      }
+
+      const workout = this.workoutRepository.create(workoutDetails);
+
       return this.workoutRepository.save(workout);
     } catch (e) {
       console.error(e);

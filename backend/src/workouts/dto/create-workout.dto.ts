@@ -1,5 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { Exercise } from '@src/typeorm/entities/exercise.entity';
+import { Type } from 'class-transformer';
+import { ArrayNotEmpty, IsNotEmpty, IsOptional, IsString, ValidateNested } from 'class-validator';
 
 export class CreateWorkoutDto {
   @ApiProperty({ description: 'The name of the workout' })
@@ -14,6 +16,8 @@ export class CreateWorkoutDto {
 
   @ApiProperty({ description: 'List of exercises in the workout' })
   @IsNotEmpty()
-  @IsString({ each: true })
-  exercises: string[];
+  @ArrayNotEmpty()
+  @ValidateNested({ each: true })
+  @Type(() => Exercise)
+  exercises: Exercise[];
 }

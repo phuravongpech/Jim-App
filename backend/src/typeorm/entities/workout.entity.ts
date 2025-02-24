@@ -1,4 +1,4 @@
-import { Entity, Column, OneToMany, PrimaryGeneratedColumn, CreateDateColumn} from "typeorm";
+import { Entity, Column, OneToMany, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn} from "typeorm";
 import { WorkoutExercise } from './workoutexercise.entity';
 
 @Entity('workout')
@@ -15,7 +15,7 @@ export class Workout{
     @CreateDateColumn()
     createdAt: Date;
     
-    @CreateDateColumn()
+    @UpdateDateColumn()
     updatedAt: Date;
 
     @OneToMany(() => WorkoutExercise, workoutExercise => workoutExercise.workout, { cascade: true })
