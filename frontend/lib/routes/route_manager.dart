@@ -6,6 +6,8 @@ import 'package:frontend/screens/workout/create_workout_screen.dart';
 import 'package:frontend/screens/workout/workout_screen.dart';
 import 'package:get/get.dart';
 
+import '../screens/workout/select_exercise_screen.dart';
+
 final routes = [
   GetPage(name: '/workout', page: () => WorkoutScreen()),
   GetPage(name: '/create-workout', page: () => CreateWorkoutScreen()),
@@ -15,4 +17,5 @@ final routes = [
       page: () => ExerciseDetail(exercise: Get.arguments)),
   GetPage(name: '/progress', page: () => ProgressScreen()),
   GetPage(name: '/profile', page: () => ProfileScreen()),
+  GetPage(name: '/select-exercises', page: () => SelectExerciseScreen()),
 ];

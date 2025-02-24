@@ -1,0 +1,65 @@
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# VS Code - Uncomment if you want to include VS Code settings (careful with sensitive info)
+# .vscode/
+
+# Flutter/Dart/Pub related
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.metadata  # Important for Flutter
+.packages
+.pub-cache/
+.pub/
+build/  # Crucial: Build artifacts should NEVER be committed
+
+# Symbolication related
+app.*.symbols
+
+# Obfuscation related
+app.*.map.json
+
+# Android Studio/Gradle files
+android/.gradle
+android/.idea
+android/app/build/
+android/app/.cxx
+android/app/src/main/kotlin/* # If you don't want to commit the initial Kotlin code (optional)
+android/app/src/debug/*
+android/app/src/profile/*
+android/build/
+android/.DS_Store
+
+# iOS related
+ios/.symlinks
+ios/Pods/
+ios/Runner.xcodeproj/project.pbxproj # Often changes, might be better to ignore
+ios/Runner.xcodeproj/xcshareddata/xcschemes/* # Often changes, might be better to ignore
+ios/build/
+ios/*.xcconfig # If you don't want to share xcconfig files
+ios/.DS_Store
+
+# Web related (if applicable)
+web/build/
+
+# Other files
+.env
+# Environment variables (NEVER commit these!)
+*.lock # Package lock files (consider if your workflow needs them)

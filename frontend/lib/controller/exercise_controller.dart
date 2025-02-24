@@ -10,18 +10,18 @@ class ExerciseController extends GetxController {
   RxString selectedBodyPart = 'chest'.obs;
   RxInt page = 0.obs;
 
-  final int limit = 10; // Number of exercises per page
+  final int limit = 10;
 
   @override
   void onInit() {
     super.onInit();
-    fetchExercises(); // Fetch exercises on initialization
+    fetchExercises();
   }
 
   Future<void> fetchExercises({bool reset = false}) async {
     if (reset) {
       exercises.clear();
-      page.value = 0; // Reset to the first page
+      page.value = 0;
     }
 
     try {

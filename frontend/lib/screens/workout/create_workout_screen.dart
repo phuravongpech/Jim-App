@@ -119,7 +119,9 @@ Widget _buildAddButton() {
   return SizedBox(
     width: double.infinity,
     child: ElevatedButton.icon(
-      onPressed: () {},
+      onPressed: () {
+        Get.toNamed('/select-exercises');
+      },
       icon: const Icon(
         Icons.add,
         color: AppColor.white,
