@@ -19,7 +19,7 @@ import { UpdateWorkoutExerciseDto } from './dto/update-workoutexercise.dto';
 export class WorkoutexerciseController {
   constructor(
     private readonly workoutExerciseService: WorkoutExerciseService,
-  ) {}
+  ) { }
 
   @Post()
   @ApiOperation({ summary: 'Create a new workout exercise' })

@@ -15,11 +15,9 @@ export class WorkoutExerciseService {
   constructor(
     @InjectRepository(WorkoutExercise)
     private readonly workoutExerciseRepository: Repository<WorkoutExercise>,
-  ) {}
+  ) { }
 
-  async create(
-    createWorkoutExerciseDto: CreateWorkoutExerciseDto,
-  ): Promise<WorkoutExercise> {
+  async create(createWorkoutExerciseDto: CreateWorkoutExerciseDto): Promise<WorkoutExercise> {
     try {
       const workoutExercise = this.workoutExerciseRepository.create(
         createWorkoutExerciseDto,

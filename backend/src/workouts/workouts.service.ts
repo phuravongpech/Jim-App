@@ -10,6 +10,7 @@ import { Repository } from 'typeorm';
 import { CreateWorkoutDto } from './dto/create-workout.dto';
 import { UpdateWorkoutDto } from './dto/update-workout.dto';
 import { ExercisesService } from '@src/exercises/exercises.service';
+import { WorkoutExerciseService } from '@src/workoutexercise/workoutexercise.service';
 
 @Injectable()
 export class WorkoutsService {
@@ -17,6 +18,7 @@ export class WorkoutsService {
     @InjectRepository(Workout)
     private workoutRepository: Repository<Workout>,
     private readonly exerciseService: ExercisesService,
+    private readonly workoutExerciseService: WorkoutExerciseService
   ) { }
 
   async create(createWorkoutDto: CreateWorkoutDto): Promise<Workout> {

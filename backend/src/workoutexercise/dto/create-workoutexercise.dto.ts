@@ -10,7 +10,7 @@ export class CreateWorkoutExerciseDto {
   @ApiProperty({ description: 'The ID of the exercise' })
   @IsNotEmpty()
   @IsString()
-  exerciseId: string;
+  exerciseId: number;
 
   @ApiProperty({ description: 'The rest time in seconds' })
   @IsNotEmpty()

@@ -24,6 +24,6 @@ export class Exercise {
     @Column('text')
     instruction: string;
 
-    @OneToMany(() => WorkoutExercise, workoutExercise => workoutExercise.exercise)
+    @OneToMany(() => WorkoutExercise, workoutExercise => workoutExercise.exerciseId)
     workoutExercises: WorkoutExercise[];
 }

@@ -4,17 +4,17 @@ import { ActivityLog } from './activitylog.entity';
 import { Workout } from './workout.entity';
 
 @Entity('workout_exercise')
-export class WorkoutExercise{
+export class WorkoutExercise {
     @PrimaryGeneratedColumn()
-    id:number;
+    id: number;
 
-    @ManyToOne(()=> Workout, (workout) => workout.workoutExercises , { onDelete: 'CASCADE' })
+    @ManyToOne(() => Workout, (workout) => workout.workoutExercises, { onDelete: 'CASCADE' })
     @JoinColumn({ name: "workoutId" })
-    workout: Workout;
+    workoutId: number;
 
-    @ManyToOne(()=> Exercise, (exercise) => exercise.workoutExercises , { onDelete: 'CASCADE' })
+    @ManyToOne(() => Exercise, (exercise) => exercise.workoutExercises, { onDelete: 'CASCADE' })
     @JoinColumn({ name: "exerciseId" })
-    exercise: Exercise;
+    exerciseId: number;
 
     @Column({ type: 'int' })
     restTimeSecond: number;
