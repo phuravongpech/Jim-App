@@ -11,6 +11,7 @@ import { CreateWorkoutDto } from './dto/create-workout.dto';
 import { UpdateWorkoutDto } from './dto/update-workout.dto';
 import { ExercisesService } from '@src/exercises/exercises.service';
 import { WorkoutExerciseService } from '@src/workoutexercise/workoutexercise.service';
+import { WorkoutExercise } from '@src/typeorm/entities/workoutexercise.entity';
 
 @Injectable()
 export class WorkoutsService {
@@ -23,11 +24,14 @@ export class WorkoutsService {
 
   async create(createWorkoutDto: CreateWorkoutDto): Promise<Workout> {
     try {
-      const { exercises, ...workoutDetails } = createWorkoutDto;
+      const { exercises, workoutExercises, ...workoutDetails } = createWorkoutDto;
 
       // Saving workout first regardless of exercise saving status
       const workout = this.workoutRepository.create(workoutDetails);
-      const saveWorkout = this.workoutRepository.save(workout);
+      const savedWorkout = await this.workoutRepository.save(workout);
+
+      // Save workoutId for relationship creation
+      const workoutId = savedWorkout.id;
 
       // Process exercises saving concurrently
       const exerciseResults = await Promise.allSettled(
@@ -43,7 +47,25 @@ export class WorkoutsService {
         }
       });
 
-      return saveWorkout;
+      // Similar to the top, relationship are created concurrently
+      const relationshipResults = await Promise.allSettled(
+        workoutExercises.map(workoutExercise => {
+          this.workoutExerciseService.create({
+            workoutId: workoutId,
+            exerciseId: workoutExercise.id,
+            restTimeSecond: workoutExercise.restTimeSecond,
+            setCount: workoutExercise.setCount
+          });
+        })
+      );
+
+      relationshipResults.forEach((result, index) => {
+        if (result.status === 'rejected') {
+          console.warn(`Exercise and Workout relationship creation failed: ${workoutExercises[index].id}`, result.reason);
+        }
+      });
+
+      return savedWorkout;
     } catch (e) {
       console.error(e);
       if (e.code === 'ER_DUP_ENTRY') {
