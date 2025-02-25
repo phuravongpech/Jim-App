@@ -22,14 +22,26 @@ export class WorkoutsService {
   async create(createWorkoutDto: CreateWorkoutDto): Promise<Workout> {
     try {
       const { exercises, ...workoutDetails } = createWorkoutDto;
-      
-      for (const exercise of exercises) {
-        await this.exerciseService.create(exercise);
-      }
 
+      // Saving workout first regardless of exercise saving status
       const workout = this.workoutRepository.create(workoutDetails);
+      const saveWorkout = this.workoutRepository.save(workout);
 
-      return this.workoutRepository.save(workout);
+      // Process exercises saving concurrently
+      const exerciseResults = await Promise.allSettled(
+        exercises.map(exercise => this.exerciseService.create(exercise))
+      );
+
+      // Log errors for each exercise that failed to be saved.
+      // Note: Null return also mean that the system succeed the task, becuase it found already exist exercise
+      // Check the create method of exerciseSercice for more info
+      exerciseResults.forEach((result, index) => {
+        if (result.status === 'rejected') {
+          console.warn(`Exercise creation failed: ${exercises[index].name}`, result.reason);
+        }
+      });
+
+      return saveWorkout;
     } catch (e) {
       console.error(e);
       if (e.code === 'ER_DUP_ENTRY') {
