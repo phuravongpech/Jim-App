@@ -19,12 +19,13 @@ export class WorkoutsService {
     @InjectRepository(Workout)
     private workoutRepository: Repository<Workout>,
     private readonly exerciseService: ExercisesService,
-    private readonly workoutExerciseService: WorkoutExerciseService
-  ) { }
+    private readonly workoutExerciseService: WorkoutExerciseService,
+  ) {}
 
   async create(createWorkoutDto: CreateWorkoutDto): Promise<Workout> {
     try {
-      const { exercises, workoutExercises, ...workoutDetails } = createWorkoutDto;
+      const { exercises, workoutExercises, ...workoutDetails } =
+        createWorkoutDto;
 
       // Saving workout first regardless of exercise saving status
       const workout = this.workoutRepository.create(workoutDetails);
@@ -35,7 +36,7 @@ export class WorkoutsService {
 
       // Process exercises saving concurrently
       const exerciseResults = await Promise.allSettled(
-        exercises.map(exercise => this.exerciseService.create(exercise))
+        exercises.map((exercise) => this.exerciseService.create(exercise)),
       );
 
       // Log errors for each exercise that failed to be saved.
@@ -43,25 +44,31 @@ export class WorkoutsService {
       // Check the create method of exerciseSercice for more info
       exerciseResults.forEach((result, index) => {
         if (result.status === 'rejected') {
-          console.warn(`Exercise creation failed: ${exercises[index].name}`, result.reason);
+          console.warn(
+            `Exercise creation failed: ${exercises[index].name}`,
+            result.reason,
+          );
         }
       });
 
       // Similar to the top, relationship are created concurrently
       const relationshipResults = await Promise.allSettled(
-        workoutExercises.map(workoutExercise => {
+        workoutExercises.map((workoutExercise) => {
           this.workoutExerciseService.create({
             workoutId: workoutId,
             exerciseId: workoutExercise.id,
             restTimeSecond: workoutExercise.restTimeSecond,
-            setCount: workoutExercise.setCount
+            setCount: workoutExercise.setCount,
           });
-        })
+        }),
       );
 
       relationshipResults.forEach((result, index) => {
         if (result.status === 'rejected') {
-          console.warn(`Exercise and Workout relationship creation failed: ${workoutExercises[index].id}`, result.reason);
+          console.warn(
+            `Exercise and Workout relationship creation failed: ${workoutExercises[index].id}`,
+            result.reason,
+          );
         }
       });
 
@@ -92,13 +99,55 @@ export class WorkoutsService {
     updateWorkoutDto: UpdateWorkoutDto,
   ): Promise<Workout> {
     try {
-      const result = await this.workoutRepository.update(id, updateWorkoutDto);
-      if (result.affected === 0) {
-        throw new NotFoundException(`Workout with ID ${id} not found`);
+      const { exercises, workoutExercises, ...workoutDetails } =
+        updateWorkoutDto;
+
+      await this.workoutRepository.update(id, workoutDetails);
+
+      if (exercises && exercises.length > 0) {
+        const exerciseResults = await Promise.allSettled(
+          exercises.map((exercise) => this.exerciseService.create(exercise)),
+        );
+
+        exerciseResults.forEach((result, index) => {
+          if (result.status === 'rejected') {
+            console.warn(
+              `Exercise creation failed: ${exercises[index].name}`,
+              result.reason,
+            );
+          }
+        });
       }
+
+      if (workoutExercises && workoutExercises.length > 0) {
+        const relationshipResults = await Promise.allSettled(
+          workoutExercises.map((workoutExercise) => {
+            return this.workoutExerciseService.update(
+              workoutExercise.id,
+              {
+                restTimeSecond: workoutExercise.restTimeSecond,
+                setCount: workoutExercise.setCount,
+              },
+            );
+          }),
+        );
+
+        relationshipResults.forEach((result, index) => {
+          if (result.status === 'rejected') {
+            console.warn(
+              `WorkoutExercise update failed: exerciseId ${workoutExercises[index].id}`,
+              result.reason,
+            );
+          }
+        });
+      }
+
       return this.findOne(id);
     } catch (e) {
       console.error(e);
+      if (e.code === 'ER_DUP_ENTRY') {
+        throw new ConflictException('Workout with this name already exists');
+      }
       throw new InternalServerErrorException('Failed to update workout');
     }
   }
