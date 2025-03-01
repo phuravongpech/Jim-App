@@ -45,7 +45,7 @@ class SelectExerciseScreen extends StatelessWidget {
             onSearchSubmitted: _onSearchSubmitted,
           ),
           const SizedBox(height: 16),
-          _buildSelectedExercisesRow(),
+          _buildNumberSelectedExercises(),
           Expanded(
             child: Obx(() {
               if (controller.isLoading.value) {
@@ -86,8 +86,7 @@ class SelectExerciseScreen extends StatelessWidget {
           ),
         ],
       ),
-      floatingActionButton: _buildAddButton(), // Add FAB for "Done"
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      bottomNavigationBar: _buildDoneButton(),
     );
   }
 
@@ -112,19 +111,32 @@ class SelectExerciseScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildAddButton() {
-    return FloatingActionButton.extended(
-      onPressed: () {
-        Get.back(result: controller.selectedExercises.toList());
-      },
-      label: const Text('Done'),
-      icon: const Icon(Icons.check),
-      backgroundColor: AppColor.primary,
-      foregroundColor: AppColor.white,
+  Widget _buildDoneButton() {
+    return Padding(
+      padding: EdgeInsets.all(16),
+      child: ElevatedButton.icon(
+        onPressed: () {
+          Get.back(result: controller.selectedExercises.toList());
+        },
+        icon: const Icon(
+          Icons.check,
+          color: AppColor.white,
+        ),
+        label: const Text('Done'),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColor.primary,
+          foregroundColor: AppColor.white,
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          textStyle: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
     );
   }
 
-  Widget _buildSelectedExercisesRow() {
+  Widget _buildNumberSelectedExercises() {
     return Obx(() {
       final selectedCount = controller.selectedExercises.length;
       return Padding(

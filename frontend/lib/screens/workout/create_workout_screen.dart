@@ -52,14 +52,32 @@ class CreateWorkoutScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 24),
-            const Text(
-              'Exercises',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
+
+            // Add exercises
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Exercises',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    Get.toNamed('/select-exercises');
+                  },
+                  icon: const Icon(
+                    Icons.add,
+                    color: AppColor.primary,
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 16),
+
+            // validate empty exercise and display exercises if selected
             Expanded(
               child: Center(
                 child: Text(
@@ -71,7 +89,6 @@ class CreateWorkoutScreen extends StatelessWidget {
                 ),
               ),
             ),
-            _buildAddButton(),
           ],
         ),
       ),
@@ -112,30 +129,5 @@ AppBar _buildAppBar() {
         ),
       ),
     ],
-  );
-}
-
-Widget _buildAddButton() {
-  return SizedBox(
-    width: double.infinity,
-    child: ElevatedButton.icon(
-      onPressed: () {
-        Get.toNamed('/select-exercises');
-      },
-      icon: const Icon(
-        Icons.add,
-        color: AppColor.white,
-      ),
-      label: const Text('Add Exercises'),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: AppColor.primary,
-        foregroundColor: AppColor.white,
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        textStyle: const TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    ),
   );
 }
