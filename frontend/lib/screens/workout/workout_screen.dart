@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/common/theme.dart';
 import 'package:frontend/screens/workout/widgets/workout_card.dart';
-import 'package:frontend/widgets/ButtomNavigationBar/custom_bottom_navbar.dart';
+import 'package:frontend/widgets/navigation/custom_bottom_navbar.dart';
+import 'package:frontend/widgets/display/jim_list_view.dart';
 import 'package:get/get.dart';
 
 import '../../../controller/workout_controller.dart';
@@ -22,33 +23,15 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
     return Scaffold(
       backgroundColor: AppColor.primaryBackground,
       appBar: _buildAppBar(),
-      body: Obx(() {
-        if (workoutController.workoutList.isEmpty) {
-          return const Center(
-            child: Text(
-              'No Workouts Available!',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-                color: AppColor.error,
-              ),
-            ),
-          );
-        }
-
-        return ListView.builder(
-          padding: const EdgeInsets.all(16.0),
-          itemCount: workoutController.workoutList.length,
-          itemBuilder: (context, index) {
-            final workout = workoutController.workoutList[index];
-            return WorkoutCard(
-              title: workout['title'],
-              description: workout['description'],
-              exercisesCount: workout['exercises'].length,
-            );
-          },
-        );
-      }),
+      body: JimListView(
+        items: workoutController.workoutList,
+        emptyMessage: "No Workouts Available!",
+        itemBuilder: (workout) => WorkoutCard(
+          title: workout['title'],
+          description: workout['description'],
+          exercisesCount: workout['exercises'].length,
+        ),
+      ),
       bottomNavigationBar: const CustomBottomNavBar(),
     );
   }

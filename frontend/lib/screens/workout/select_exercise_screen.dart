@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/common/theme.dart';
 import 'package:frontend/controller/select_exercise_controller.dart';
 import 'package:frontend/screens/workout/widgets/select_exercise_card.dart';
-import 'package:frontend/widgets/SearchExercises/custom_select_search.dart';
+import 'package:frontend/widgets/inputs/custom_select_search.dart';
 import 'package:get/get.dart';
 
 import '../../models/exercise.dart';
