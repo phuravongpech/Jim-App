@@ -4,6 +4,7 @@ import 'package:frontend/screens/exercise/widgets/exercise_card.dart';
 import 'package:frontend/theme/theme.dart';
 import 'package:frontend/widgets/navigation/custom_bottom_navbar.dart';
 import 'package:frontend/widgets/inputs/custom_search_exercisses.dart';
+import 'package:frontend/widgets/navigation/jim_top_bar.dart';
 import 'package:get/get.dart';
 
 import '../../controller/select_exercise_controller.dart';
@@ -20,7 +21,7 @@ class ExerciseScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: JimColors.backgroundAccent,
-      appBar: _buildAppBar(),
+      appBar: JimTopBar(title: "Exercises"),
       body: Column(
         children: [
           // Search bar
@@ -39,17 +40,6 @@ class ExerciseScreen extends StatelessWidget {
         ],
       ),
       bottomNavigationBar: const CustomBottomNavBar(),
-    );
-  }
-
-  AppBar _buildAppBar() {
-    return AppBar(
-      title: Text('EXERCISE', style: JimTextStyles.body
-          // TextStyle(
-          //   fontWeight: FontWeight.bold,
-          //   fontSize: 24,
-          // ),
-          ),
     );
   }
 }

@@ -3,6 +3,7 @@ import 'package:frontend/common/theme.dart';
 import 'package:frontend/screens/workout/widgets/workout_card.dart';
 import 'package:frontend/widgets/navigation/custom_bottom_navbar.dart';
 import 'package:frontend/widgets/display/jim_list_view.dart';
+import 'package:frontend/widgets/navigation/jim_top_bar.dart';
 import 'package:get/get.dart';
 
 import '../../../controller/workout_controller.dart';
@@ -22,7 +23,16 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.primaryBackground,
-      appBar: _buildAppBar(),
+      appBar: JimTopBar(
+        title: 'Workout',
+        actions: [
+          TextButton(
+              onPressed: () {
+                Get.toNamed('/create-workout');
+              },
+              child: saveButton),
+        ],
+      ),
       body: JimListView(
         items: workoutController.workoutList,
         emptyMessage: "No Workouts Available!",
@@ -35,43 +45,23 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
       bottomNavigationBar: const CustomBottomNavBar(),
     );
   }
-
-  AppBar _buildAppBar() {
-    return AppBar(
-      backgroundColor: AppColor.white,
-      elevation: 0,
-      title: const Text(
-        'WORKOUT',
-        style: TextStyle(
-          color: AppColor.black,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Get.toNamed('/create-workout'); // Navigate to create workout page
-          },
-          child: Row(
-            children: const [
-              Text(
-                'Add',
-                style: TextStyle(
-                  color: AppColor.primary,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(width: 2),
-              Icon(
-                Icons.add,
-                color: AppColor.primary,
-                size: 28,
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
 }
+
+const Widget saveButton = Row(
+  children: [
+    Text(
+      'Add',
+      style: TextStyle(
+        color: AppColor.primary,
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+    SizedBox(width: 2),
+    Icon(
+      Icons.add,
+      color: AppColor.primary,
+      size: 28,
+    ),
+  ],
+);

@@ -3,6 +3,7 @@ import 'package:frontend/common/theme.dart';
 import 'package:frontend/controller/select_exercise_controller.dart';
 import 'package:frontend/screens/workout/widgets/select_exercise_card.dart';
 import 'package:frontend/widgets/inputs/custom_select_search.dart';
+import 'package:frontend/widgets/navigation/jim_top_bar.dart';
 import 'package:get/get.dart';
 
 import '../../models/exercise.dart';
@@ -36,7 +37,16 @@ class SelectExerciseScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.primaryBackground,
-      appBar: _buildAppBar(),
+      appBar: JimTopBar(
+        title: 'Select Exercises',
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: AppColor.black),
+          onPressed: () {
+            Get.back();
+          },
+        ),
+      ),
       body: Column(
         children: [
           CustomSelectSearch(
@@ -87,27 +97,6 @@ class SelectExerciseScreen extends StatelessWidget {
         ],
       ),
       bottomNavigationBar: _buildDoneButton(),
-    );
-  }
-
-  AppBar _buildAppBar() {
-    return AppBar(
-      centerTitle: true,
-      backgroundColor: AppColor.white,
-      elevation: 0,
-      leading: IconButton(
-        icon: const Icon(Icons.arrow_back, color: AppColor.black),
-        onPressed: () {
-          Get.back();
-        },
-      ),
-      title: const Text(
-        'Select Exercises',
-        style: TextStyle(
-          color: AppColor.black,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
     );
   }
 
