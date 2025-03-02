@@ -13,9 +13,14 @@ final routes = [
   GetPage(name: '/create-workout', page: () => CreateWorkoutScreen()),
   GetPage(name: '/exercise', page: () => ExerciseScreen()),
   GetPage(
-      name: '/exercise-detail',
-      page: () => ExerciseDetail(exercise: Get.arguments)),
+    name: '/exercise-detail',
+    page: () => ExerciseDetail(exercise: Get.arguments),
+  ),
   GetPage(name: '/progress', page: () => ProgressScreen()),
   GetPage(name: '/profile', page: () => ProfileScreen()),
-  GetPage(name: '/select-exercises', page: () => SelectExerciseScreen()),
+  GetPage(
+    name: '/select-exercises',
+    page: () => SelectExerciseScreen(),
+    // No need to specify return type in the route definition
+  ),
 ];

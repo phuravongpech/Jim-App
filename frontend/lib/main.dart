@@ -13,6 +13,7 @@ void main() async {
   }
   runApp(GetMaterialApp(
     debugShowCheckedModeBanner: false,
+    initialRoute: '/',
     getPages: routes,
     color: AppColor.primaryBackground,
     home: WorkoutScreen(),

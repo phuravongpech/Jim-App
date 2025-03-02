@@ -1,49 +1,64 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/common/theme.dart';
 
 class WorkoutCard extends StatelessWidget {
-  const WorkoutCard({super.key});
+  final String title;
+  final String description;
+  final int exercisesCount;
+
+  const WorkoutCard({
+    super.key,
+    required this.title,
+    required this.description,
+    required this.exercisesCount,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return Container(
       margin: const EdgeInsets.only(bottom: 16),
-      shape: RoundedRectangleBorder(
+      decoration: BoxDecoration(
+        color: AppColor.primaryBackground,
         borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: AppColor.black,
+          width: 1, // Border width
+        ),
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Full Body HIIT',
-              style: TextStyle(
-                fontSize: 16,
+            Text(
+              title,
+              style: const TextStyle(
+                fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: 8),
-            const Text(
-              'Lorem ipsum is a dummy or placeholder text commonly used in graphic design.',
-              style: TextStyle(
+            Text(
+              description,
+              style: const TextStyle(
                 fontSize: 14,
                 color: Colors.grey,
               ),
             ),
             const SizedBox(height: 16),
             Row(
-              children: const [
-                Icon(
+              children: [
+                const Icon(
                   Icons.fitness_center,
                   size: 16,
                   color: Colors.black,
                 ),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 Text(
-                  '11 exercises',
-                  style: TextStyle(
+                  '$exercisesCount exercises',
+                  style: const TextStyle(
                     fontSize: 14,
-                    color: Colors.black,
+                    color: AppColor.primary,
                   ),
                 ),
               ],

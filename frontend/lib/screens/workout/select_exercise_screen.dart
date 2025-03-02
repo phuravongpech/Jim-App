@@ -113,9 +113,10 @@ class SelectExerciseScreen extends StatelessWidget {
 
   Widget _buildDoneButton() {
     return Padding(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       child: ElevatedButton.icon(
         onPressed: () {
+          // Pass the selected exercises back to the previous screen
           Get.back(result: controller.selectedExercises.toList());
         },
         icon: const Icon(

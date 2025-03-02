@@ -1,111 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/common/theme.dart';
+import 'package:frontend/screens/workout/widgets/workout_form.dart';
 import 'package:get/get.dart';
 
+import '../../controller/select_exercise_controller.dart';
+import '../../controller/workout_controller.dart';
+
 class CreateWorkoutScreen extends StatelessWidget {
-  const CreateWorkoutScreen({super.key});
+  CreateWorkoutScreen({super.key});
+
+  final WorkoutController controller = Get.put(WorkoutController());
 
   @override
   Widget build(BuildContext context) {
+    Get.put(WorkoutController());
+    Get.put(SelectExerciseController());
+
     return Scaffold(
       backgroundColor: AppColor.primaryBackground,
-      appBar: _buildAppBar(),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Workout Title',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                  color: AppColor.textPrimary),
-            ),
-            const TextField(
-              decoration: InputDecoration(
-                hintText: 'Input Workout Title',
-                labelStyle: TextStyle(
-                    color: AppColor.textSecondary,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 12),
-                border: OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 24),
-            const Text(
-              'Description (Optional)',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                  color: AppColor.textPrimary),
-            ),
-            const TextField(
-              maxLines: 3,
-              decoration: InputDecoration(
-                hintText: 'Description...',
-                labelStyle: TextStyle(
-                    color: AppColor.textSecondary,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 12),
-                border: OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 24),
-
-            // Add exercises
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Exercises',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {
-                    Get.toNamed('/select-exercises');
-                  },
-                  icon: const Icon(
-                    Icons.add,
-                    color: AppColor.primary,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-
-            // validate empty exercise and display exercises if selected
-            Expanded(
-              child: Center(
-                child: Text(
-                  'No exercises added yet',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: AppColor.textSecondary,
-                  ),
-                ),
-              ),
-            ),
-          ],
+      appBar: _buildAppBar(controller),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              WorkoutForm(),
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
-AppBar _buildAppBar() {
+AppBar _buildAppBar(WorkoutController controller) {
   return AppBar(
     centerTitle: true,
     backgroundColor: AppColor.white,
     elevation: 0,
     leading: IconButton(
-      icon: const Icon(
-        Icons.arrow_back,
-        color: AppColor.black,
-      ),
+      icon: const Icon(Icons.arrow_back, color: AppColor.black),
       onPressed: () {
         Get.back();
       },
@@ -119,13 +54,38 @@ AppBar _buildAppBar() {
     ),
     actions: [
       TextButton(
-        onPressed: () {},
+        onPressed: () {
+          if (controller.workoutTitle.isEmpty) {
+            Get.snackbar(
+              'Error',
+              'Please Input Workout Title',
+              snackPosition: SnackPosition.BOTTOM,
+              backgroundColor: AppColor.error,
+              colorText: Colors.white,
+            );
+            return;
+          }
+
+          if (controller.selectedExercises.isEmpty) {
+            Get.snackbar(
+              'Error',
+              'Please add at least one exercise.',
+              snackPosition: SnackPosition.BOTTOM,
+              backgroundColor: AppColor.error,
+              colorText: Colors.white,
+            );
+            return;
+          }
+          // Trigger save logic in controller
+          controller.saveWorkout();
+        },
         child: const Text(
           'Save',
           style: TextStyle(
-              color: AppColor.primary,
-              fontWeight: FontWeight.bold,
-              fontSize: 16),
+            color: AppColor.primary,
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
         ),
       ),
     ],
