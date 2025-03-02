@@ -56,16 +56,9 @@ class ExerciseController extends GetxController {
     try {
       isLoading.value = true;
 
-      final allExercises = await _exerciseService.getExercises(
-        page: 0,
-        limit: 100, // Fetch a large number of exercises for searching
-        bodyPart: selectedBodyPart.value,
-      );
+      final allExercises = await _exerciseService.searchExercises(query: query);
 
-      exercises.value = allExercises
-          .where((exercise) =>
-              exercise.name.toLowerCase().contains(query.toLowerCase()))
-          .toList();
+      exercises.value = allExercises;
 
       if (exercises.isEmpty) {
         Get.snackbar('No Results', 'No exercises found for "$query".');

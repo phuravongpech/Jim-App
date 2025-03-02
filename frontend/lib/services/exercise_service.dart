@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:frontend/models/exercise.dart';
+import 'package:frontend/utils/fuzzywuzzy.dart';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
 
@@ -21,7 +22,7 @@ class ExerciseService {
             '$baseUrl/exercises/bodyPart/$bodyPart?offset=${page * limit}&limit=$limit'),
         headers: {
           'X-RapidAPI-Key': apiKey,
-          'X-RapidAPI-Host': 'exercisedb.p.rapidapi.com',
+          'X-RapidAPI-Host': 'exercisedb.p.rapidapi.co',
         },
       );
 
@@ -37,9 +38,11 @@ class ExerciseService {
   }
 
   Future<List<Exercise>> searchExercises({required String query}) async {
+    String newQuery = Fuzzywuzzy.searchForExercise(query);
+
     try {
       final response = await http.get(
-        Uri.parse('$baseUrl/exercises/name/$query'),
+        Uri.parse('$baseUrl/exercises/name/$newQuery?offset=0&limit=10'),
         headers: {
           'X-RapidAPI-Key': apiKey,
           'X-RapidAPI-Host': 'exercisedb.p.rapidapi.com',

@@ -2,15 +2,18 @@ import 'package:fuzzywuzzy/fuzzywuzzy.dart';
 
 class Fuzzywuzzy {
   static String searchForExercise(String query) {
+
+    // Findinf the closest keyword
     final result = extractOne(
       query: query,
       choices: exerciseKeywords,
-      cutoff: 70,
+      cutoff: 70, // Tested, wrong threshold is best at 30%
     );
 
     return result.choice;
   }
 
+  // Note: This is keywords, not exercise name
   static const List<String> exerciseKeywords = [
     "180",
     "3/4",
@@ -1077,8 +1080,6 @@ class Fuzzywuzzy {
     "hyper extension",
     "hyper flat",
     "hyperextension",
-    "hyperextension bench",
-    "hyperextension stability",
     "impossible",
     "impossible dips",
     "inchworm",
