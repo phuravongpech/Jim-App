@@ -22,7 +22,7 @@ class ExerciseService {
             '$baseUrl/exercises/bodyPart/$bodyPart?offset=${page * limit}&limit=$limit'),
         headers: {
           'X-RapidAPI-Key': apiKey,
-          'X-RapidAPI-Host': 'exercisedb.p.rapidapi.co',
+          'X-RapidAPI-Host': 'exercisedb.p.rapidapi.com',
         },
       );
 

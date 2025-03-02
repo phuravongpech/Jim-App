@@ -17,15 +17,15 @@ class SelectExerciseScreen extends StatelessWidget {
   void _onSearchSubmitted(String query) {
     if (query.isNotEmpty) {
       controller.searchExercises(query); // Search exercises
-    } else {
-      controller.fetchExercises(reset: true); // Fetch all exercises
+      // } else {
+      //   controller.fetchExercises(reset: true); // Fetch all exercises
     }
   }
 
   void _onClearSearch() {
     _searchController.clear();
-    controller.fetchExercises(
-        reset: true); // Clear search and fetch all exercises
+    // controller.fetchExercises(
+    //     reset: true); // Clear search and fetch all exercises
   }
 
   void _navigateToExerciseDetails(Exercise exercise) {

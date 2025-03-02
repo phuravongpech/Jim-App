@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/common/theme.dart';
 import 'package:frontend/controller/exercise_controller.dart';
 import 'package:frontend/screens/exercise/widgets/exercise_card.dart';
+import 'package:frontend/theme/theme.dart';
 import 'package:frontend/widgets/ButtomNavigationBar/custom_bottom_navbar.dart';
 import 'package:frontend/widgets/SearchExercises/custom_search_exercisses.dart';
 import 'package:get/get.dart';
@@ -15,15 +15,20 @@ class ExerciseScreen extends StatelessWidget {
   final SelectExerciseController controller =
       Get.put(SelectExerciseController());
 
+  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor.primaryBackground,
+      backgroundColor: JimColors.backgroundAccent,
       appBar: _buildAppBar(),
       body: Column(
         children: [
+          // Search bar
           CustomSearchExercisses(),
-          const SizedBox(height: 16),
+
+          const SizedBox(height: JimSpacings.m),
+
           Expanded(
             child: Obx(() {
               if (exerciseController.isLoading.value) {
@@ -52,13 +57,12 @@ class ExerciseScreen extends StatelessWidget {
 
   AppBar _buildAppBar() {
     return AppBar(
-      title: const Text(
-        'EXERCISE',
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 24,
-        ),
-      ),
+      title: Text('EXERCISE', style: JimTextStyles.body
+          // TextStyle(
+          //   fontWeight: FontWeight.bold,
+          //   fontSize: 24,
+          // ),
+          ),
     );
   }
 }
