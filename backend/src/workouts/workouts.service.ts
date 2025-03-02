@@ -56,7 +56,7 @@ export class WorkoutsService {
         workoutExercises.map((workoutExercise) => {
           this.workoutExerciseService.create({
             workoutId: workoutId,
-            exerciseId: workoutExercise.id,
+            exerciseId: String(workoutExercise.id),
             restTimeSecond: workoutExercise.restTimeSecond,
             setCount: workoutExercise.setCount,
           });

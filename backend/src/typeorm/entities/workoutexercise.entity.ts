@@ -14,7 +14,7 @@ export class WorkoutExercise {
 
     @ManyToOne(() => Exercise, (exercise) => exercise.workoutExercises, { onDelete: 'CASCADE' })
     @JoinColumn({ name: "exerciseId" })
-    exerciseId: number;
+    exerciseId: string;
 
     @Column({ type: 'int' })
     restTimeSecond: number;
