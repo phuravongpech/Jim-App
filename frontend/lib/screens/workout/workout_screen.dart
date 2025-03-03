@@ -34,7 +34,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
         ],
       ),
       body: JimListView(
-        items: workoutController.workoutList,
+        items: workoutController.xWorkoutList,
         emptyMessage: "No Workouts Available!",
         itemBuilder: (workout) => WorkoutCard(
           title: workout['title'],

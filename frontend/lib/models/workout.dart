@@ -8,34 +8,6 @@ import 'workout_log.dart';
 
 enum Category { strength, powerlifting, cardio }
 
-extension CategoryExtension on Category {
-  IconData get icon {
-    switch (this) {
-      case Category.strength:
-        return Icons.fitness_center;
-      case Category.powerlifting:
-        return Icons.sports_mma;
-      case Category.cardio:
-        return Icons.directions_run;
-      default:
-        return Icons.help;
-    }
-  }
-
-  String get name {
-    switch (this) {
-      case Category.strength:
-        return 'Strength';
-      case Category.powerlifting:
-        return 'Powerlifting';
-      case Category.cardio:
-        return 'Cardio';
-      default:
-        return 'Unknown';
-    }
-  }
-}
-
 class Workout {
   final String id;
   final String name;
@@ -85,6 +57,30 @@ class Workout {
         .toList();
 
     return list;
+  }
+}
+
+extension CategoryExtension on Category {
+  IconData get icon {
+    switch (this) {
+      case Category.strength:
+        return Icons.fitness_center;
+      case Category.powerlifting:
+        return Icons.sports_mma;
+      case Category.cardio:
+        return Icons.directions_run;
+    }
+  }
+
+  String get name {
+    switch (this) {
+      case Category.strength:
+        return 'Strength';
+      case Category.powerlifting:
+        return 'Powerlifting';
+      case Category.cardio:
+        return 'Cardio';
+    }
   }
 }
 

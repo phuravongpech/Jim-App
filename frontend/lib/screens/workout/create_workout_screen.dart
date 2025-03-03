@@ -55,7 +55,7 @@ AppBar _buildAppBar(WorkoutController controller) {
     actions: [
       TextButton(
         onPressed: () {
-          if (controller.workoutTitle.isEmpty) {
+          if (controller.xWorkoutTitle.isEmpty) {
             Get.snackbar(
               'Error',
               'Please Input Workout Title',
@@ -66,7 +66,7 @@ AppBar _buildAppBar(WorkoutController controller) {
             return;
           }
 
-          if (controller.selectedExercises.isEmpty) {
+          if (controller.xSelectedExercises.isEmpty) {
             Get.snackbar(
               'Error',
               'Please add at least one exercise.',

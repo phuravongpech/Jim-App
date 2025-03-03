@@ -33,7 +33,7 @@ class WorkoutForm extends StatelessWidget {
             ),
           ),
           TextFormField(
-            onChanged: (value) => workoutController.workoutTitle.value = value,
+            onChanged: (value) => workoutController.xWorkoutTitle.value = value,
             decoration: const InputDecoration(
               hintText: 'Input Workout Title',
               border: OutlineInputBorder(),
@@ -65,7 +65,7 @@ class WorkoutForm extends StatelessWidget {
           ),
           TextField(
             onChanged: (value) =>
-                workoutController.workoutDescription.value = value,
+                workoutController.xWorkoutDescription.value = value,
             maxLines: 3,
             decoration: const InputDecoration(
               hintText: 'Description...',
@@ -91,7 +91,7 @@ class WorkoutForm extends StatelessWidget {
                   final result = await Get.toNamed('/select-exercises');
                   if (result != null) {
                     // Update the selected exercises in the workout controller
-                    workoutController.selectedExercises.value =
+                    workoutController.xSelectedExercises.value =
                         List<String>.from(result);
                   }
                 },
@@ -106,7 +106,7 @@ class WorkoutForm extends StatelessWidget {
           // List of Selected Exercises
           SingleChildScrollView(
             child: Obx(() {
-              if (workoutController.selectedExercises.isEmpty) {
+              if (workoutController.xSelectedExercises.isEmpty) {
                 return Center(
                   child: Text(
                     'No exercises added yet',
@@ -122,12 +122,12 @@ class WorkoutForm extends StatelessWidget {
                 height: 500,
                 child: ListView.separated(
                   shrinkWrap: true,
-                  itemCount: workoutController.selectedExercises.length,
+                  itemCount: workoutController.xSelectedExercises.length,
                   separatorBuilder: (context, index) =>
                       const Divider(height: 1),
                   itemBuilder: (context, index) {
                     final exerciseId =
-                        workoutController.selectedExercises[index];
+                        workoutController.xSelectedExercises[index];
                     final Exercise? exercise =
                         selectExerciseController.getExerciseById(exerciseId);
 
