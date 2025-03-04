@@ -75,4 +75,7 @@ class JimIconSizes {
   static const double large = 32;
 }
 
-
+ThemeData appTheme =  ThemeData(
+  fontFamily: 'Eesti',
+  scaffoldBackgroundColor: Colors.white,
+);
