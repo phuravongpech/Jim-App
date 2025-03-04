@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/common/theme.dart';
 import 'package:frontend/screens/workout/widgets/workout_card.dart';
+import 'package:frontend/theme/theme.dart';
 import 'package:frontend/widgets/navigation/custom_bottom_navbar.dart';
 import 'package:frontend/widgets/display/jim_list_view.dart';
 import 'package:frontend/widgets/navigation/jim_top_bar.dart';
@@ -47,15 +48,11 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
   }
 }
 
-const Widget saveButton = Row(
+ Widget saveButton = Row(
   children: [
     Text(
       'Add',
-      style: TextStyle(
-        color: AppColor.primary,
-        fontSize: 18,
-        fontWeight: FontWeight.bold,
-      ),
+      style: JimTextStyles.button,
     ),
     SizedBox(width: 2),
     Icon(

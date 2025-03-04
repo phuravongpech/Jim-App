@@ -37,6 +37,19 @@ class Exercise {
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'gifUrl': gifUrl,
+      'bodyPart': bodyPart,
+      'equipment': equipment,
+      'target': target,
+      'instructions': instructions,
+      'isFavorite': isFavorite
+    };
+  }
+
   @override
   String toString() {
     return 'Exercise{\n  name: $name,\n  url: $gifUrl,}';

@@ -1,0 +1,21 @@
+{
+    "exercises": [
+        {
+            "id": "1",
+            "name": "Push Up",
+            "gifUrl": "https://example.com/pushup.gif",
+            "bodyPart": "Chest",
+            "equipment": "Body Weight",
+            "target": "Pectorals",
+            "instructions": [
+                "Start in plank position",
+                "Lower yourself",
+                "Push back up"
+            ],
+            "secondaryMuscles": [
+                "Triceps",
+                "Shoulders"
+            ]
+        }
+    ]
+}
