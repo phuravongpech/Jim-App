@@ -1,4 +1,4 @@
-import '../utils/utils.dart';
+import '../utils/uuid_utils.dart';
 import 'workout_exercise.dart';
 
 class WorkoutLog {
@@ -14,15 +14,11 @@ class WorkoutLog {
     this.weight,
     this.rep,
     required this.setNumber,
-  }) : id = id ?? Utils.generateUuid(); // Generate a new UUID if not provided
+  }) : id = id ??
+            UuidUtils.generateUuid(); // Generate a new UUID if not provided
 
   @override
   String toString() {
-    return 'WorkoutLog{\n'
-        '  workoutExercise: ${workoutExercise.exercise.name},\n'
-        '  weight: $weight,\n'
-        '  rep: $rep,\n'
-        '  setNumber: $setNumber\n'
-        '}';
+    return 'WorkoutLog{\n  workoutExercise: $workoutExercise,\n  weight: $weight,\n  rep: $rep,\n  setNumber: $setNumber\n}';
   }
 }
