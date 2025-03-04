@@ -1,4 +1,4 @@
-import { Entity, Column, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, Column, OneToMany, PrimaryGeneratedColumn, CreateDateColumn} from "typeorm";
 import { WorkoutExercise } from './workoutexercise.entity';
 
 @Entity('workout')
@@ -13,12 +13,11 @@ export class Workout{
     description: string;
     
     @Column()
-    date: Date;
-    
-    @Column()
     category: string;
     
     @OneToMany(() => WorkoutExercise, workoutExercise => workoutExercise.workout, { cascade: true })
     workoutExercises: WorkoutExercise[];
 
+    @CreateDateColumn({ type: "timestamp" })
+    createdAt: Date;
 }
