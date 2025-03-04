@@ -1,16 +1,16 @@
 # frontend
 
-A new Flutter project.
+## To test mock exercise fetching
 
-## Getting Started
+Install json-server
+```
+npm install -g json
+```
 
-This project is a starting point for a Flutter application.
+Start the server
+```
+json-server lib/data/db.json
+```
+(You must be inside the frontend directory)
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Run flutter app

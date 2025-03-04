@@ -1,9 +1,15 @@
 import 'package:frontend/models/exercise.dart';
 import 'package:frontend/services/exercise_service.dart';
+import 'package:frontend/services/mock_exercise_service.dart'; // Import Mock service
 import 'package:get/get.dart';
 
+import '../repository/exercise_repository.dart';
+
 class ExerciseController extends GetxController {
-  final ExerciseService _exerciseService = ExerciseService();
+  // Flag used for swicthing between mock service and real service
+  bool useMock = true;
+
+  late final ExerciseRepository _exerciseService;
 
   RxList<Exercise> exercises = <Exercise>[].obs;
   RxBool isLoading = false.obs;
@@ -15,6 +21,7 @@ class ExerciseController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    _exerciseService = useMock ? MockExerciseService() : ExerciseService();
     fetchExercises();
   }
 

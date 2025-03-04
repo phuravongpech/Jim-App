@@ -2,15 +2,17 @@ import 'dart:convert';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:frontend/models/exercise.dart';
+import 'package:frontend/repository/exercise_repository.dart';
 import 'package:frontend/utils/fuzzywuzzy.dart';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
 
-class ExerciseService {
+class ExerciseService implements ExerciseRepository {
   final log = Logger();
   final String baseUrl = dotenv.env['BASE_URL'] ?? 'default_url';
   final String apiKey = dotenv.env['API_KEY'] ?? 'default_key';
 
+  @override
   Future<List<Exercise>> getExercises({
     required int page,
     required int limit,
@@ -37,6 +39,7 @@ class ExerciseService {
     }
   }
 
+  @override
   Future<List<Exercise>> searchExercises({required String query}) async {
     String newQuery = Fuzzywuzzy.searchForExercise(query);
 
