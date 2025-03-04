@@ -106,7 +106,12 @@ class SelectExerciseScreen extends StatelessWidget {
       child: ElevatedButton.icon(
         onPressed: () {
           // Pass the selected exercises back to the previous screen
-          Get.back(result: controller.selectedExercises.toList());
+          final selectedExercises = controller.selectedExercises.map((id) {
+            return controller.exercises
+                .firstWhere((exercise) => exercise.id == id);
+          }).toList();
+
+          Get.back(result: selectedExercises);
         },
         icon: const Icon(
           Icons.check,

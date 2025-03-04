@@ -92,7 +92,7 @@ class WorkoutForm extends StatelessWidget {
                   if (result != null) {
                     // Update the selected exercises in the workout controller
                     workoutController.xSelectedExercises.value =
-                        List<String>.from(result);
+                        List<Exercise>.from(result);
                   }
                 },
                 icon: const Icon(
@@ -127,7 +127,8 @@ class WorkoutForm extends StatelessWidget {
                       const Divider(height: 1),
                   itemBuilder: (context, index) {
                     final exerciseId =
-                        workoutController.xSelectedExercises[index];
+                        workoutController.xSelectedExercises[index].id;
+
                     final Exercise? exercise =
                         selectExerciseController.getExerciseById(exerciseId);
 
@@ -204,7 +205,7 @@ class WorkoutForm extends StatelessWidget {
                             icon:
                                 const Icon(Icons.delete, color: AppColor.error),
                             onPressed: () =>
-                                workoutController.removeExercise(exerciseId),
+                               workoutController.removeExercise(exercise),
                           ),
                         ],
                       ),

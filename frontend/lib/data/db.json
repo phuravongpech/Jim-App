@@ -130,8 +130,56 @@
             ]
         }
     ],
-
-    "workouts" : [
-        
+    "workouts": [
+        {
+            "name": "New Workout",
+            "description": "A great workout for all muscle groups",
+            "exercises": [
+                {
+                    "id": "001",
+                    "gifUrl": "https://example.com/squat.gif",
+                    "bodyPart": "legs",
+                    "target": "quadriceps",
+                    "equipment": "barbell",
+                    "name": "Squat",
+                    "instruction": "Stand with feet shoulder-width apart, lower your hips, and push back up."
+                },
+                {
+                    "id": "002",
+                    "gifUrl": "https://example.com/deadlift.gif",
+                    "bodyPart": "back",
+                    "target": "hamstrings",
+                    "equipment": "barbell",
+                    "name": "Deadlift",
+                    "instruction": "Bend at your hips and knees, grab the bar, and lift it up."
+                },
+                {
+                    "id": "003",
+                    "gifUrl": "https://example.com/deadlift.gif",
+                    "bodyPart": "back",
+                    "target": "hamstrings",
+                    "equipment": "barbell",
+                    "name": "Deadlift",
+                    "instruction": "Bend at your hips and knees, grab the bar, and lift it up."
+                }
+            ],
+            "workoutExercises": [
+                {
+                    "id": "001",
+                    "restTimeSecond": 60,
+                    "setCount": 3
+                },
+                {
+                    "id": "002",
+                    "restTimeSecond": 90,
+                    "setCount": 4
+                },
+                {
+                    "id": "003",
+                    "restTimeSecond": 120,
+                    "setCount": 4
+                }
+            ]
+        }
     ]
 }

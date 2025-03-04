@@ -38,9 +38,9 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
         items: workoutController.xWorkoutList,
         emptyMessage: "No Workouts Available!",
         itemBuilder: (workout) => WorkoutCard(
-          title: workout['title'],
-          description: workout['description'],
-          exercisesCount: workout['exercises'].length,
+          title: workout.name,
+          description: workout.description,
+          exercisesCount: workout.exercises.length,
         ),
       ),
       bottomNavigationBar: const CustomBottomNavBar(),
@@ -48,7 +48,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
   }
 }
 
- Widget saveButton = Row(
+Widget saveButton = Row(
   children: [
     Text(
       'Add',
