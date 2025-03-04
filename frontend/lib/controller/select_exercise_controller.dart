@@ -6,6 +6,9 @@ import '../repository/exercise_repository.dart';
 import '../services/mock_exercise_service.dart';
 
 class SelectExerciseController extends GetxController {
+  //
+  // Flag used for swicthing between mock service and real service
+  //
   bool useMock = true;
 
   late final ExerciseRepository _exerciseService;
