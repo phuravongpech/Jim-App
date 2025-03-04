@@ -76,17 +76,23 @@ class SelectExerciseController extends GetxController {
       isLoading.value = true;
 
       // Fetch all exercises (or a large number) for searching
-      final allExercises = await _exerciseService.getExercises(
+      final allFetchedExercises = await _exerciseService.getExercises(
         page: 0,
         limit: 100, // Adjust this limit as needed
         bodyPart: selectedBodyPart.value,
       );
 
       // Filter exercises by name
-      exercises.value = allExercises
+      final filteredExercises = allFetchedExercises
           .where((exercise) =>
               exercise.name.toLowerCase().contains(query.toLowerCase()))
           .toList();
+
+      // Update the exercises list with the filtered results
+      exercises.value = filteredExercises;
+
+      // Update the allExercises list with the fetched exercises
+      allExercises.addAll(allFetchedExercises);
 
       if (exercises.isEmpty) {
         Get.snackbar('No Results', 'No exercises found for "$query".');
