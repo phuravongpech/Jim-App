@@ -45,7 +45,6 @@ class SelectExerciseController extends GetxController {
       final fetchedExercises = await _exerciseService.getExercises(
         page: page.value,
         limit: limit,
-        bodyPart: selectedBodyPart.value,
       );
 
       if (fetchedExercises.isNotEmpty) {
@@ -82,7 +81,6 @@ class SelectExerciseController extends GetxController {
       final allFetchedExercises = await _exerciseService.getExercises(
         page: 0,
         limit: 100, // Adjust this limit as needed
-        bodyPart: selectedBodyPart.value,
       );
 
       // Filter exercises by name

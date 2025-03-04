@@ -39,7 +39,6 @@ class ExerciseController extends GetxController {
       final fetchedExercises = await _exerciseService.getExercises(
         page: page.value,
         limit: limit,
-        bodyPart: selectedBodyPart.value,
       );
 
       if (fetchedExercises.isNotEmpty) {
