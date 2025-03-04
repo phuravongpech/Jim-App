@@ -47,7 +47,6 @@ class ExerciseController extends GetxController {
         Get.snackbar('End of List', 'No more exercises available.');
       }
     } catch (e) {
-      print('Error loading exercises: $e');
       Get.snackbar('Error', 'Failed to load exercises: $e');
     } finally {
       isLoading.value = false;

@@ -2,8 +2,13 @@ import 'package:frontend/models/exercise.dart';
 import 'package:frontend/services/exercise_service.dart';
 import 'package:get/get.dart';
 
+import '../repository/exercise_repository.dart';
+import '../services/mock_exercise_service.dart';
+
 class SelectExerciseController extends GetxController {
-  final ExerciseService _exerciseService = ExerciseService();
+  bool useMock = true;
+
+  late final ExerciseRepository _exerciseService;
 
   RxList<Exercise> exercises = <Exercise>[].obs; // List of exercises
   RxSet<String> selectedExercises =
@@ -17,6 +22,7 @@ class SelectExerciseController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    _exerciseService = useMock ? MockExerciseService() : ExerciseService();
     fetchExercises(); // Fetch exercises on initialization
   }
 
