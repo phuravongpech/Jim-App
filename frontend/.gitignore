@@ -63,3 +63,6 @@ web/build/
 .env
 # Environment variables (NEVER commit these!)
 *.lock # Package lock files (consider if your workflow needs them)
+
+linux/
+macos/
