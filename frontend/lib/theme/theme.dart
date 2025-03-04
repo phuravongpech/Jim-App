@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter/material.dart';
-
 class JimColors {
   static const Color primary = Color(0xFF4ADE80);
   static const Color backgroundAccent = Color(0xFFEDEDED);
@@ -76,6 +74,6 @@ class JimIconSizes {
 }
 
 ThemeData appTheme =  ThemeData(
-  fontFamily: 'Eesti',
+  fontFamily: 'Poppins',
   scaffoldBackgroundColor: Colors.white,
 );

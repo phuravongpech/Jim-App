@@ -13,6 +13,9 @@ void main() async {
   }
   runApp(GetMaterialApp(
     debugShowCheckedModeBanner: false,
+    theme: ThemeData(
+      fontFamily: 'Poppins',
+    ),
     initialRoute: '/',
     getPages: routes,
     color: AppColor.primaryBackground,
