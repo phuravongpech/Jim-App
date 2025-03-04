@@ -1,4 +1,3 @@
-# Miscellaneous
 *.class
 *.log
 *.pyc
@@ -29,7 +28,7 @@ migrate_working_dir/
 .packages
 .pub-cache/
 .pub/
-build/  # Crucial: Build artifacts should NEVER be committed
+build/
 
 # Symbolication related
 app.*.symbols
@@ -61,5 +60,9 @@ ios/.DS_Store
 web/build/
 
 # Other files
-.env # Environment variables (NEVER commit these!)
+.env
+# Environment variables (NEVER commit these!)
 *.lock # Package lock files (consider if your workflow needs them)
+
+linux/
+macos/

@@ -1,0 +1,89 @@
+{
+    "exercises": [
+        {
+            "id": "1",
+            "name": "Push Up",
+            "gifUrl": "",
+            "bodyPart": "Chest",
+            "equipment": "Body Weight",
+            "target": "Pectorals",
+            "instructions": [
+                "Start in plank position",
+                "Lower yourself",
+                "Push back up"
+            ],
+            "secondaryMuscles": [
+                "Triceps",
+                "Shoulders"
+            ]
+        },
+        {
+            "id": "2",
+            "name": "Squat",
+            "gifUrl": "",
+            "bodyPart": "Legs",
+            "equipment": "Body Weight",
+            "target": "Quadriceps",
+            "instructions": [
+                "Stand with feet shoulder-width apart",
+                "Bend your knees and lower your hips",
+                "Return to standing position"
+            ],
+            "secondaryMuscles": [
+                "Glutes",
+                "Hamstrings"
+            ]
+        },
+        {
+            "id": "3",
+            "name": "Pull Up",
+            "gifUrl": "",
+            "bodyPart": "Back",
+            "equipment": "Pull-up Bar",
+            "target": "Latissimus Dorsi",
+            "instructions": [
+                "Grip the pull-up bar with hands shoulder-width apart",
+                "Pull yourself up until chin is above the bar",
+                "Lower yourself slowly to starting position"
+            ],
+            "secondaryMuscles": [
+                "Biceps",
+                "Shoulders"
+            ]
+        },
+        {
+            "id": "4",
+            "name": "Plank",
+            "gifUrl": "",
+            "bodyPart": "Core",
+            "equipment": "Body Weight",
+            "target": "Abdominals",
+            "instructions": [
+                "Get into forearm plank position",
+                "Engage your core and hold position",
+                "Avoid letting your hips sag"
+            ],
+            "secondaryMuscles": [
+                "Shoulders",
+                "Glutes"
+            ]
+        },
+        {
+            "id": "5",
+            "name": "Lunges",
+            "gifUrl": "",
+            "bodyPart": "Legs",
+            "equipment": "Body Weight",
+            "target": "Quadriceps",
+            "instructions": [
+                "Step forward with one leg",
+                "Lower your body until both knees are bent at 90 degrees",
+                "Push off the front foot to return to standing"
+            ],
+            "secondaryMuscles": [
+                "Glutes",
+                "Hamstrings"
+            ]
+        }
+    ]
+}
