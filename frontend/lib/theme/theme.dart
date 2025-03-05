@@ -6,14 +6,15 @@ class JimColors {
   static const Color white = Colors.white;
   static const Color placeholder = Color(0xFFCCCCCC);
   static const Color stroke = Color(0xFFAEAEB2);
-  
+  static const Color black = Color(0xFF000000);
+  static const Color transparent = Colors.transparent;
+
   static const Color error = Color(0xFFEE3B2B);
   static const Color success = Color(0xFF82DD55);
   static const Color warning = Color(0xFFFAC752);
   static const Color textPrimary = Color(0xFF1A1A1A);
   static const Color textSecondary = Color(0xFF737373);
 }
-
 
 class JimTextStyles {
   static const TextStyle heading = TextStyle(
@@ -53,7 +54,6 @@ class JimTextStyles {
   );
 }
 
-
 class JimSpacings {
   static const double xs = 8;
   static const double s = 12;
@@ -62,18 +62,19 @@ class JimSpacings {
   static const double xl = 32;
   static const double xxl = 40;
 
+  static const double radiusSmall = 8;
   static const double radius = 16;
   static const double radiusLarge = 24;
-  static const double iconSize = 24;
   static const double buttonHeight = 48;
 }
+
 class JimIconSizes {
   static const double small = 20;
   static const double medium = 24;
   static const double large = 32;
 }
 
-ThemeData appTheme =  ThemeData(
+ThemeData appTheme = ThemeData(
   fontFamily: 'Poppins',
   scaffoldBackgroundColor: Colors.white,
 );

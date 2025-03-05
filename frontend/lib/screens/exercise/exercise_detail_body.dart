@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/common/theme.dart';
 import 'package:frontend/controller/exercise_detail_controller.dart';
+import 'package:get/get.dart';
+
+import '../../theme/theme.dart';
+import '../../widgets/action/jim_button.dart';
 
 class ExerciseDetailBody extends StatelessWidget {
   final ExerciseDetailController controller;
@@ -9,19 +12,20 @@ class ExerciseDetailBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+      padding: const EdgeInsets.symmetric(horizontal: JimSpacings.m), // Updated padding
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 24),
+          const SizedBox(height: JimSpacings.l),
           _buildExerciseHeader(),
-          const SizedBox(height: 32),
+          const SizedBox(height: JimSpacings.xl),
           _buildMuscleGroups(),
-          const SizedBox(height: 32),
+          const SizedBox(height: JimSpacings.xl),
           _buildEquipmentInfo(),
-          const SizedBox(height: 32),
+          const SizedBox(height: JimSpacings.xl),
           _buildInstructions(),
-          const SizedBox(height: 32),
+          const SizedBox(height: JimSpacings.xl),
+          _buildAddToWorkoutButton(),
         ],
       ),
     );
@@ -33,25 +37,21 @@ class ExerciseDetailBody extends StatelessWidget {
       children: [
         Text(
           controller.formattedName,
-          style: const TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: AppColor.textPrimary,
+          style: JimTextStyles.heading.copyWith(
+            color: JimColors.textPrimary,
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: JimSpacings.xs),
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          padding: const EdgeInsets.symmetric(horizontal: JimSpacings.s, vertical: JimSpacings.xs),
           decoration: BoxDecoration(
-            color: AppColor.primary,
-            borderRadius: BorderRadius.circular(8),
+            color: JimColors.primary,
+            borderRadius: BorderRadius.circular(JimSpacings.radiusSmall),
           ),
           child: Text(
             controller.formattedBodyPart,
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: AppColor.textPrimary,
+            style: JimTextStyles.body.copyWith(
+              color: JimColors.textPrimary,
             ),
           ),
         ),
@@ -63,20 +63,18 @@ class ExerciseDetailBody extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'Muscle Groups',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: AppColor.textPrimary,
+          style: JimTextStyles.heading.copyWith(
+            color: JimColors.textPrimary,
           ),
         ),
         const SizedBox(height: 16),
         Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: AppColor.white,
-            borderRadius: BorderRadius.circular(16),
+            color: JimColors.white, 
+            borderRadius: BorderRadius.circular(JimSpacings.radius),
           ),
           child: Column(
             children: [
@@ -87,7 +85,7 @@ class ExerciseDetailBody extends StatelessWidget {
               ),
               if (controller.hasSecondaryMuscles) ...[
                 const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 12),
+                  padding: EdgeInsets.symmetric(vertical: JimSpacings.s),
                   child: Divider(),
                 ),
                 _buildMuscleItem(
@@ -113,21 +111,20 @@ class ExerciseDetailBody extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            color: AppColor.primary,
+            color: JimColors.primary,
             borderRadius: BorderRadius.circular(12),
           ),
-          child: Icon(icon, color: AppColor.black, size: 24),
+          child: Icon(icon, color: JimColors.black, size: JimIconSizes.medium),
         ),
-        const SizedBox(width: 16),
+        const SizedBox(width: JimSpacings.m),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 title,
-                style: const TextStyle(
-                  color: AppColor.black,
-                  fontSize: 14,
+                style: JimTextStyles.body.copyWith(
+                  color: JimColors.textPrimary,
                 ),
               ),
               Text(
@@ -135,10 +132,9 @@ class ExerciseDetailBody extends StatelessWidget {
                     .split(' ')
                     .map((word) => word[0].toUpperCase() + word.substring(1))
                     .join(' '),
-                style: const TextStyle(
-                  color: AppColor.black,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
+                style: JimTextStyles.body.copyWith(
+                  color: JimColors.textPrimary,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ],
@@ -152,42 +148,39 @@ class ExerciseDetailBody extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'Equipment',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: AppColor.black,
+          style: JimTextStyles.heading.copyWith(
+            color: JimColors.textPrimary,
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: JimSpacings.m),
         Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: AppColor.white,
-            borderRadius: BorderRadius.circular(16),
+            color: JimColors.white,
+            borderRadius: BorderRadius.circular(JimSpacings.radius),
           ),
           child: Row(
             children: [
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: AppColor.primary,
+                  color: JimColors.primary,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: const Icon(
                   Icons.fitness_center,
-                  color: AppColor.black,
+                  color: JimColors.black,
                   size: 24,
                 ),
               ),
-              const SizedBox(width: 16),
+              const SizedBox(width: JimSpacings.m),
               Text(
                 controller.formattedEquipment,
-                style: const TextStyle(
-                  color: AppColor.black,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
+                style: JimTextStyles.body.copyWith(
+                  color: JimColors.textPrimary,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ],
@@ -205,20 +198,18 @@ class ExerciseDetailBody extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'Instructions',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: AppColor.textPrimary,
+          style: JimTextStyles.heading.copyWith(
+            color: JimColors.textPrimary,
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: JimSpacings.m),
         Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: AppColor.white,
-            borderRadius: BorderRadius.circular(16),
+            color: JimColors.white,
+            borderRadius: BorderRadius.circular(JimSpacings.radius),
           ),
           child: Column(
             children: controller.instructions.asMap().entries.map((entry) {
@@ -233,26 +224,25 @@ class ExerciseDetailBody extends StatelessWidget {
                       width: 28,
                       height: 28,
                       decoration: BoxDecoration(
-                        color: AppColor.primary,
-                        borderRadius: BorderRadius.circular(8),
+                        color: JimColors.primary,
+                        borderRadius: BorderRadius.circular(JimSpacings.radiusSmall),
                       ),
                       child: Center(
                         child: Text(
                           '$index',
-                          style: const TextStyle(
-                            color: AppColor.white,
+                          style: JimTextStyles.body.copyWith(
+                            color: JimColors.white,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: JimSpacings.s),
                     Expanded(
                       child: Text(
                         instruction,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          color: AppColor.textPrimary,
+                        style: JimTextStyles.body.copyWith(
+                          color: JimColors.textPrimary,
                           height: 1.5,
                         ),
                       ),
@@ -264,6 +254,19 @@ class ExerciseDetailBody extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildAddToWorkoutButton() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: JimSpacings.s),
+      child: JimButton(
+        text: 'Add to Workout',
+        onPressed: () {
+          // Navigating to a workout screen
+          Get.toNamed('/create-workout');
+        },
+      ),
     );
   }
 }

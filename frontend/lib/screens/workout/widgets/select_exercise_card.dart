@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/common/theme.dart';
 import 'package:frontend/models/exercise.dart';
+import 'package:frontend/theme/theme.dart';
 
 class SelectExerciseCard extends StatelessWidget {
   final Exercise exercise;
@@ -24,7 +24,7 @@ class SelectExerciseCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Card(
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        margin: const EdgeInsets.symmetric(horizontal: JimSpacings.xs, vertical: JimSpacings.s),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
@@ -36,17 +36,17 @@ class SelectExerciseCard extends StatelessWidget {
             GestureDetector(
               onTap: () => onSelected(!isSelected),
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(4.0),
                 child: Container(
                   width: 24,
                   height: 24,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: isSelected ? AppColor.primary : Colors.transparent,
+                    color: isSelected ? JimColors.primary : JimColors.transparent,
                     border: Border.all(
                       color: isSelected
-                          ? AppColor.primary
-                          : AppColor.textSecondary,
+                          ? JimColors.primary
+                          : JimColors.textSecondary,
                       width: 2,
                     ),
                   ),
@@ -54,7 +54,7 @@ class SelectExerciseCard extends StatelessWidget {
                       ? Icon(
                           Icons.check,
                           size: 16,
-                          color: AppColor.white,
+                          color: JimColors.white,
                         )
                       : null,
                 ),
@@ -64,7 +64,7 @@ class SelectExerciseCard extends StatelessWidget {
             // Exercise Details and Image
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12),
+                padding: const EdgeInsets.symmetric(horizontal: JimSpacings.s, vertical: JimSpacings.s),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -79,20 +79,20 @@ class SelectExerciseCard extends StatelessWidget {
                         placeholder: (context, url) => Container(
                           width: 60,
                           height: 60,
-                          color: AppColor.white,
+                          color: JimColors.white,
                           child: const Center(
                             child: CircularProgressIndicator(
                               valueColor: AlwaysStoppedAnimation<Color>(
-                                  AppColor.accent),
+                                  JimColors.placeholder),
                             ),
                           ),
                         ),
                         errorWidget: (context, url, error) => Container(
                           width: 60,
                           height: 60,
-                          color: Colors.grey[300],
+                          color: JimColors.stroke,
                           child:
-                              const Icon(Icons.error, color: AppColor.warning),
+                              const Icon(Icons.error, color: JimColors.error),
                         ),
                       ),
                     ),
@@ -111,7 +111,7 @@ class SelectExerciseCard extends StatelessWidget {
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
-                              color: AppColor.textPrimary,
+                              color: JimColors.textPrimary,
                             ),
                           ),
                           const SizedBox(height: 4),
@@ -120,7 +120,7 @@ class SelectExerciseCard extends StatelessWidget {
                             "${exercise.target}, ${exercise.equipment}",
                             style: const TextStyle(
                               fontSize: 14,
-                              color: AppColor.textSecondary,
+                              color: JimColors.textSecondary,
                             ),
                           ),
                         ],

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/common/theme.dart';
+import 'package:frontend/theme/theme.dart';
 import 'package:frontend/screens/workout/widgets/workout_form.dart';
 import 'package:get/get.dart';
 
@@ -17,11 +17,11 @@ class CreateWorkoutScreen extends StatelessWidget {
     Get.put(SelectExerciseController());
 
     return Scaffold(
-      backgroundColor: AppColor.primaryBackground,
+      backgroundColor: JimColors.backgroundAccent,
       appBar: _buildAppBar(controller),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(JimSpacings.m),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -37,10 +37,10 @@ class CreateWorkoutScreen extends StatelessWidget {
 AppBar _buildAppBar(WorkoutController controller) {
   return AppBar(
     centerTitle: true,
-    backgroundColor: AppColor.white,
+    backgroundColor: JimColors.white,
     elevation: 0,
     leading: IconButton(
-      icon: const Icon(Icons.arrow_back, color: AppColor.black),
+      icon: const Icon(Icons.arrow_back, color: JimColors.black),
       onPressed: () {
         Get.back();
       },
@@ -48,7 +48,7 @@ AppBar _buildAppBar(WorkoutController controller) {
     title: const Text(
       'Create Workout',
       style: TextStyle(
-        color: AppColor.black,
+        color: JimColors.black,
         fontWeight: FontWeight.bold,
       ),
     ),
@@ -60,8 +60,8 @@ AppBar _buildAppBar(WorkoutController controller) {
               'Error',
               'Please Input Workout Title',
               snackPosition: SnackPosition.BOTTOM,
-              backgroundColor: AppColor.error,
-              colorText: Colors.white,
+              backgroundColor: JimColors.error,
+              colorText: JimColors.white,
             );
             return;
           }
@@ -71,8 +71,8 @@ AppBar _buildAppBar(WorkoutController controller) {
               'Error',
               'Please add at least one exercise.',
               snackPosition: SnackPosition.BOTTOM,
-              backgroundColor: AppColor.error,
-              colorText: Colors.white,
+              backgroundColor: JimColors.error,
+              colorText: JimColors.white,
             );
             return;
           }
@@ -82,7 +82,7 @@ AppBar _buildAppBar(WorkoutController controller) {
         child: const Text(
           'Save',
           style: TextStyle(
-            color: AppColor.primary,
+            color: JimColors.primary,
             fontWeight: FontWeight.bold,
             fontSize: 16,
           ),

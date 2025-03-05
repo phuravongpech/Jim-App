@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/common/theme.dart';
 import 'package:frontend/screens/workout/widgets/workout_card.dart';
 import 'package:frontend/theme/theme.dart';
 import 'package:frontend/widgets/navigation/custom_bottom_navbar.dart';
@@ -8,6 +7,7 @@ import 'package:frontend/widgets/navigation/jim_top_bar.dart';
 import 'package:get/get.dart';
 
 import '../../../controller/workout_controller.dart';
+import '../../widgets/action/jim_text_button.dart';
 
 class WorkoutScreen extends StatefulWidget {
   const WorkoutScreen({super.key});
@@ -23,15 +23,17 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor.primaryBackground,
+      backgroundColor: JimColors.backgroundAccent,
       appBar: JimTopBar(
         title: 'Workout',
         actions: [
-          TextButton(
-              onPressed: () {
-                Get.toNamed('/create-workout');
-              },
-              child: saveButton),
+          JimTextButton(
+            text: 'Add',
+            onPressed: () {
+              Get.toNamed('/create-workout');
+            },
+            
+          ),
         ],
       ),
       body: JimListView(
@@ -47,18 +49,3 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
     );
   }
 }
-
-Widget saveButton = Row(
-  children: [
-    Text(
-      'Add',
-      style: JimTextStyles.button,
-    ),
-    SizedBox(width: 2),
-    Icon(
-      Icons.add,
-      color: AppColor.primary,
-      size: 28,
-    ),
-  ],
-);
