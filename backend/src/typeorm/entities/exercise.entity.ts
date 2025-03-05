@@ -1,29 +1,29 @@
-import { Entity, Column, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, OneToMany, PrimaryColumn } from 'typeorm';
 import { WorkoutExercise } from './workoutexercise.entity';
 
 @Entity('exercise')
 export class Exercise {
-    @PrimaryGeneratedColumn()
+    @PrimaryColumn()
     id: string;
 
     @Column()
     gifUrl: string;
-    
+
     @Column()
     bodyPart: string;
 
     @Column()
     target: string;
-    
+
     @Column()
     equipment: string;
-    
+
     @Column()
     name: string;
-    
+
     @Column('text')
     instruction: string;
 
-    @OneToMany(()=> WorkoutExercise, workoutExercise => workoutExercise.exercise)
+    @OneToMany(() => WorkoutExercise, workoutExercise => workoutExercise.exerciseId)
     workoutExercises: WorkoutExercise[];
 }
