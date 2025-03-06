@@ -22,6 +22,7 @@ class WorkoutController extends GetxController {
   void onInit() {
     super.onInit();
     _workoutService = MockWorkoutService();
+    fetchExercises();
   }
 
   fetchExercises() async {

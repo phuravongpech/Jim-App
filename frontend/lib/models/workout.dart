@@ -6,14 +6,12 @@ class Workout {
   final String name;
   final String description;
   final List<Exercise> exercises;
-  bool isCompleted;
 
   Workout({
     String? id,
     required this.name,
     required this.description,
     required this.exercises,
-    this.isCompleted = false,
   }) : id = id ?? UuidUtils.generateUuid();
 
   @override
@@ -21,7 +19,6 @@ class Workout {
     return 'Workout{\n'
         '  name: $name,\n'
         '  description: $description,\n'
-        '  isCompleted: $isCompleted,\n'
         '  exercises: $exercises,\n'
         '}';
   }
@@ -34,7 +31,6 @@ class Workout {
       exercises: (json['exercises'] as List)
           .map((exercise) => Exercise.fromJson(exercise))
           .toList(),
-      isCompleted: json['isCompleted'],
     );
   }
 }

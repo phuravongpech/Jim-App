@@ -180,6 +180,56 @@
                     "setCount": 4
                 }
             ]
+        },
+        {
+            "name": "New Workout 2",
+            "description": "A great workout for leg muscle groups",
+            "exercises": [
+                {
+                    "id": "003",
+                    "gifUrl": "https://example.com/squat.gif",
+                    "bodyPart": "legs",
+                    "target": "quadriceps",
+                    "equipment": "barbell",
+                    "name": "Squat",
+                    "instruction": "Stand with feet shoulder-width apart, lower your hips, and push back up."
+                },
+                {
+                    "id": "006",
+                    "gifUrl": "https://example.com/deadlift.gif",
+                    "bodyPart": "back",
+                    "target": "hamstrings",
+                    "equipment": "barbell",
+                    "name": "Deadlift",
+                    "instruction": "Bend at your hips and knees, grab the bar, and lift it up."
+                },
+                {
+                    "id": "009",
+                    "gifUrl": "https://example.com/deadlift.gif",
+                    "bodyPart": "back",
+                    "target": "hamstrings",
+                    "equipment": "barbell",
+                    "name": "Deadlift",
+                    "instruction": "Bend at your hips and knees, grab the bar, and lift it up."
+                }
+            ],
+            "workoutExercises": [
+                {
+                    "id": "003",
+                    "restTimeSecond": 60,
+                    "setCount": 3
+                },
+                {
+                    "id": "006",
+                    "restTimeSecond": 90,
+                    "setCount": 4
+                },
+                {
+                    "id": "009",
+                    "restTimeSecond": 120,
+                    "setCount": 4
+                }
+            ]
         }
     ]
 }
