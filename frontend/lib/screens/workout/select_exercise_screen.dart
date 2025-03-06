@@ -94,8 +94,9 @@ class SelectExerciseScreen extends StatelessWidget {
         text: 'Done',
         onPressed: () {
           final selectedExercises = controller.selectedExercises.map((id) {
-            return controller.exercises
-                .firstWhere((exercise) => exercise.id == id);
+            return controller.allExercises.firstWhere(
+              (exercise) => exercise.id == id,
+            );
           }).toList();
           Get.back(result: selectedExercises);
         },

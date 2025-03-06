@@ -1,3 +1,4 @@
+import 'package:frontend/controller/select_exercise_controller.dart';
 import 'package:frontend/models/exercise.dart';
 import 'package:get/get.dart';
 
@@ -58,11 +59,15 @@ class WorkoutController extends GetxController {
       return;
     }
 
+    // Get the selected exercises from the SelectExerciseController
+    final selectExerciseController = Get.find<SelectExerciseController>();
+    final selectedExercises = selectExerciseController.getSelectedExercises();
+
     // Create the workout data
     final workoutData = Workout(
       name: xWorkoutTitle.value,
       description: xWorkoutDescription.value,
-      exercises: xSelectedExercises,
+      exercises: selectedExercises,
     );
 
     // Add the workout to the list

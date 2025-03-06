@@ -138,4 +138,10 @@ class SelectExerciseController extends GetxController {
       return null;
     }
   }
+
+  List<Exercise> getSelectedExercises() {
+    return selectedExercises
+        .map((id) => allExercises.firstWhere((exercise) => exercise.id == id))
+        .toList();
+  }
 }
