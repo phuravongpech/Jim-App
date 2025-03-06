@@ -23,9 +23,7 @@ class MockWorkoutService extends WorkoutRepository {
 
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
-        var test = data.map((json) => Workout.fromJson(json)).toList();
-        print(test);
-        return test;
+        return data.map((json) => Workout.fromJson(json)).toList();
       } else {
         throw Exception('Failed to load workouts');
       }
