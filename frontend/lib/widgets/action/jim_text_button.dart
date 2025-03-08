@@ -24,7 +24,8 @@ class JimTextButton extends StatelessWidget {
         child: GestureDetector(
             onTap: onPressed,
             child: Text(text,
-                style: JimTextStyles.button.copyWith(color: JimColors.primary, fontSize: 16))),
+                style: JimTextStyles.button
+                    .copyWith(color: JimColors.primary, fontSize: 16))),
       ),
     );
   }

@@ -6,8 +6,6 @@ class Exercise {
   final String equipment;
   final String target;
   final List<String>? instructions;
-  final List<String>? secondaryMuscles;
-  bool isFavorite;
 
   Exercise(
       {required this.id,
@@ -16,9 +14,7 @@ class Exercise {
       required this.bodyPart,
       required this.equipment,
       required this.target,
-      this.instructions,
-      this.secondaryMuscles,
-      this.isFavorite = false});
+      this.instructions,});
 
   factory Exercise.fromJson(Map<String, dynamic> json) {
     return Exercise(
@@ -29,9 +25,6 @@ class Exercise {
       equipment: json['equipment']?.toString() ?? '',
       target: json['target']?.toString() ?? '',
       instructions: (json['instructions'] as List<dynamic>?)
-          ?.map((item) => item.toString())
-          .toList(),
-      secondaryMuscles: (json['secondaryMuscles'] as List<dynamic>?)
           ?.map((item) => item.toString())
           .toList(),
     );
@@ -46,12 +39,11 @@ class Exercise {
       'equipment': equipment,
       'target': target,
       'instructions': instructions,
-      'isFavorite': isFavorite
     };
   }
 
   @override
   String toString() {
-    return 'Exercise{\n  name: $name,\n  url: $gifUrl,}';
+    return 'Exercise{\n  id: $id,\n  name: $name,\n  gifUrl: $gifUrl,\n  bodyPart: $bodyPart,\n  equipment: $equipment,\n  target: $target,\n  instructions: $instructions\n}';
   }
 }

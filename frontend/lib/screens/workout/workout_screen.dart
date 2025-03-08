@@ -32,7 +32,6 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
             onPressed: () {
               Get.toNamed('/create-workout');
             },
-            
           ),
         ],
       ),

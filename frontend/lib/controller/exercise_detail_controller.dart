@@ -6,21 +6,26 @@ class ExerciseDetailController extends GetxController {
 
   ExerciseDetailController(this.exercise);
 
-  bool get hasSecondaryMuscles =>
-      exercise.secondaryMuscles != null &&
-      exercise.secondaryMuscles!.isNotEmpty;
-
+  /// Get the formatted name of the exercise
   String get formattedName => exercise.name
       .split(' ')
       .map((word) => word[0].toUpperCase() + word.substring(1))
       .join(' ');
 
+  /// Get the formatted body part of the exercise
   String get formattedBodyPart => exercise.bodyPart.toUpperCase();
 
+  /// Get the formatted equipment of the exercise
   String get formattedEquipment => exercise.equipment
       .split(' ')
       .map((word) => word[0].toUpperCase() + word.substring(1))
       .join(' ');
 
+  /// Get the formatted target of the exercise
+  String get formattedTarget => exercise.target
+      .split(' ')
+      .map((word) => word[0].toUpperCase() + word.substring(1))
+      .join(' ');
+  /// Get the instructions of the exercise    
   List<String> get instructions => exercise.instructions ?? [];
 }

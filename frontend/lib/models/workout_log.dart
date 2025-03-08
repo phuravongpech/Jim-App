@@ -9,7 +9,7 @@ class WorkoutLog {
   final int setNumber;
 
   WorkoutLog({
-    String? id, // Optional parameter
+    String? id,
     required this.workoutExercise,
     this.weight,
     this.rep,

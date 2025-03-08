@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/controller/exercise_detail_controller.dart';
-import 'package:get/get.dart';
-
-import '../../theme/theme.dart';
-import '../../widgets/action/jim_button.dart';
-
+import 'package:frontend/theme/theme.dart';
 class ExerciseDetailBody extends StatelessWidget {
-  final ExerciseDetailController controller;
   const ExerciseDetailBody({super.key, required this.controller});
+
+  final ExerciseDetailController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -24,8 +21,6 @@ class ExerciseDetailBody extends StatelessWidget {
           _buildEquipmentInfo(),
           const SizedBox(height: JimSpacings.xl),
           _buildInstructions(),
-          const SizedBox(height: JimSpacings.xl),
-          _buildAddToWorkoutButton(),
         ],
       ),
     );
@@ -69,7 +64,7 @@ class ExerciseDetailBody extends StatelessWidget {
             color: JimColors.textPrimary,
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: JimSpacings.m),
         Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
@@ -83,17 +78,6 @@ class ExerciseDetailBody extends StatelessWidget {
                 muscle: controller.exercise.target,
                 icon: Icons.track_changes,
               ),
-              if (controller.hasSecondaryMuscles) ...[
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: JimSpacings.s),
-                  child: Divider(),
-                ),
-                _buildMuscleItem(
-                  title: 'Secondary Muscles',
-                  muscle: controller.exercise.secondaryMuscles!.join(', '),
-                  icon: Icons.online_prediction_outlined,
-                ),
-              ],
             ],
           ),
         ),
@@ -109,7 +93,7 @@ class ExerciseDetailBody extends StatelessWidget {
     return Row(
       children: [
         Container(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.all(JimSpacings.s),
           decoration: BoxDecoration(
             color: JimColors.primary,
             borderRadius: BorderRadius.circular(12),
@@ -128,10 +112,7 @@ class ExerciseDetailBody extends StatelessWidget {
                 ),
               ),
               Text(
-                muscle
-                    .split(' ')
-                    .map((word) => word[0].toUpperCase() + word.substring(1))
-                    .join(' '),
+                muscle,
                 style: JimTextStyles.body.copyWith(
                   color: JimColors.textPrimary,
                   fontWeight: FontWeight.bold,
@@ -164,10 +145,10 @@ class ExerciseDetailBody extends StatelessWidget {
           child: Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.all(JimSpacings.s),
                 decoration: BoxDecoration(
                   color: JimColors.primary,
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(JimSpacings.radius),
                 ),
                 child: const Icon(
                   Icons.fitness_center,
@@ -216,7 +197,7 @@ class ExerciseDetailBody extends StatelessWidget {
               final index = entry.key + 1;
               final instruction = entry.value;
               return Padding(
-                padding: const EdgeInsets.only(bottom: 16),
+                padding: const EdgeInsets.only(bottom: JimSpacings.m),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -254,19 +235,6 @@ class ExerciseDetailBody extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildAddToWorkoutButton() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: JimSpacings.s),
-      child: JimButton(
-        text: 'Add to Workout',
-        onPressed: () {
-          // Navigating to a workout screen
-          Get.toNamed('/create-workout');
-        },
-      ),
     );
   }
 }

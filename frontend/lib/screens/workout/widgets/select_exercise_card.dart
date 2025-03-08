@@ -19,14 +19,13 @@ class SelectExerciseCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(
-        'Building SelectExerciseCard for ${exercise.name}, isSelected: $isSelected'); // Debugging
     return GestureDetector(
       onTap: onTap,
       child: Card(
-        margin: const EdgeInsets.symmetric(horizontal: JimSpacings.xs, vertical: JimSpacings.s),
+        margin: const EdgeInsets.symmetric(
+            horizontal: JimSpacings.xs, vertical: JimSpacings.s),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(JimSpacings.radius),
         ),
         elevation: 2,
         color: Colors.white,
@@ -42,12 +41,13 @@ class SelectExerciseCard extends StatelessWidget {
                   height: 24,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: isSelected ? JimColors.primary : JimColors.transparent,
+                    color:
+                        isSelected ? JimColors.primary : JimColors.transparent,
                     border: Border.all(
                       color: isSelected
                           ? JimColors.primary
                           : JimColors.textSecondary,
-                      width: 2,
+                      width: 1,
                     ),
                   ),
                   child: isSelected
@@ -64,7 +64,8 @@ class SelectExerciseCard extends StatelessWidget {
             // Exercise Details and Image
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: JimSpacings.s, vertical: JimSpacings.s),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: JimSpacings.s, vertical: JimSpacings.s),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -96,32 +97,23 @@ class SelectExerciseCard extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: JimSpacings.s),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           // Exercise Name
                           Text(
-                            exercise.name
-                                .split(' ')
-                                .map((word) =>
-                                    word[0].toUpperCase() + word.substring(1))
-                                .join(' '),
-                            style: const TextStyle(
-                              fontSize: 16,
+                            exercise.name,
+                            style: JimTextStyles.body.copyWith(
                               fontWeight: FontWeight.bold,
-                              color: JimColors.textPrimary,
                             ),
                           ),
                           const SizedBox(height: 4),
                           // Target and Equipment
                           Text(
                             "${exercise.target}, ${exercise.equipment}",
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: JimColors.textSecondary,
-                            ),
+                            style: JimTextStyles.label,
                           ),
                         ],
                       ),

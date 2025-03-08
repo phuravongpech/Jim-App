@@ -40,7 +40,6 @@ class SelectExerciseScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: JimColors.backgroundAccent,
       appBar: JimTopBar(
         title: 'Select Exercises',
         centerTitle: true,
@@ -93,11 +92,14 @@ class SelectExerciseScreen extends StatelessWidget {
       child: JimButton(
         text: 'Done',
         onPressed: () {
+          // Map selected exercise IDs to Exercise objects
           final selectedExercises = controller.selectedExercises.map((id) {
             return controller.allExercises.firstWhere(
               (exercise) => exercise.id == id,
             );
           }).toList();
+
+          // Return the selected exercises to the previous screen
           Get.back(result: selectedExercises);
         },
         type: ButtonType.primary,

@@ -42,7 +42,7 @@ class JimTextStyles {
   );
 
   static const TextStyle label = TextStyle(
-    fontSize: 13,
+    fontSize: 14,
     fontWeight: FontWeight.w400,
     color: JimColors.textSecondary,
   );

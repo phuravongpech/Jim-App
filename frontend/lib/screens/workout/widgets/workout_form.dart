@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/models/workout_exercise.dart';
 import 'package:get/get.dart';
 
 import '../../../controller/select_exercise_controller.dart';
 import '../../../controller/workout_controller.dart';
 import '../../../models/exercise.dart';
-import '../../../theme/theme.dart';  // Import your custom theme
+import '../../../theme/theme.dart';
 
 class WorkoutForm extends StatelessWidget {
   WorkoutForm({super.key});
@@ -37,7 +38,8 @@ class WorkoutForm extends StatelessWidget {
             decoration: InputDecoration(
               hintText: 'Input Workout Title',
               border: OutlineInputBorder(),
-              hintStyle: JimTextStyles.subBody.copyWith(color: JimColors.textSecondary),
+              hintStyle: JimTextStyles.subBody
+                  .copyWith(color: JimColors.textSecondary),
             ),
             validator: (value) {
               if (value == null || value.isEmpty) {
@@ -65,11 +67,11 @@ class WorkoutForm extends StatelessWidget {
             decoration: InputDecoration(
               hintText: 'Description...',
               border: OutlineInputBorder(),
-              hintStyle: JimTextStyles.subBody.copyWith(color: JimColors.textSecondary),
+              hintStyle: JimTextStyles.subBody
+                  .copyWith(color: JimColors.textSecondary),
             ),
           ),
           const SizedBox(height: JimSpacings.l),
-
           // Exercises Section
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -78,23 +80,38 @@ class WorkoutForm extends StatelessWidget {
                 'Exercises',
                 style: JimTextStyles.title,
               ),
-              // Add Exercise Button
-              IconButton(
-                onPressed: () async {
-                  // Navigate to the exercise selection screen
-                  final result = await Get.toNamed('/select-exercises');
-                  if (result != null) {
-                    // Update the selected exercises in the workout controller
-                    workoutController.xSelectedExercises.value =
-                        List<Exercise>.from(result);
-                  }
-                },
-                icon: Icon(
-                  Icons.add,
-                  size: JimIconSizes.medium,
-                  color: JimColors.primary,
-                ),
-              ),
+              Obx(() => IconButton(
+                    onPressed: () async {
+                      // Navigate based on whether exercises have been selected
+                      final result = await Get.toNamed(
+                        workoutController.xSelectedExercises.isEmpty
+                            ? '/select-exercises' // Navigate to select exercises if none are selected
+                            : '/edit-exercises', // Navigate to edit exercises if already selected
+                        arguments: workoutController.xSelectedExercises
+                            .map((exercise) {
+                          return WorkoutExercise(
+                            exerciseId: exercise.id,
+                            set: 4,
+                            restTimeSecond: 90,
+                          );
+                        }).toList(),
+                      );
+
+                      // Update selected exercises when returning from the screen
+                      if (result != null) {
+                        workoutController.xSelectedExercises.value =
+                            List<Exercise>.from(result);
+                      }
+                    },
+                    icon: Icon(
+                      // Show "Add" icon if no exercises are selected, otherwise "Edit"
+                      workoutController.xSelectedExercises.isEmpty
+                          ? Icons.add // Display Add icon
+                          : Icons.edit, // Display Edit icon
+                      size: JimIconSizes.medium,
+                      color: JimColors.primary,
+                    ),
+                  )),
             ],
           ),
           const SizedBox(height: JimSpacings.s),
@@ -119,7 +136,8 @@ class WorkoutForm extends StatelessWidget {
                 child: ListView.separated(
                   shrinkWrap: true,
                   itemCount: workoutController.xSelectedExercises.length,
-                  separatorBuilder: (context, index) => const Divider(height: 1),
+                  separatorBuilder: (context, index) =>
+                      const Divider(height: 1),
                   itemBuilder: (context, index) {
                     final exerciseId =
                         workoutController.xSelectedExercises[index].id;
@@ -131,8 +149,16 @@ class WorkoutForm extends StatelessWidget {
                       return Container();
                     }
 
+                    // Create a WorkoutExercise instance dynamically
+                    final workoutExercise = WorkoutExercise(
+                      exerciseId: exercise.id,
+                      set: 4,
+                      restTimeSecond: 90,
+                    );
+
                     return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: JimSpacings.s),
+                      padding:
+                          const EdgeInsets.symmetric(vertical: JimSpacings.s),
                       child: Row(
                         children: [
                           // Menu/Edit Icon
@@ -152,7 +178,8 @@ class WorkoutForm extends StatelessWidget {
                             width: 70,
                             height: 70,
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(JimSpacings.radiusSmall),
+                              borderRadius: BorderRadius.circular(
+                                  JimSpacings.radiusSmall),
                               image: DecorationImage(
                                 image: NetworkImage(exercise.gifUrl),
                                 fit: BoxFit.cover,
@@ -178,7 +205,7 @@ class WorkoutForm extends StatelessWidget {
                                 Row(
                                   children: [
                                     Text(
-                                      "4 sets",
+                                      "${workoutExercise.set} sets",
                                       style: JimTextStyles.subBody.copyWith(
                                         fontSize: 14,
                                         color: JimColors.textSecondary,
@@ -186,7 +213,7 @@ class WorkoutForm extends StatelessWidget {
                                     ),
                                     const SizedBox(width: JimSpacings.s),
                                     Text(
-                                      "90s",
+                                      "${workoutExercise.restTimeSecond}s",
                                       style: JimTextStyles.subBody.copyWith(
                                         fontSize: 14,
                                         color: JimColors.textSecondary,

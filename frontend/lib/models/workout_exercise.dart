@@ -1,13 +1,26 @@
 class WorkoutExercise {
   final String exerciseId;
-  final int set;
-  final int restTimeSecond;
+  late final int set;
+  late final int restTimeSecond;
 
   WorkoutExercise({
     required this.exerciseId,
-    required this.set,
-    required this.restTimeSecond,
+    this.set = 4,
+    this.restTimeSecond = 90,
   });
+
+  /// Create a new [WorkoutExercise] from a JSON object
+  WorkoutExercise copyWith({
+    String? exerciseId,
+    int? set,
+    int? restTimeSecond,
+  }) {
+    return WorkoutExercise(
+      exerciseId: exerciseId ?? this.exerciseId,
+      set: set ?? this.set,
+      restTimeSecond: restTimeSecond ?? this.restTimeSecond,
+    );
+  }
 
   @override
   String toString() {

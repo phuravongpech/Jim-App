@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/common/theme.dart';
+import 'package:frontend/theme/theme.dart';
 
 class CustomSelectSearch extends StatelessWidget {
   final TextEditingController searchController;
@@ -16,14 +16,14 @@ class CustomSelectSearch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: AppColor.white,
+      color: JimColors.white,
       margin: const EdgeInsets.only(left: 16, right: 16, top: 8),
       elevation: 3,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+        padding: const EdgeInsets.symmetric(horizontal: JimSpacings.xs, vertical: JimSpacings.xs),
         child: TextField(
           controller: searchController,
           decoration: InputDecoration(

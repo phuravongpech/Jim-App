@@ -12,6 +12,7 @@ class ExerciseService implements ExerciseRepository {
   final String baseUrl = dotenv.env['BASE_URL'] ?? 'default_url';
   final String apiKey = dotenv.env['API_KEY'] ?? 'default_key';
 
+  /// Get exercises from the API
   @override
   Future<List<Exercise>> getExercises({
     required int page,
@@ -37,6 +38,7 @@ class ExerciseService implements ExerciseRepository {
     }
   }
 
+  /// Search exercises from the API
   @override
   Future<List<Exercise>> searchExercises({required String query}) async {
     String newQuery = Fuzzywuzzy.searchForExercise(query);

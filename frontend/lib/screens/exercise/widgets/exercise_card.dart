@@ -69,20 +69,16 @@ class ExerciseCard extends StatelessWidget {
                 children: [
                   // Exercise Name
                   Text(
-                    exercise.name
-                        .split(' ')
-                        .map(
-                            (word) => word[0].toUpperCase() + word.substring(1))
-                        .join(' '),
+                    exercise.name,
                     style: JimTextStyles.heading.copyWith(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: JimColors.textPrimary,
                     ),
                   ),
-                  // Target and Secondary Muscles
+                  // Target
                   Text(
-                    "${exercise.target}${exercise.secondaryMuscles != null && exercise.secondaryMuscles!.isNotEmpty ? ', ${exercise.secondaryMuscles!.join(', ')}' : ''}",
+                    exercise.target,
                     style: JimTextStyles.subBody.copyWith(
                       fontSize: 14,
                       color: JimColors.textSecondary,

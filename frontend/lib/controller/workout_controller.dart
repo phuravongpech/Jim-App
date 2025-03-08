@@ -1,5 +1,6 @@
 import 'package:frontend/controller/select_exercise_controller.dart';
 import 'package:frontend/models/exercise.dart';
+import 'package:frontend/models/workout_exercise.dart';
 import 'package:get/get.dart';
 
 import '../models/workout.dart';
@@ -18,7 +19,7 @@ class WorkoutController extends GetxController {
   var xWorkoutDescription = ''.obs;
   var xSelectedExercises = <Exercise>[].obs; // List of selected exercise IDs
   var xWorkoutList = <Workout>[].obs; // List to store workouts
-
+  
   @override
   void onInit() {
     super.onInit();
@@ -29,7 +30,6 @@ class WorkoutController extends GetxController {
   fetchExercises() async {
     try {
       final fetchedExercises = await _workoutService.getWorkouts();
-
       // Add the fetched exercises to the list
       xWorkoutList.addAll(fetchedExercises);
     } catch (e) {
@@ -47,17 +47,17 @@ class WorkoutController extends GetxController {
     xSelectedExercises.remove(exercise);
   }
 
-  // Save the workout data and perform validation
+  // Save the workout data
   void saveWorkout() {
-    if (xWorkoutTitle.value.isEmpty) {
-      Get.snackbar('Error', 'Workout Title is required!');
-      return;
-    }
+    // if (xWorkoutTitle.value.isEmpty) {
+    //   Get.snackbar('Error', 'Workout Title is required!');
+    //   return;
+    // }
 
-    if (xSelectedExercises.isEmpty) {
-      Get.snackbar('Error', 'At least one exercise must be added!');
-      return;
-    }
+    // if (xSelectedExercises.isEmpty) {
+    //   Get.snackbar('Error', 'At least one exercise must be added!');
+    //   return;
+    // }
 
     // Get the selected exercises from the SelectExerciseController
     final selectExerciseController = Get.find<SelectExerciseController>();

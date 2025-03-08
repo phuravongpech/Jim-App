@@ -1,6 +1,6 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/common/theme.dart';
+import 'package:frontend/theme/theme.dart';
 import 'package:get/get.dart';
 
 class CustomBottomNavBar extends StatelessWidget {
@@ -48,9 +48,9 @@ class CustomBottomNavBar extends StatelessWidget {
         Icon(Icons.bar_chart, size: 24),
         Icon(Icons.person, size: 24),
       ],
-      backgroundColor: AppColor.white,
-      color: AppColor.primary,
-      buttonBackgroundColor: AppColor.primary,
+      backgroundColor: JimColors.backgroundAccent,
+      color: JimColors.primary,
+      buttonBackgroundColor: JimColors.primary,
       animationDuration: const Duration(milliseconds: 600),
       height: 60,
     );

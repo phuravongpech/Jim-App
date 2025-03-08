@@ -11,6 +11,7 @@ class MockExerciseService extends ExerciseRepository {
 
   final String baseUrl = 'http://localhost:3000';
 
+  /// Get exercises from mock data
   @override
   Future<List<Exercise>> getExercises({
     required int page,

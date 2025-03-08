@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/common/theme.dart';
 import 'package:frontend/controller/exercise_controller.dart';
+import 'package:frontend/theme/theme.dart';
 import 'package:get/get.dart';
 
 class CustomSearchExercisses extends StatelessWidget {
@@ -12,14 +12,14 @@ class CustomSearchExercisses extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: AppColor.white,
+      color: JimColors.white,
       margin: const EdgeInsets.only(left: 16, right: 16, top: 8),
       elevation: 3,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(JimSpacings.radiusLarge),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+        padding: const EdgeInsets.symmetric(horizontal: JimSpacings.xs, vertical: JimSpacings.xs),
         child: TextField(
           controller: _searchController,
           decoration: InputDecoration(
