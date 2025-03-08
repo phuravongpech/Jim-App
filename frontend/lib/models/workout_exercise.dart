@@ -22,6 +22,14 @@ class WorkoutExercise {
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'exerciseId': exerciseId,
+      'set': set,
+      'restTimeSecond': restTimeSecond,
+    };
+  }
+
   @override
   String toString() {
     return 'WorkoutExercise{\n  exerciseId: $exerciseId,\n  set: $set,\n  restTimeSecond: $restTimeSecond\n}';

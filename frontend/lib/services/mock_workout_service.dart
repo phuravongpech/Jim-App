@@ -46,7 +46,7 @@ class MockWorkoutService extends WorkoutRepository {
           'name': name,
           'description': description,
           'exercises': exercises.map((e) => e.toJson()).toList(),
-          // 'workoutExercises': workoutExercises.map((we) => we.toJson()).toList(),
+          'workoutExercises': workoutExercises.map((we) => we.toJson()).toList(),
         }),
         headers: {
           'Content-Type': 'application/json',

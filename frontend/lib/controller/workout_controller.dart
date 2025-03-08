@@ -1,4 +1,3 @@
-import 'package:frontend/controller/select_exercise_controller.dart';
 import 'package:frontend/models/exercise.dart';
 import 'package:frontend/models/workout_exercise.dart';
 import 'package:get/get.dart';
@@ -19,7 +18,7 @@ class WorkoutController extends GetxController {
   var xWorkoutDescription = ''.obs;
   var xSelectedExercises = <Exercise>[].obs; // List of selected exercise IDs
   var xWorkoutList = <Workout>[].obs; // List to store workouts
-  
+
   @override
   void onInit() {
     super.onInit();
@@ -49,46 +48,30 @@ class WorkoutController extends GetxController {
 
   // Save the workout data
   void saveWorkout() {
-    // if (xWorkoutTitle.value.isEmpty) {
-    //   Get.snackbar('Error', 'Workout Title is required!');
-    //   return;
-    // }
+    if (xWorkoutTitle.value.isEmpty) {
+      Get.snackbar('Error', 'Workout Title is required!');
+      return;
+    }
 
-    // if (xSelectedExercises.isEmpty) {
-    //   Get.snackbar('Error', 'At least one exercise must be added!');
-    //   return;
-    // }
+    if (xSelectedExercises.isEmpty) {
+      Get.snackbar('Error', 'At least one exercise must be added!');
+      return;
+    }
 
-    // Get the selected exercises from the SelectExerciseController
-    final selectExerciseController = Get.find<SelectExerciseController>();
-    final selectedExercises = selectExerciseController.getSelectedExercises();
+    List<Exercise> exercises = xSelectedExercises;
 
-    // Create the workout data
-    final workoutData = Workout(
-      name: xWorkoutTitle.value,
-      description: xWorkoutDescription.value,
-      exercises: selectedExercises,
-    );
+    List<WorkoutExercise> workoutExercise = exercises.map((exercise) {
+      return WorkoutExercise(exerciseId: exercise.id);
+    }).toList();
 
-    // Add the workout to the list
-    addWorkout(workoutData);
+    _workoutService.saveWorkouts(
+        name: xWorkoutTitle.value,
+        description: xWorkoutDescription.value,
+        exercises: xSelectedExercises,
+        workoutExercises: workoutExercise);
 
-    // Clear the form fields after saving
     xWorkoutTitle.value = '';
     xWorkoutDescription.value = '';
     xSelectedExercises.clear();
-
-    // Return the workout data when saved
-    Get.back(result: workoutData);
   }
-
-  // Add a new workout to the list
-  void addWorkout(Workout workoutData) {
-    xWorkoutList.add(workoutData);
-  }
-
-  // // Optionally, remove a workout by title
-  // void removeWorkout(String title) {
-  //   xWorkoutList.removeWhere((workout) => workout['title'] == title);
-  // }
 }
