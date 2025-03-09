@@ -4,6 +4,7 @@ import 'package:frontend/screens/profile/profile_screen.dart';
 import 'package:frontend/screens/progress/progress_screen.dart';
 import 'package:frontend/screens/workout/create_workout_screen.dart';
 import 'package:frontend/screens/workout/edit_exercise_screen.dart';
+import 'package:frontend/screens/workout/workout_detail_screen.dart';
 import 'package:frontend/screens/workout/workout_screen.dart';
 import 'package:get/get.dart';
 
@@ -26,5 +27,10 @@ final routes = [
   GetPage(
     name: '/edit-exercises',
     page: () => EditExerciseScreen(),
+  ),
+  GetPage(
+    name: '/workout-detail',
+    page: () => WorkoutDetailScreen(),
+    // No need to specify return type in the route definition
   ),
 ];

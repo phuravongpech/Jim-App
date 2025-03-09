@@ -33,6 +33,22 @@ class MockWorkoutService extends WorkoutRepository {
   }
 
   @override
+  Future<Workout> getWorkoutById(String id) async {
+    try {
+      final response = await get(Uri.parse('$baseUrl/workouts/$id'));
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = json.decode(response.body);
+        return Workout.fromJson(data);
+      } else {
+        throw Exception('Failed to load workout details');
+      }
+    } catch (e) {
+      throw Exception('Error fetching workout details: $e');
+    }
+  }
+
+  @override
   Future<void> saveWorkouts({
     required String name,
     required String description,
