@@ -61,7 +61,7 @@ class WorkoutController extends GetxController {
     List<Exercise> exercises = xSelectedExercises;
 
     List<WorkoutExercise> workoutExercise = exercises.map((exercise) {
-      return WorkoutExercise(exerciseId: exercise.id);
+      return WorkoutExercise(exerciseId: exercise.id, set: 4, restTimeSecond: 90);
     }).toList();
 
     _workoutService.saveWorkouts(

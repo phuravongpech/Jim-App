@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/controller/select_exercise_controller.dart';
 import 'package:frontend/controller/workout_controller.dart';
 import 'package:frontend/models/exercise.dart';
+import 'package:frontend/screens/workout/widgets/rest_time_picker.dart';
 import 'package:frontend/widgets/action/jim_button.dart';
 import 'package:frontend/widgets/navigation/jim_top_bar.dart';
 import 'package:get/get.dart';
@@ -154,8 +155,23 @@ class EditExerciseScreen extends StatelessWidget {
                     // Rest Time Icon and Value
                     Column(
                       children: [
-                        Icon(Icons.timer, color: Colors.blue),
+                        IconButton(
+                          icon: Icon(Icons.timer, color: Colors.blue),
+                          onPressed: () async {
+                            final newRestTime = await Get.to<int>(
+                              RestTimePicker(
+                                initialRestTime: exercise.restTimeSecond,
+                                exerciseIndex: index,
+                              ),
+                            );
+
+                            if (newRestTime != null) {
+                              controller.updateRestTime(index, newRestTime);
+                            }
+                          },
+                        ),
                         const SizedBox(height: 4.0),
+                        // Display Rest Time
                         Text(
                           "${exercise.restTimeSecond}s",
                           style:
@@ -184,7 +200,7 @@ class EditExerciseScreen extends StatelessWidget {
 
           // If the result is not null, update the selected exercises
           if (result != null) {
-            // Convert the result to a list of WorkoutExercise objects
+            // Convert the result (List<Exercise>) to a list of WorkoutExercise objects
             final newExercises = (result as List<Exercise>).map((exercise) {
               return WorkoutExercise(
                 exerciseId: exercise.id,

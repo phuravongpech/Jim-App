@@ -7,10 +7,7 @@
       "id": "0001",
       "name": "3/4 sit-up",
       "target": "abs",
-      "secondaryMuscles": [
-        "hip flexors",
-        "lower back"
-      ],
+      "secondaryMuscles": ["hip flexors", "lower back"],
       "instructions": [
         "Lie flat on your back with your knees bent and feet flat on the ground.",
         "Place your hands behind your head with your elbows pointing outwards.",
@@ -26,9 +23,7 @@
       "id": "0002",
       "name": "45° side bend",
       "target": "abs",
-      "secondaryMuscles": [
-        "obliques"
-      ],
+      "secondaryMuscles": ["obliques"],
       "instructions": [
         "Stand with your feet shoulder-width apart and your arms extended straight down by your sides.",
         "Keeping your back straight and your core engaged, slowly bend your torso to one side, lowering your hand towards your knee.",
@@ -44,9 +39,7 @@
       "id": "0003",
       "name": "air bike",
       "target": "abs",
-      "secondaryMuscles": [
-        "hip flexors"
-      ],
+      "secondaryMuscles": ["hip flexors"],
       "instructions": [
         "Lie flat on your back with your hands placed behind your head.",
         "Lift your legs off the ground and bend your knees at a 90-degree angle.",
@@ -62,9 +55,7 @@
       "id": "0006",
       "name": "alternate heel touchers",
       "target": "abs",
-      "secondaryMuscles": [
-        "obliques"
-      ],
+      "secondaryMuscles": ["obliques"],
       "instructions": [
         "Lie flat on your back with your knees bent and feet flat on the ground.",
         "Extend your arms straight out to the sides, parallel to the ground.",
@@ -80,10 +71,7 @@
       "id": "0007",
       "name": "alternate lateral pulldown",
       "target": "lats",
-      "secondaryMuscles": [
-        "biceps",
-        "rhomboids"
-      ],
+      "secondaryMuscles": ["biceps", "rhomboids"],
       "instructions": [
         "Sit on the cable machine with your back straight and feet flat on the ground.",
         "Grasp the handles with an overhand grip, slightly wider than shoulder-width apart.",
@@ -99,10 +87,7 @@
       "id": "0009",
       "name": "assisted chest dip (kneeling)",
       "target": "pectorals",
-      "secondaryMuscles": [
-        "triceps",
-        "shoulders"
-      ],
+      "secondaryMuscles": ["triceps", "shoulders"],
       "instructions": [
         "Adjust the machine to your desired height and secure your knees on the pad.",
         "Grasp the handles with your palms facing down and your arms fully extended.",
@@ -118,10 +103,7 @@
       "id": "0010",
       "name": "assisted hanging knee raise with throw down",
       "target": "abs",
-      "secondaryMuscles": [
-        "hip flexors",
-        "lower back"
-      ],
+      "secondaryMuscles": ["hip flexors", "lower back"],
       "instructions": [
         "Hang from a pull-up bar with your arms fully extended and your palms facing away from you.",
         "Engage your core and lift your knees towards your chest, keeping your legs together.",

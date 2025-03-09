@@ -1,12 +1,12 @@
 class WorkoutExercise {
   final String exerciseId;
-  late final int set;
-  late final int restTimeSecond;
+  int set;
+  int restTimeSecond;
 
   WorkoutExercise({
     required this.exerciseId,
-    this.set = 4,
-    this.restTimeSecond = 90,
+    required this.set,
+    required this.restTimeSecond,
   });
 
   /// Create a new [WorkoutExercise] from a JSON object
