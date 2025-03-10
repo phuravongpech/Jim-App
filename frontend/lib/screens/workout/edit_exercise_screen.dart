@@ -18,6 +18,25 @@ class EditExerciseScreen extends StatelessWidget {
 
   EditExerciseScreen({super.key});
 
+  void _onPressedAddExercise() async {
+    final result = await Get.toNamed('/select-exercises');
+
+    // If the result is not null, update the selected exercises
+    if (result != null) {
+      // Convert the result (List<Exercise>) to a list of WorkoutExercise objects
+      final newExercises = (result as List<Exercise>).map((exercise) {
+        return WorkoutExercise(
+          exerciseId: exercise.id,
+          set: 4,
+          restTimeSecond: 90,
+        );
+      }).toList();
+
+      // Add the new exercises to the existing list in the controller
+      controller.addExercises(newExercises);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // Initialize exercises with the arguments passed
@@ -28,8 +47,7 @@ class EditExerciseScreen extends StatelessWidget {
       backgroundColor: JimColors.backgroundAccent,
       appBar: _buildAppBar(),
       body: _buildExerciseList(),
-      bottomNavigationBar:
-          _buildAddExerciseButton(), // Use the corrected method here
+      bottomNavigationBar: _buildAddExerciseButton(),
     );
   }
 
@@ -76,28 +94,20 @@ class EditExerciseScreen extends StatelessWidget {
 
           return Padding(
             padding:
-                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                const EdgeInsets.symmetric(vertical: JimSpacings.xs, horizontal: JimSpacings.m),
             child: Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12.0),
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.2),
-                    blurRadius: 6,
-                    offset: Offset(0, 3),
-                  ),
-                ],
+                borderRadius: BorderRadius.circular(12),
+                color: JimColors.white,
               ),
               child: Padding(
-                padding: const EdgeInsets.all(12.0),
+                padding: const EdgeInsets.all(JimSpacings.m),
                 child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    // Drag Handle Icon (Optional)
                     Padding(
-                      padding: const EdgeInsets.only(right: 12.0),
-                      child: Icon(Icons.drag_handle, color: Colors.grey),
+                      padding: const EdgeInsets.only(right: JimSpacings.m),
+                      child: Icon(Icons.menu, color: Colors.grey),
                     ),
                     // Exercise Image
                     Container(
@@ -112,7 +122,7 @@ class EditExerciseScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 12.0),
+                    const SizedBox(width: JimSpacings.m),
                     // Exercise Info
                     Expanded(
                       child: Column(
@@ -129,23 +139,56 @@ class EditExerciseScreen extends StatelessWidget {
                           Row(
                             children: [
                               // Decrease Set Button
-                              IconButton(
-                                icon: Icon(Icons.remove),
-                                onPressed: () => controller.decreaseSet(index),
-                                splashRadius: 20,
-                                color: Colors.grey,
+                              Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  Container(
+                                    width: 24,
+                                    height: 24,
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey,
+                                      borderRadius: BorderRadius.circular(
+                                          JimSpacings.radiusSmall),
+                                    ),
+                                  ),
+                                  IconButton(
+                                    icon: Icon(Icons.remove),
+                                    onPressed: () =>
+                                        controller.decreaseSet(index),
+                                    color: JimColors.black,
+                                  ),
+                                ],
                               ),
                               // Set Count
                               Text(
-                                "${exercise.set} Sets",
+                                exercise.set.toString(),
                                 style: JimTextStyles.body,
                               ),
                               // Increase Set Button
-                              IconButton(
-                                icon: Icon(Icons.add),
-                                onPressed: () => controller.increaseSet(index),
-                                splashRadius: 20,
-                                color: Colors.grey,
+                              Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  Container(
+                                    width: 24,
+                                    height: 24,
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey,
+                                      borderRadius: BorderRadius.circular(
+                                          JimSpacings.radiusSmall),
+                                    ),
+                                  ),
+                                  IconButton(
+                                    icon: Icon(Icons.add),
+                                    onPressed: () =>
+                                        controller.increaseSet(index),
+                                    color: JimColors.black,
+                                  ),
+                                ],
+                              ),
+                              Text(
+                                'Sets',
+                                style: JimTextStyles.body
+                                    .copyWith(color: Colors.grey),
                               ),
                             ],
                           ),
@@ -156,7 +199,8 @@ class EditExerciseScreen extends StatelessWidget {
                     Column(
                       children: [
                         IconButton(
-                          icon: Icon(Icons.timer, color: Colors.blue),
+                          icon:
+                              Icon(Icons.more_time_rounded, color: Colors.blue),
                           onPressed: () async {
                             final newRestTime = await Get.to<int>(
                               RestTimePicker(
@@ -170,7 +214,6 @@ class EditExerciseScreen extends StatelessWidget {
                             }
                           },
                         ),
-                        const SizedBox(height: 4.0),
                         // Display Rest Time
                         Text(
                           "${exercise.restTimeSecond}s",
@@ -194,25 +237,7 @@ class EditExerciseScreen extends StatelessWidget {
       padding: const EdgeInsets.all(JimSpacings.m),
       child: JimButton(
         text: 'Add Exercise',
-        onPressed: () async {
-          // Navigate to SelectExerciseScreen and wait for the result
-          final result = await Get.toNamed('/select-exercises');
-
-          // If the result is not null, update the selected exercises
-          if (result != null) {
-            // Convert the result (List<Exercise>) to a list of WorkoutExercise objects
-            final newExercises = (result as List<Exercise>).map((exercise) {
-              return WorkoutExercise(
-                exerciseId: exercise.id,
-                set: 4,
-                restTimeSecond: 90,
-              );
-            }).toList();
-
-            // Add the new exercises to the existing list in the controller
-            controller.addExercises(newExercises);
-          }
-        },
+        onPressed: _onPressedAddExercise,
         type: ButtonType.primary,
         icon: Icons.add,
       ),

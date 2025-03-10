@@ -1,38 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../models/workout_exercise.dart';
 
-class EditExerciseController extends GetxController with SingleGetTickerProviderMixin {
+class EditExerciseController extends GetxController {
   var exercises = <WorkoutExercise>[].obs;
-  late AnimationController _animationController;
-  late Animation<double> _animation;
-
-  @override
-  void onInit() {
-    // Initialize animation controller
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 300),
-    );
-
-    // Initialize animation
-    _animation = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(
-        parent: _animationController,
-        curve: Curves.easeInOut,
-      ),
-    );
-
-    // Start animation when the controller is initialized
-    _animationController.forward();
-    super.onInit();
-  }
-
-  @override
-  void onClose() {
-    _animationController.dispose();
-    super.onClose();
-  }
 
   void initializeExercises(List<WorkoutExercise> initialExercises) {
     exercises.assignAll(initialExercises);
@@ -76,16 +46,10 @@ class EditExerciseController extends GetxController with SingleGetTickerProvider
         set: exercises[index].set,
         restTimeSecond: newRestTime,
       );
-      // Trigger animation when the rest time changes
-      _animationController.reset();
-      _animationController.forward();
     }
   }
 
   List<WorkoutExercise> getUpdatedExercises() {
     return exercises;
   }
-
-  // Getter for animation
-  Animation<double> get animation => _animation;
 }
