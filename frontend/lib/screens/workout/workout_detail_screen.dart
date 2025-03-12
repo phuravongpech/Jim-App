@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/controller/workout_controller.dart';
 import 'package:get/get.dart';
-import 'package:frontend/theme/theme.dart';
-import 'package:frontend/models/workout.dart';
-import 'package:frontend/models/exercise.dart';
-import 'package:frontend/models/workout_exercise.dart';
 
 class WorkoutDetailScreen extends StatelessWidget {
   final WorkoutController controller = Get.put(WorkoutController());

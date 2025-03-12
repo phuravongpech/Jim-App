@@ -1,4 +1,3 @@
-import 'package:frontend/controller/select_exercise_controller.dart';
 import 'package:frontend/models/exercise.dart';
 import 'package:get/get.dart';
 
