@@ -58,6 +58,17 @@ class WorkoutForm extends StatelessWidget {
         // If coming from the SelectExerciseScreen, update the selected exercises
         final selectedExercises = result as List<Exercise>;
         workoutController.xSelectedExercises.value = selectedExercises;
+
+        // Also Initialize the EditExerciseController with the newly selected exercises
+        final newArguments = selectedExercises.map((exercise) {
+          return WorkoutExercise(
+            exerciseId: exercise.id,
+            set: 4,
+            restTimeSecond: 90,
+          );
+        }).toList();
+        editExerciseController.initializeExercises(newArguments);
+        
       } else {
         // If coming from the EditExerciseScreen, update the selected exercises
         final updatedExercises =
@@ -186,8 +197,10 @@ class WorkoutForm extends StatelessWidget {
                   separatorBuilder: (context, index) =>
                       const Divider(height: 1),
                   itemBuilder: (context, index) {
-                    final exerciseId = workoutController.xSelectedExercises[index].id;
-                    final Exercise? exercise = selectExerciseController.getExerciseById(exerciseId);
+                    final exerciseId =
+                        workoutController.xSelectedExercises[index].id;
+                    final Exercise? exercise =
+                        selectExerciseController.getExerciseById(exerciseId);
 
                     if (exercise == null) {
                       return Container();
