@@ -22,7 +22,13 @@ class JimIconButton extends StatelessWidget {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
-          onTap: onPressed, child: Icon(icon, size: JimIconSizes.small)),
+        onTap: onPressed,
+        child: Icon(
+          icon,
+          size: JimIconSizes.medium,
+          color: color,
+        ),
+      ),
     );
   }
 }

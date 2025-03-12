@@ -50,7 +50,7 @@ class EditExerciseScreen extends StatelessWidget {
       'Exercise removed',
       'You can undo this action',
       snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: JimColors.backgroundAccent,
+      backgroundColor: JimColors.error,
       colorText: JimColors.white,
       mainButton: TextButton(
         onPressed: () {
@@ -60,7 +60,8 @@ class EditExerciseScreen extends StatelessWidget {
         },
         child: Text(
           'UNDO',
-          style: JimTextStyles.body.copyWith(color: JimColors.primary),
+          style: JimTextStyles.body
+              .copyWith(color: JimColors.primary, fontWeight: FontWeight.bold),
         ),
       ),
     );
@@ -109,8 +110,7 @@ class EditExerciseScreen extends StatelessWidget {
         itemBuilder: (context, index) {
           final exercise = controller.exercises[index];
           final exerciseId = exercise.exerciseId;
-          final Exercise? fullExercise =
-              selectExerciseController.getExerciseById(exerciseId);
+          final Exercise? fullExercise = selectExerciseController.getExerciseById(exerciseId);
 
           if (fullExercise == null) {
             return Container(); // Handle null case
@@ -121,7 +121,7 @@ class EditExerciseScreen extends StatelessWidget {
             direction: DismissDirection.endToStart,
             background: Container(
               alignment: Alignment.centerRight,
-              color: Colors.red,
+              color: JimColors.error,
               padding: const EdgeInsets.only(right: JimSpacings.m + 4),
               child: Icon(Icons.delete, color: JimColors.white),
             ),
@@ -224,8 +224,7 @@ class EditExerciseScreen extends StatelessWidget {
                           // Display Rest Time
                           Text(
                             "${exercise.restTimeSecond}s",
-                            style:
-                                JimTextStyles.body.copyWith(color: JimColors.whiteGrey),
+                            style: JimTextStyles.body,
                           ),
                         ],
                       ),
