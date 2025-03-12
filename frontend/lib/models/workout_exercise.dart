@@ -1,26 +1,37 @@
-import '../utils/utils.dart';
-import 'exercise.dart';
-import 'workout.dart';
-
-//link workout to exercise
-//workout 1 ex1 3 sets, w1 ex2 4 sets...
 class WorkoutExercise {
-  final String id; // Unique identifier for the workout exercise
-  final Workout workout;
-  final Exercise exercise;
-  final int set;
-  final int restTimeSecond;
+  final String exerciseId;
+  int set;
+  int restTimeSecond;
 
   WorkoutExercise({
-    String? id, // Optional parameter
-    required this.workout,
-    required this.exercise,
+    required this.exerciseId,
     required this.set,
     required this.restTimeSecond,
-  }) : id = id ?? Utils.generateUuid(); // Generate a new UUID if not provided
+  });
+
+  /// Create a new [WorkoutExercise] from a JSON object
+  WorkoutExercise copyWith({
+    String? exerciseId,
+    int? set,
+    int? restTimeSecond,
+  }) {
+    return WorkoutExercise(
+      exerciseId: exerciseId ?? this.exerciseId,
+      set: set ?? this.set,
+      restTimeSecond: restTimeSecond ?? this.restTimeSecond,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'exerciseId': exerciseId,
+      'set': set,
+      'restTimeSecond': restTimeSecond,
+    };
+  }
 
   @override
   String toString() {
-    return 'WorkoutExercise{\n  workout: ${workout.name},\n  exercise: ${exercise.name},\n  set: $set,\n  restTimeSecond: $restTimeSecond\n}';
+    return 'WorkoutExercise{\n  exerciseId: $exerciseId,\n  set: $set,\n  restTimeSecond: $restTimeSecond\n}';
   }
 }

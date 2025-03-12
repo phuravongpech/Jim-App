@@ -1,18 +1,65 @@
+import 'package:frontend/controller/select_exercise_controller.dart';
+import 'package:frontend/models/exercise.dart';
 import 'package:get/get.dart';
 
+import '../models/workout.dart';
+import '../repository/workout_repository.dart';
+import '../services/mock_workout_service.dart';
+
 class WorkoutController extends GetxController {
+  //
+  // Flag used for swicthing between mock service and real service
+  //
+  static bool useMock = true;
+
+  late final WorkoutRepository _workoutService;
+
   var xWorkoutTitle = ''.obs;
   var xWorkoutDescription = ''.obs;
-  var xSelectedExercises = <String>[].obs; // List of selected exercise IDs
-  var xWorkoutList = <Map<String, dynamic>>[].obs; // List to store workouts
+  var xSelectedExercises = <Exercise>[].obs; // List of selected exercise IDs
+  var xWorkoutList = <Workout>[].obs; // List to store workouts
+  var workout = Rxn<Workout>(); // Store workout details
+
+  @override
+  void onInit() {
+    super.onInit();
+    _workoutService = MockWorkoutService();
+    fetchExercises();
+
+    String? workoutId = Get.arguments;
+    if (workoutId != null) {
+      fetchWorkoutDetail(workoutId);
+    }
+  }
+
+  // Fetch workout details by ID
+  void fetchWorkoutDetail(String id) async {
+    try {
+      Workout fetchedWorkout = await _workoutService.getWorkoutById(id);
+      workout.value = fetchedWorkout;
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to load workout details: $e');
+    } 
+  }
+
+  fetchExercises() async {
+    try {
+      final fetchedExercises = await _workoutService.getWorkouts();
+
+      // Add the fetched exercises to the list
+      xWorkoutList.addAll(fetchedExercises);
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to load workouts: $e');
+    }
+  }
 
   // Add an exercise to the selected exercises list
-  void addExercise(String exercise) {
+  void addExercise(Exercise exercise) {
     xSelectedExercises.add(exercise);
   }
 
   // Remove an exercise from the selected exercises list
-  void removeExercise(String exercise) {
+  void removeExercise(Exercise exercise) {
     xSelectedExercises.remove(exercise);
   }
 
@@ -28,12 +75,16 @@ class WorkoutController extends GetxController {
       return;
     }
 
+    // Get the selected exercises from the SelectExerciseController
+    //final selectExerciseController = Get.find<SelectExerciseController>();
+    //final selectedExercises = selectExerciseController.getSelectedExercises();
+
     // Create the workout data
-    final workoutData = {
-      'title': xWorkoutTitle.value,
-      'description': xWorkoutDescription.value,
-      'exercises': xSelectedExercises.toList(),
-    };
+    final workoutData = Workout(
+      name: xWorkoutTitle.value,
+      description: xWorkoutDescription.value,
+      exercises: xSelectedExercises.toList(),
+    );
 
     // Add the workout to the list
     addWorkout(workoutData);
@@ -48,12 +99,12 @@ class WorkoutController extends GetxController {
   }
 
   // Add a new workout to the list
-  void addWorkout(Map<String, dynamic> workoutData) {
+  void addWorkout(Workout workoutData) {
     xWorkoutList.add(workoutData);
   }
 
-  // Optionally, remove a workout by title
-  void removeWorkout(String title) {
-    xWorkoutList.removeWhere((workout) => workout['title'] == title);
-  }
+  // // Optionally, remove a workout by title
+  // void removeWorkout(String title) {
+  //   xWorkoutList.removeWhere((workout) => workout['title'] == title);
+  // }
 }

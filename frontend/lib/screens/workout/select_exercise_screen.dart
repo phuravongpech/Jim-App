@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/common/theme.dart';
 import 'package:frontend/controller/select_exercise_controller.dart';
 import 'package:frontend/screens/workout/widgets/select_exercise_card.dart';
 import 'package:frontend/widgets/inputs/custom_select_search.dart';
@@ -7,6 +6,11 @@ import 'package:frontend/widgets/navigation/jim_top_bar.dart';
 import 'package:get/get.dart';
 
 import '../../models/exercise.dart';
+import '../../theme/theme.dart';
+import '../../widgets/action/jim_button.dart';
+import '../../widgets/action/jim_icon_button.dart';
+import '../../widgets/action/jim_text_button.dart';
+import '../../widgets/display/jim_list_view.dart';
 
 class SelectExerciseScreen extends StatelessWidget {
   SelectExerciseScreen({super.key});
@@ -33,15 +37,26 @@ class SelectExerciseScreen extends StatelessWidget {
     Get.toNamed('/exercise-detail', arguments: exercise);
   }
 
+  void onPressedDone() {
+    // Map selected exercise IDs to Exercise objects
+    final selectedExercises = controller.selectedExercises.map((id) {
+      return controller.allExercises.firstWhere(
+        (exercise) => exercise.id == id,
+      );
+    }).toList();
+
+    // Return the selected exercises to the previous screen
+    Get.back(result: selectedExercises);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor.primaryBackground,
       appBar: JimTopBar(
         title: 'Select Exercises',
         centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColor.black),
+        leading: JimIconButton(
+          icon: Icons.arrow_back,
           onPressed: () {
             Get.back();
           },
@@ -54,45 +69,28 @@ class SelectExerciseScreen extends StatelessWidget {
             onClear: _onClearSearch,
             onSearchSubmitted: _onSearchSubmitted,
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: JimSpacings.m),
           _buildNumberSelectedExercises(),
           Expanded(
-            child: Obx(() {
-              if (controller.isLoading.value) {
-                return const Center(child: CircularProgressIndicator());
-              }
-
-              if (controller.exercises.isEmpty) {
-                return const Center(
-                  child: Text(
-                    'No exercises found.',
-                    style: TextStyle(
-                      color: AppColor.textSecondary,
-                      fontSize: 16,
-                    ),
-                  ),
-                );
-              }
-
-              return ListView.builder(
-                itemCount: controller.exercises.length,
-                itemBuilder: (context, index) {
-                  final exercise = controller.exercises[index];
-                  return Obx(() {
-                    final isSelected =
-                        controller.selectedExercises.contains(exercise.id);
-                    return SelectExerciseCard(
-                      exercise: exercise,
-                      isSelected: isSelected,
-                      onSelected: (isSelected) {
-                        controller.toggleExerciseSelection(exercise.id);
-                      },
-                      onTap: () => _navigateToExerciseDetails(exercise),
-                    );
-                  });
-                },
-              );
-            }),
+            child: JimListView(
+              items: controller.exercises,
+              isLoading: controller.isLoading,
+              emptyMessage: 'No exercises found.',
+              itemBuilder: (exercise) {
+                return Obx(() {
+                  final isSelected =
+                      controller.selectedExercises.contains(exercise.id);
+                  return SelectExerciseCard(
+                    exercise: exercise,
+                    isSelected: isSelected,
+                    onSelected: (isSelected) {
+                      controller.toggleExerciseSelection(exercise.id);
+                    },
+                    onTap: () => _navigateToExerciseDetails(exercise),
+                  );
+                });
+              },
+            ),
           ),
         ],
       ),
@@ -100,37 +98,12 @@ class SelectExerciseScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildDoneButton() {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: ElevatedButton.icon(
-        onPressed: () {
-          // Pass the selected exercises back to the previous screen
-          Get.back(result: controller.selectedExercises.toList());
-        },
-        icon: const Icon(
-          Icons.check,
-          color: AppColor.white,
-        ),
-        label: const Text('Done'),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColor.primary,
-          foregroundColor: AppColor.white,
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          textStyle: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget _buildNumberSelectedExercises() {
     return Obx(() {
       final selectedCount = controller.selectedExercises.length;
       return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.symmetric(
+            horizontal: JimSpacings.m, vertical: JimSpacings.s),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -139,10 +112,10 @@ class SelectExerciseScreen extends StatelessWidget {
                 children: [
                   TextSpan(
                     text: '$selectedCount ',
-                    style: TextStyle(
-                      color:
-                          selectedCount > 0 ? AppColor.primary : AppColor.black,
-                      fontSize: 16,
+                    style: JimTextStyles.body.copyWith(
+                      color: selectedCount > 0
+                          ? JimColors.primary
+                          : JimColors.textSecondary,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -150,31 +123,35 @@ class SelectExerciseScreen extends StatelessWidget {
                     text: selectedCount == 1 || selectedCount == 0
                         ? 'exercise selected'
                         : 'exercises selected',
-                    style: TextStyle(
-                      color: AppColor.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+                    style: JimTextStyles.body.copyWith(
+                      color: JimColors.textSecondary,
                     ),
                   ),
                 ],
               ),
             ),
             if (selectedCount > 0)
-              TextButton(
+              JimTextButton(
+                text: 'Deselect All',
                 onPressed: () {
                   controller.clearSelectedExercises();
                 },
-                child: Text(
-                  'Deselect All',
-                  style: TextStyle(
-                    color: AppColor.primary,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
               ),
           ],
         ),
       );
     });
+  }
+
+  Widget _buildDoneButton() {
+    return Padding(
+      padding: const EdgeInsets.all(JimSpacings.m),
+      child: JimButton(
+        text: 'Done',
+        onPressed: onPressedDone,
+        type: ButtonType.primary,
+        icon: Icons.check,
+      ),
+    );
   }
 }

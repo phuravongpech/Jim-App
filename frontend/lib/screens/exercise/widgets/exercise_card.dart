@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/common/theme.dart';
 import 'package:frontend/models/exercise.dart';
+import 'package:frontend/theme/theme.dart';
 import 'package:get/get.dart';
 
 class ExerciseCard extends StatelessWidget {
@@ -19,12 +19,13 @@ class ExerciseCard extends StatelessWidget {
         Get.toNamed('/exercise-detail', arguments: exercise);
       },
       child: Card(
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        margin: const EdgeInsets.symmetric(
+            horizontal: JimSpacings.m, vertical: JimSpacings.s),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(JimSpacings.radius),
         ),
         elevation: 2,
-        color: AppColor.primary.withOpacity(0.5),
+        color: JimColors.primary.withOpacity(0.5),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -32,8 +33,8 @@ class ExerciseCard extends StatelessWidget {
               tag: 'exercise-${exercise.id}',
               child: ClipRRect(
                 borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(16),
-                  topRight: Radius.circular(16),
+                  topLeft: Radius.circular(JimSpacings.radius),
+                  topRight: Radius.circular(JimSpacings.radius),
                 ),
                 child: CachedNetworkImage(
                   imageUrl: exercise.gifUrl,
@@ -42,54 +43,53 @@ class ExerciseCard extends StatelessWidget {
                   fit: BoxFit.cover,
                   placeholder: (context, url) => Container(
                     height: 200,
-                    color: AppColor.white,
+                    color: JimColors.white,
                     child: const Center(
                       child: CircularProgressIndicator(
-                        valueColor:
-                            AlwaysStoppedAnimation<Color>(AppColor.accent),
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                            JimColors.placeholder),
                       ),
                     ),
                   ),
                   errorWidget: (context, url, error) => Container(
                     height: 200,
-                    color: Colors.grey[300],
-                    child: const Icon(Icons.error, color: AppColor.warning),
+                    color: JimColors.backgroundAccent,
+                    child: const Icon(Icons.error, color: JimColors.error),
                   ),
                 ),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 14, top: 8, bottom: 8),
+              padding: const EdgeInsets.only(
+                  left: JimSpacings.l,
+                  top: JimSpacings.s,
+                  bottom: JimSpacings.s),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Exercise Name
                   Text(
-                    exercise.name
-                        .split(' ')
-                        .map(
-                            (word) => word[0].toUpperCase() + word.substring(1))
-                        .join(' '),
-                    style: const TextStyle(
+                    exercise.name,
+                    style: JimTextStyles.heading.copyWith(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: AppColor.textPrimary,
+                      color: JimColors.textPrimary,
                     ),
                   ),
-                  // Target and Secondary Muscles
+                  // Target
                   Text(
-                    "${exercise.target}${exercise.secondaryMuscles != null && exercise.secondaryMuscles!.isNotEmpty ? ', ${exercise.secondaryMuscles!.join(', ')}' : ''}",
-                    style: const TextStyle(
+                    exercise.target,
+                    style: JimTextStyles.subBody.copyWith(
                       fontSize: 14,
-                      color: AppColor.textSecondary,
+                      color: JimColors.textSecondary,
                     ),
                   ),
                   // Equipment
                   Text(
                     exercise.equipment,
-                    style: const TextStyle(
+                    style: JimTextStyles.subBody.copyWith(
                       fontSize: 12,
-                      color: AppColor.textSecondary,
+                      color: JimColors.textSecondary,
                     ),
                   ),
                 ],

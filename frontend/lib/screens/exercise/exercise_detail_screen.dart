@@ -1,10 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/common/theme.dart';
 import 'package:frontend/controller/exercise_detail_controller.dart';
 import 'package:frontend/models/exercise.dart';
 import 'package:frontend/screens/exercise/exercise_detail_body.dart';
+import 'package:frontend/theme/theme.dart';
 import 'package:get/get.dart';
+
+import '../../widgets/action/jim_icon_button.dart';
 
 class ExerciseDetail extends StatelessWidget {
   final Exercise exercise;
@@ -16,7 +18,7 @@ class ExerciseDetail extends StatelessWidget {
         Get.put(ExerciseDetailController(exercise));
 
     return Scaffold(
-      backgroundColor: AppColor.white,
+      backgroundColor: JimColors.white,
       body: CustomScrollView(
         slivers: [
           _buildSliverAppBar(controller),
@@ -32,22 +34,23 @@ class ExerciseDetail extends StatelessWidget {
     return SliverAppBar(
       expandedHeight: 400,
       pinned: true,
-      backgroundColor: AppColor.white,
+      backgroundColor: JimColors.white,
       elevation: 0,
       leading: Container(
-        margin: const EdgeInsets.all(8),
+        margin: const EdgeInsets.all(JimSpacings.s),
         decoration: BoxDecoration(
-          color: AppColor.white.withOpacity(0.9),
+          color: JimColors.white,
           shape: BoxShape.circle,
         ),
-        child: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColor.black),
+        child: JimIconButton(
+          icon: Icons.arrow_back,
+          color: JimColors.black,
           onPressed: () => Get.back(),
         ),
       ),
       flexibleSpace: FlexibleSpaceBar(
         background: Container(
-          color: AppColor.white,
+          color: JimColors.white,
           child: Hero(
             tag: 'exercise-${controller.exercise.id}',
             child: CachedNetworkImage(
@@ -55,7 +58,7 @@ class ExerciseDetail extends StatelessWidget {
               fit: BoxFit.contain,
               placeholder: (context, url) => const Center(
                 child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(AppColor.white),
+                  valueColor: AlwaysStoppedAnimation<Color>(JimColors.placeholder),
                 ),
               ),
             ),

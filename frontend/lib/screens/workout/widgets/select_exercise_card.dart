@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/common/theme.dart';
 import 'package:frontend/models/exercise.dart';
+import 'package:frontend/theme/theme.dart';
 
 class SelectExerciseCard extends StatelessWidget {
   final Exercise exercise;
@@ -19,42 +19,42 @@ class SelectExerciseCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(
-        'Building SelectExerciseCard for ${exercise.name}, isSelected: $isSelected'); // Debugging
     return GestureDetector(
       onTap: onTap,
       child: Card(
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        margin: const EdgeInsets.symmetric(
+            horizontal: JimSpacings.xs, vertical: JimSpacings.s),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(JimSpacings.radius),
         ),
         elevation: 2,
-        color: Colors.white,
+        color: JimColors.white,
         child: Row(
           children: [
             // Custom Radio Button (Checkmark)
             GestureDetector(
               onTap: () => onSelected(!isSelected),
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(4),
                 child: Container(
                   width: 24,
                   height: 24,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: isSelected ? AppColor.primary : Colors.transparent,
+                    color:
+                        isSelected ? JimColors.primary : JimColors.transparent,
                     border: Border.all(
                       color: isSelected
-                          ? AppColor.primary
-                          : AppColor.textSecondary,
-                      width: 2,
+                          ? JimColors.primary
+                          : JimColors.textSecondary,
+                      width: 1,
                     ),
                   ),
                   child: isSelected
                       ? Icon(
                           Icons.check,
                           size: 16,
-                          color: AppColor.white,
+                          color: JimColors.white,
                         )
                       : null,
                 ),
@@ -64,7 +64,8 @@ class SelectExerciseCard extends StatelessWidget {
             // Exercise Details and Image
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: JimSpacings.s, vertical: JimSpacings.s),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -79,49 +80,40 @@ class SelectExerciseCard extends StatelessWidget {
                         placeholder: (context, url) => Container(
                           width: 60,
                           height: 60,
-                          color: AppColor.white,
+                          color: JimColors.white,
                           child: const Center(
                             child: CircularProgressIndicator(
                               valueColor: AlwaysStoppedAnimation<Color>(
-                                  AppColor.accent),
+                                  JimColors.placeholder),
                             ),
                           ),
                         ),
                         errorWidget: (context, url, error) => Container(
                           width: 60,
                           height: 60,
-                          color: Colors.grey[300],
+                          color: JimColors.stroke,
                           child:
-                              const Icon(Icons.error, color: AppColor.warning),
+                              const Icon(Icons.error, color: JimColors.error),
                         ),
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: JimSpacings.s),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           // Exercise Name
                           Text(
-                            exercise.name
-                                .split(' ')
-                                .map((word) =>
-                                    word[0].toUpperCase() + word.substring(1))
-                                .join(' '),
-                            style: const TextStyle(
-                              fontSize: 16,
+                            exercise.name,
+                            style: JimTextStyles.body.copyWith(
                               fontWeight: FontWeight.bold,
-                              color: AppColor.textPrimary,
                             ),
                           ),
                           const SizedBox(height: 4),
                           // Target and Equipment
                           Text(
                             "${exercise.target}, ${exercise.equipment}",
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: AppColor.textSecondary,
-                            ),
+                            style: JimTextStyles.label,
                           ),
                         ],
                       ),

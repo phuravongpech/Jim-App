@@ -11,11 +11,11 @@ class MockExerciseService extends ExerciseRepository {
 
   final String baseUrl = 'http://localhost:3000';
 
+  /// Get exercises from mock data
   @override
   Future<List<Exercise>> getExercises({
     required int page,
     required int limit,
-    required String bodyPart,
   }) async {
     try {
       final response = await get(

@@ -6,8 +6,10 @@ import 'package:get/get.dart';
 import '../repository/exercise_repository.dart';
 
 class ExerciseController extends GetxController {
+  //
   // Flag used for swicthing between mock service and real service
-  bool useMock = true;
+  //
+  static bool useMock = true;
 
   late final ExerciseRepository _exerciseService;
 
@@ -37,7 +39,6 @@ class ExerciseController extends GetxController {
       final fetchedExercises = await _exerciseService.getExercises(
         page: page.value,
         limit: limit,
-        bodyPart: selectedBodyPart.value,
       );
 
       if (fetchedExercises.isNotEmpty) {
@@ -47,7 +48,6 @@ class ExerciseController extends GetxController {
         Get.snackbar('End of List', 'No more exercises available.');
       }
     } catch (e) {
-      print('Error loading exercises: $e');
       Get.snackbar('Error', 'Failed to load exercises: $e');
     } finally {
       isLoading.value = false;

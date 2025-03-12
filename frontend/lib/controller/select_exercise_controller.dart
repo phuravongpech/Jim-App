@@ -2,8 +2,16 @@ import 'package:frontend/models/exercise.dart';
 import 'package:frontend/services/exercise_service.dart';
 import 'package:get/get.dart';
 
+import '../repository/exercise_repository.dart';
+import '../services/mock_exercise_service.dart';
+
 class SelectExerciseController extends GetxController {
-  final ExerciseService _exerciseService = ExerciseService();
+  //
+  // Flag used for swicthing between mock service and real service
+  //
+  bool useMock = true;
+
+  late final ExerciseRepository _exerciseService;
 
   RxList<Exercise> exercises = <Exercise>[].obs; // List of exercises
   RxSet<String> selectedExercises =
@@ -17,6 +25,7 @@ class SelectExerciseController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    _exerciseService = useMock ? MockExerciseService() : ExerciseService();
     fetchExercises(); // Fetch exercises on initialization
   }
 
@@ -36,7 +45,6 @@ class SelectExerciseController extends GetxController {
       final fetchedExercises = await _exerciseService.getExercises(
         page: page.value,
         limit: limit,
-        bodyPart: selectedBodyPart.value,
       );
 
       if (fetchedExercises.isNotEmpty) {
@@ -70,17 +78,22 @@ class SelectExerciseController extends GetxController {
       isLoading.value = true;
 
       // Fetch all exercises (or a large number) for searching
-      final allExercises = await _exerciseService.getExercises(
+      final allFetchedExercises = await _exerciseService.getExercises(
         page: 0,
         limit: 100, // Adjust this limit as needed
-        bodyPart: selectedBodyPart.value,
       );
 
       // Filter exercises by name
-      exercises.value = allExercises
+      final filteredExercises = allFetchedExercises
           .where((exercise) =>
               exercise.name.toLowerCase().contains(query.toLowerCase()))
           .toList();
+
+      // Update the exercises list with the filtered results
+      exercises.value = filteredExercises;
+
+      // Update the allExercises list with the fetched exercises
+      allExercises.addAll(allFetchedExercises);
 
       if (exercises.isEmpty) {
         Get.snackbar('No Results', 'No exercises found for "$query".');
@@ -124,5 +137,11 @@ class SelectExerciseController extends GetxController {
     } catch (e) {
       return null;
     }
+  }
+
+  List<Exercise> getSelectedExercises() {
+    return selectedExercises
+        .map((id) => allExercises.firstWhere((exercise) => exercise.id == id))
+        .toList();
   }
 }

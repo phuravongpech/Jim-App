@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/common/theme.dart';
+import 'package:frontend/models/workout_exercise.dart';
+import 'package:frontend/widgets/action/jim_icon_button.dart';
 import 'package:get/get.dart';
 
 import '../../../controller/select_exercise_controller.dart';
 import '../../../controller/workout_controller.dart';
 import '../../../models/exercise.dart';
+import '../../../theme/theme.dart';
 
 class WorkoutForm extends StatelessWidget {
   WorkoutForm({super.key});
@@ -16,6 +18,48 @@ class WorkoutForm extends StatelessWidget {
   // Add GlobalKey for form validation
   final _formKey = GlobalKey<FormState>();
 
+  Future<void> handleExerciseNavigation() async {
+    // Determine the appropriate route and arguments
+    final isSelectedEmpty = workoutController.xSelectedExercises.isEmpty;
+    final routeName = isSelectedEmpty ? '/select-exercises' : '/edit-exercises';
+    final arguments = isSelectedEmpty
+        ? null
+        : workoutController.xSelectedExercises.map((exercise) {
+            return WorkoutExercise(
+              exerciseId: exercise.id,
+              set: 4,
+              restTimeSecond: 90,
+            );
+          }).toList();
+
+    // Navigate to the screen and await the result
+    final result = await Get.toNamed(routeName, arguments: arguments);
+
+    // Process the result if it is not null
+    if (result != null) {
+      if (isSelectedEmpty) {
+        // If coming from the SelectExerciseScreen, update the selected exercises
+        final selectedExercises = result as List<Exercise>;
+        workoutController.xSelectedExercises.value = selectedExercises;
+      } else {
+        // If coming from the EditExerciseScreen, update the selected exercises
+        final updatedExercises =
+            (result as List<WorkoutExercise>).map((workoutExercise) {
+          final exercise = selectExerciseController
+              .getExerciseById(workoutExercise.exerciseId);
+          if (exercise == null) {
+            throw Exception(
+                'Exercise not found for ID: ${workoutExercise.exerciseId}');
+          }
+          return exercise;
+        }).toList();
+
+        // Update the selected exercises in the WorkoutController
+        workoutController.xSelectedExercises.value = updatedExercises;
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -24,85 +68,74 @@ class WorkoutForm extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Workout Title
-          const Text(
+          Text(
             'Workout Title',
-            style: TextStyle(
+            style: JimTextStyles.subBody.copyWith(
               fontWeight: FontWeight.bold,
               fontSize: 14,
-              color: AppColor.textPrimary,
+              color: JimColors.textPrimary,
             ),
           ),
           TextFormField(
             onChanged: (value) => workoutController.xWorkoutTitle.value = value,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               hintText: 'Input Workout Title',
               border: OutlineInputBorder(),
+              hintStyle: JimTextStyles.subBody
+                  .copyWith(color: JimColors.textSecondary),
             ),
             validator: (value) {
-              // Check if title is empty or already exists
+              // Check if value is null or empty
               if (value == null || value.isEmpty) {
                 return 'Please enter a title';
               }
-
-              // if (workoutController.workoutTitle.value ==
-              //     workoutController.previousTitle.value) {
-              //   return 'This title is already used';
-              // }
-
-              return null;
             },
           ),
-          const SizedBox(height: 16),
+
+          const SizedBox(height: JimSpacings.s),
 
           // Workout Description
-          const Text(
+          Text(
             'Description (Optional)',
-            style: TextStyle(
+            style: JimTextStyles.subBody.copyWith(
               fontWeight: FontWeight.bold,
               fontSize: 14,
-              color: AppColor.textPrimary,
+              color: JimColors.textPrimary,
             ),
           ),
           TextField(
             onChanged: (value) =>
                 workoutController.xWorkoutDescription.value = value,
             maxLines: 3,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               hintText: 'Description...',
               border: OutlineInputBorder(),
+              hintStyle: JimTextStyles.subBody
+                  .copyWith(color: JimColors.textSecondary),
             ),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: JimSpacings.l),
           // Exercises Section
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 'Exercises',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: JimTextStyles.title,
               ),
-              // Add Exercise Button
-              IconButton(
-                onPressed: () async {
-                  // Navigate to the exercise selection screen
-                  final result = await Get.toNamed('/select-exercises');
-                  if (result != null) {
-                    // Update the selected exercises in the workout controller
-                    workoutController.xSelectedExercises.value =
-                        List<String>.from(result);
-                  }
-                },
-                icon: const Icon(
-                  Icons.add,
-                  color: AppColor.primary,
-                ),
-              ),
+              Obx(() => JimIconButton(
+                    onPressed: () async {
+                      await handleExerciseNavigation();
+                    },
+                    icon: workoutController.xSelectedExercises.isEmpty
+                        ? Icons.add
+                        : Icons.edit,
+                    color: JimColors.primary,
+                  )),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: JimSpacings.s),
+
           // List of Selected Exercises
           SingleChildScrollView(
             child: Obx(() {
@@ -110,9 +143,9 @@ class WorkoutForm extends StatelessWidget {
                 return Center(
                   child: Text(
                     'No exercises added yet',
-                    style: TextStyle(
+                    style: JimTextStyles.body.copyWith(
                       fontSize: 16,
-                      color: AppColor.error,
+                      color: JimColors.error,
                     ),
                   ),
                 );
@@ -127,22 +160,31 @@ class WorkoutForm extends StatelessWidget {
                       const Divider(height: 1),
                   itemBuilder: (context, index) {
                     final exerciseId =
-                        workoutController.xSelectedExercises[index];
+                        workoutController.xSelectedExercises[index].id;
+
                     final Exercise? exercise =
                         selectExerciseController.getExerciseById(exerciseId);
 
-                    // If the exercise is not found, return an empty container
                     if (exercise == null) {
                       return Container();
                     }
 
+                    // Create a WorkoutExercise instance dynamically
+                    final workoutExercise = WorkoutExercise(
+                      exerciseId: exercise.id,
+                      set: 4,
+                      restTimeSecond: 90,
+                    );
+
                     return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      padding:
+                          const EdgeInsets.symmetric(vertical: JimSpacings.s),
                       child: Row(
                         children: [
                           // Menu/Edit Icon
-                          IconButton(
-                            icon: const Icon(Icons.menu, color: Colors.grey),
+                          JimIconButton(
+                            icon: Icons.menu,
+                            color: JimColors.textSecondary,
                             onPressed: () {
                               // Handle edit action
                             },
@@ -153,58 +195,51 @@ class WorkoutForm extends StatelessWidget {
                             width: 70,
                             height: 70,
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
+                              borderRadius: BorderRadius.circular(
+                                  JimSpacings.radiusSmall),
                               image: DecorationImage(
                                 image: NetworkImage(exercise.gifUrl),
                                 fit: BoxFit.cover,
                               ),
                             ),
                           ),
-                          const SizedBox(width: 12),
+                          const SizedBox(width: JimSpacings.s),
 
-                          // Exercise Details
+                          // Exercise card items
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   exercise.name,
-                                  style: TextStyle(
+                                  style: JimTextStyles.body.copyWith(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
-                                    color: AppColor.textPrimary,
+                                    color: JimColors.textPrimary,
                                   ),
                                 ),
-                                const SizedBox(height: 4),
+                                const SizedBox(height: JimSpacings.xs),
                                 Row(
                                   children: [
                                     Text(
-                                      "4 sets",
-                                      style: TextStyle(
+                                      "${workoutExercise.set} sets",
+                                      style: JimTextStyles.subBody.copyWith(
                                         fontSize: 14,
-                                        color: AppColor.textSecondary,
+                                        color: JimColors.textSecondary,
                                       ),
                                     ),
-                                    const SizedBox(width: 12),
+                                    const SizedBox(width: JimSpacings.s),
                                     Text(
-                                      "90s",
-                                      style: TextStyle(
+                                      "${workoutExercise.restTimeSecond}s",
+                                      style: JimTextStyles.subBody.copyWith(
                                         fontSize: 14,
-                                        color: AppColor.textSecondary,
+                                        color: JimColors.textSecondary,
                                       ),
                                     ),
                                   ],
                                 ),
                               ],
                             ),
-                          ),
-
-                          // Delete Button
-                          IconButton(
-                            icon:
-                                const Icon(Icons.delete, color: AppColor.error),
-                            onPressed: () =>
-                                workoutController.removeExercise(exerciseId),
                           ),
                         ],
                       ),

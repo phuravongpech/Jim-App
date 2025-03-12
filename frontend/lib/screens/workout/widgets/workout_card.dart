@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/common/theme.dart';
+import 'package:frontend/theme/theme.dart';
 
 class WorkoutCard extends StatelessWidget {
   final String title;
@@ -16,49 +16,46 @@ class WorkoutCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 16),
+      margin: const EdgeInsets.only(bottom: JimSpacings.m),
       decoration: BoxDecoration(
-        color: AppColor.primaryBackground,
-        borderRadius: BorderRadius.circular(8),
+        color: JimColors.backgroundAccent,
+        borderRadius: BorderRadius.circular(JimSpacings.radius),
         border: Border.all(
-          color: AppColor.black,
+          color: JimColors.stroke,
           width: 1, // Border width
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(JimSpacings.m),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               title,
-              style: const TextStyle(
-                fontSize: 24,
+              style: JimTextStyles.heading.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: JimSpacings.s),
             Text(
               description,
-              style: const TextStyle(
-                fontSize: 14,
-                color: Colors.grey,
+              style: JimTextStyles.subBody.copyWith(
+                color: JimColors.textSecondary,
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: JimSpacings.l),
             Row(
               children: [
                 const Icon(
                   Icons.fitness_center,
-                  size: 16,
-                  color: Colors.black,
+                  size: JimIconSizes.small,
+                  color: JimColors.textPrimary,
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: JimSpacings.s),
                 Text(
                   '$exercisesCount exercises',
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: AppColor.primary,
+                  style: JimTextStyles.subBody.copyWith(
+                    color: JimColors.primary,
                   ),
                 ),
               ],

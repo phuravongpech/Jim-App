@@ -26,9 +26,7 @@ class ExerciseScreen extends StatelessWidget {
         children: [
           // Search bar
           CustomSearchExercisses(),
-
           const SizedBox(height: JimSpacings.m),
-
           Expanded(
             child: JimListView(
               items: exerciseController.exercises,
