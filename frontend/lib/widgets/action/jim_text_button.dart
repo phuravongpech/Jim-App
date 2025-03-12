@@ -17,15 +17,18 @@ class JimTextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Render the button
-    return SizedBox(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: JimSpacings.m),
       child: MouseRegion(
         cursor: SystemMouseCursors.click,
         child: GestureDetector(
-            onTap: onPressed,
-            child: Text(text,
-                style: JimTextStyles.button
-                    .copyWith(color: JimColors.primary, fontSize: 16))),
+          onTap: onPressed,
+          child: Text(
+            text,
+            style: JimTextStyles.button
+                .copyWith(color: JimColors.primary, fontSize: 16),
+          ),
+        ),
       ),
     );
   }

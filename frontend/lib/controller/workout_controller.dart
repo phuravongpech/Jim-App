@@ -76,14 +76,14 @@ class WorkoutController extends GetxController {
     }
 
     // Get the selected exercises from the SelectExerciseController
-    final selectExerciseController = Get.find<SelectExerciseController>();
-    final selectedExercises = selectExerciseController.getSelectedExercises();
+    //final selectExerciseController = Get.find<SelectExerciseController>();
+    //final selectedExercises = selectExerciseController.getSelectedExercises();
 
     // Create the workout data
     final workoutData = Workout(
       name: xWorkoutTitle.value,
       description: xWorkoutDescription.value,
-      exercises: selectedExercises,
+      exercises: xSelectedExercises.toList(),
     );
 
     // Add the workout to the list

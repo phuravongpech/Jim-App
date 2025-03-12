@@ -39,7 +39,7 @@ class ExerciseDetail extends StatelessWidget {
       leading: Container(
         margin: const EdgeInsets.all(JimSpacings.s),
         decoration: BoxDecoration(
-          color: JimColors.white.withOpacity(0.8),
+          color: JimColors.white,
           shape: BoxShape.circle,
         ),
         child: JimIconButton(

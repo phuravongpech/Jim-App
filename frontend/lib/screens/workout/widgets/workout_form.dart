@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/models/workout_exercise.dart';
+import 'package:frontend/widgets/action/jim_icon_button.dart';
 import 'package:get/get.dart';
 
 import '../../../controller/select_exercise_controller.dart';
@@ -16,6 +17,48 @@ class WorkoutForm extends StatelessWidget {
 
   // Add GlobalKey for form validation
   final _formKey = GlobalKey<FormState>();
+
+  Future<void> handleExerciseNavigation() async {
+    // Determine the appropriate route and arguments
+    final isSelectedEmpty = workoutController.xSelectedExercises.isEmpty;
+    final routeName = isSelectedEmpty ? '/select-exercises' : '/edit-exercises';
+    final arguments = isSelectedEmpty
+        ? null
+        : workoutController.xSelectedExercises.map((exercise) {
+            return WorkoutExercise(
+              exerciseId: exercise.id,
+              set: 4,
+              restTimeSecond: 90,
+            );
+          }).toList();
+
+    // Navigate to the screen and await the result
+    final result = await Get.toNamed(routeName, arguments: arguments);
+
+    // Process the result if it is not null
+    if (result != null) {
+      if (isSelectedEmpty) {
+        // If coming from the SelectExerciseScreen, update the selected exercises
+        final selectedExercises = result as List<Exercise>;
+        workoutController.xSelectedExercises.value = selectedExercises;
+      } else {
+        // If coming from the EditExerciseScreen, update the selected exercises
+        final updatedExercises =
+            (result as List<WorkoutExercise>).map((workoutExercise) {
+          final exercise = selectExerciseController
+              .getExerciseById(workoutExercise.exerciseId);
+          if (exercise == null) {
+            throw Exception(
+                'Exercise not found for ID: ${workoutExercise.exerciseId}');
+          }
+          return exercise;
+        }).toList();
+
+        // Update the selected exercises in the WorkoutController
+        workoutController.xSelectedExercises.value = updatedExercises;
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,13 +85,13 @@ class WorkoutForm extends StatelessWidget {
                   .copyWith(color: JimColors.textSecondary),
             ),
             validator: (value) {
+              // Check if value is null or empty
               if (value == null || value.isEmpty) {
                 return 'Please enter a title';
               }
-
-              return null;
             },
           ),
+
           const SizedBox(height: JimSpacings.s),
 
           // Workout Description
@@ -80,37 +123,14 @@ class WorkoutForm extends StatelessWidget {
                 'Exercises',
                 style: JimTextStyles.title,
               ),
-              Obx(() => IconButton(
+              Obx(() => JimIconButton(
                     onPressed: () async {
-                      // Navigate based on whether exercises have been selected
-                      final result = await Get.toNamed(
-                        workoutController.xSelectedExercises.isEmpty
-                            ? '/select-exercises' // Navigate to select exercises if none are selected
-                            : '/edit-exercises', // Navigate to edit exercises if already selected
-                        arguments: workoutController.xSelectedExercises
-                            .map((exercise) {
-                          return WorkoutExercise(
-                            exerciseId: exercise.id,
-                            set: 4,
-                            restTimeSecond: 90,
-                          );
-                        }).toList(),
-                      );
-
-                      // Update selected exercises when returning from the screen
-                      if (result != null) {
-                        workoutController.xSelectedExercises.value =
-                            List<Exercise>.from(result);
-                      }
+                      await handleExerciseNavigation();
                     },
-                    icon: Icon(
-                      // Show "Add" icon if no exercises are selected, otherwise "Edit"
-                      workoutController.xSelectedExercises.isEmpty
-                          ? Icons.add // Display Add icon
-                          : Icons.edit, // Display Edit icon
-                      size: JimIconSizes.medium,
-                      color: JimColors.primary,
-                    ),
+                    icon: workoutController.xSelectedExercises.isEmpty
+                        ? Icons.add
+                        : Icons.edit,
+                    color: JimColors.primary,
                   )),
             ],
           ),
@@ -162,12 +182,9 @@ class WorkoutForm extends StatelessWidget {
                       child: Row(
                         children: [
                           // Menu/Edit Icon
-                          IconButton(
-                            icon: Icon(
-                              Icons.menu,
-                              size: JimIconSizes.small,
-                              color: JimColors.textSecondary,
-                            ),
+                          JimIconButton(
+                            icon: Icons.menu,
+                            color: JimColors.textSecondary,
                             onPressed: () {
                               // Handle edit action
                             },
@@ -188,7 +205,7 @@ class WorkoutForm extends StatelessWidget {
                           ),
                           const SizedBox(width: JimSpacings.s),
 
-                          // Exercise Details
+                          // Exercise card items
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -223,17 +240,6 @@ class WorkoutForm extends StatelessWidget {
                                 ),
                               ],
                             ),
-                          ),
-
-                          // Delete Button
-                          IconButton(
-                            icon: Icon(
-                              Icons.delete,
-                              size: JimIconSizes.small,
-                              color: JimColors.error,
-                            ),
-                            onPressed: () =>
-                                workoutController.removeExercise(exercise),
                           ),
                         ],
                       ),

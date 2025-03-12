@@ -109,6 +109,7 @@ class ExerciseDetailBody extends StatelessWidget {
                 title,
                 style: JimTextStyles.body.copyWith(
                   color: JimColors.textPrimary,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               Text(

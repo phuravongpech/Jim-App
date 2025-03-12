@@ -28,14 +28,14 @@ class SelectExerciseCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(JimSpacings.radius),
         ),
         elevation: 2,
-        color: Colors.white,
+        color: JimColors.white,
         child: Row(
           children: [
             // Custom Radio Button (Checkmark)
             GestureDetector(
               onTap: () => onSelected(!isSelected),
               child: Padding(
-                padding: const EdgeInsets.all(4.0),
+                padding: const EdgeInsets.all(4),
                 child: Container(
                   width: 24,
                   height: 24,

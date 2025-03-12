@@ -37,6 +37,18 @@ class SelectExerciseScreen extends StatelessWidget {
     Get.toNamed('/exercise-detail', arguments: exercise);
   }
 
+  void onPressedDone() {
+    // Map selected exercise IDs to Exercise objects
+    final selectedExercises = controller.selectedExercises.map((id) {
+      return controller.allExercises.firstWhere(
+        (exercise) => exercise.id == id,
+      );
+    }).toList();
+
+    // Return the selected exercises to the previous screen
+    Get.back(result: selectedExercises);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,28 +98,6 @@ class SelectExerciseScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildDoneButton() {
-    return Padding(
-      padding: const EdgeInsets.all(JimSpacings.m),
-      child: JimButton(
-        text: 'Done',
-        onPressed: () {
-          // Map selected exercise IDs to Exercise objects
-          final selectedExercises = controller.selectedExercises.map((id) {
-            return controller.allExercises.firstWhere(
-              (exercise) => exercise.id == id,
-            );
-          }).toList();
-
-          // Return the selected exercises to the previous screen
-          Get.back(result: selectedExercises);
-        },
-        type: ButtonType.primary,
-        icon: Icons.check,
-      ),
-    );
-  }
-
   Widget _buildNumberSelectedExercises() {
     return Obx(() {
       final selectedCount = controller.selectedExercises.length;
@@ -151,5 +141,17 @@ class SelectExerciseScreen extends StatelessWidget {
         ),
       );
     });
+  }
+
+  Widget _buildDoneButton() {
+    return Padding(
+      padding: const EdgeInsets.all(JimSpacings.m),
+      child: JimButton(
+        text: 'Done',
+        onPressed: onPressedDone,
+        type: ButtonType.primary,
+        icon: Icons.check,
+      ),
+    );
   }
 }

@@ -3,7 +3,10 @@ import 'package:frontend/controller/select_exercise_controller.dart';
 import 'package:frontend/controller/workout_controller.dart';
 import 'package:frontend/models/exercise.dart';
 import 'package:frontend/screens/workout/widgets/rest_time_picker.dart';
+import 'package:frontend/screens/workout/widgets/set_button.dart';
 import 'package:frontend/widgets/action/jim_button.dart';
+import 'package:frontend/widgets/action/jim_icon_button.dart';
+import 'package:frontend/widgets/action/jim_text_button.dart';
 import 'package:frontend/widgets/navigation/jim_top_bar.dart';
 import 'package:get/get.dart';
 import '../../controller/edit_exercise_controller.dart';
@@ -18,7 +21,7 @@ class EditExerciseScreen extends StatelessWidget {
 
   EditExerciseScreen({super.key});
 
-  void _onPressedAddExercise() async {
+  void onPressedAddExercise() async {
     final result = await Get.toNamed('/select-exercises');
 
     // If the result is not null, update the selected exercises
@@ -35,6 +38,32 @@ class EditExerciseScreen extends StatelessWidget {
       // Add the new exercises to the existing list in the controller
       controller.addExercises(newExercises);
     }
+  }
+
+  void handleDismissedExercise(BuildContext context, int index) {
+    final removedExercise = controller.exercises[index];
+    // Remove the exercise
+    controller.removeExercise(index);
+
+    // Show SnackBar for undo
+    Get.snackbar(
+      'Exercise removed',
+      'You can undo this action',
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: JimColors.backgroundAccent,
+      colorText: JimColors.white,
+      mainButton: TextButton(
+        onPressed: () {
+          // Undo the removal
+          controller.exercises.insert(index, removedExercise);
+          controller.update();
+        },
+        child: Text(
+          'UNDO',
+          style: JimTextStyles.body.copyWith(color: JimColors.primary),
+        ),
+      ),
+    );
   }
 
   @override
@@ -54,25 +83,19 @@ class EditExerciseScreen extends StatelessWidget {
   JimTopBar _buildAppBar() {
     return JimTopBar(
       title: 'Edit Exercise',
-      leading: IconButton(
-        icon: const Icon(Icons.arrow_back, color: JimColors.textPrimary),
+      leading: JimIconButton(
+        icon: Icons.arrow_back,
+        color: JimColors.textPrimary,
         onPressed: () {
           Get.back();
         },
       ),
       actions: [
-        TextButton(
+        JimTextButton(
+          text: 'Save',
           onPressed: () {
             Get.back(result: controller.getUpdatedExercises());
           },
-          child: const Text(
-            'Save',
-            style: TextStyle(
-              color: JimColors.primary,
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-            ),
-          ),
         ),
       ],
     );
@@ -80,8 +103,9 @@ class EditExerciseScreen extends StatelessWidget {
 
   Widget _buildExerciseList() {
     return Obx(() {
-      return ListView.builder(
+      return ReorderableListView.builder(
         itemCount: controller.exercises.length,
+        buildDefaultDragHandles: false,
         itemBuilder: (context, index) {
           final exercise = controller.exercises[index];
           final exerciseId = exercise.exerciseId;
@@ -92,141 +116,134 @@ class EditExerciseScreen extends StatelessWidget {
             return Container(); // Handle null case
           }
 
-          return Padding(
-            padding:
-                const EdgeInsets.symmetric(vertical: JimSpacings.xs, horizontal: JimSpacings.m),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: JimColors.white,
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(JimSpacings.m),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: JimSpacings.m),
-                      child: Icon(Icons.menu, color: Colors.grey),
-                    ),
-                    // Exercise Image
-                    Container(
-                      width: 70,
-                      height: 70,
-                      decoration: BoxDecoration(
-                        borderRadius:
-                            BorderRadius.circular(JimSpacings.radiusSmall),
-                        image: DecorationImage(
-                          image: NetworkImage(fullExercise.gifUrl),
-                          fit: BoxFit.cover,
+          return Dismissible(
+            key: Key(exerciseId), // Unique key for each item
+            direction: DismissDirection.endToStart,
+            background: Container(
+              alignment: Alignment.centerRight,
+              color: Colors.red,
+              padding: const EdgeInsets.only(right: JimSpacings.m + 4),
+              child: Icon(Icons.delete, color: JimColors.white),
+            ),
+            onDismissed: (direction) {
+              handleDismissedExercise(context, index);
+            },
+            child: Padding(
+              key: Key(exerciseId), // Unique key for reordering
+              padding: const EdgeInsets.symmetric(
+                  vertical: JimSpacings.xs, horizontal: JimSpacings.m),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(JimSpacings.radius),
+                  color: JimColors.white,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(JimSpacings.m),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      // Reorderable Drag Handle
+                      ReorderableDragStartListener(
+                        index: index,
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: JimSpacings.m),
+                          child: Icon(Icons.menu, color: JimColors.whiteGrey),
                         ),
                       ),
-                    ),
-                    const SizedBox(width: JimSpacings.m),
-                    // Exercise Info
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Exercise Name
-                          Text(
-                            fullExercise.name,
-                            style: JimTextStyles.body.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
+                      // Exercise Image
+                      Container(
+                        width: 70,
+                        height: 70,
+                        decoration: BoxDecoration(
+                          borderRadius:
+                              BorderRadius.circular(JimSpacings.radiusSmall),
+                          image: DecorationImage(
+                            image: NetworkImage(fullExercise.gifUrl),
+                            fit: BoxFit.cover,
                           ),
-                          const SizedBox(height: 4.0),
-                          Row(
-                            children: [
-                              // Decrease Set Button
-                              Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  Container(
-                                    width: 24,
-                                    height: 24,
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey,
-                                      borderRadius: BorderRadius.circular(
-                                          JimSpacings.radiusSmall),
-                                    ),
-                                  ),
-                                  IconButton(
-                                    icon: Icon(Icons.remove),
-                                    onPressed: () =>
-                                        controller.decreaseSet(index),
-                                    color: JimColors.black,
-                                  ),
-                                ],
+                        ),
+                      ),
+                      const SizedBox(width: JimSpacings.m),
+                      // Exercise Info
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Exercise Name
+                            Text(
+                              fullExercise.name,
+                              style: JimTextStyles.body.copyWith(
+                                fontWeight: FontWeight.bold,
                               ),
-                              // Set Count
-                              Text(
-                                exercise.set.toString(),
-                                style: JimTextStyles.body,
-                              ),
-                              // Increase Set Button
-                              Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  Container(
-                                    width: 24,
-                                    height: 24,
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey,
-                                      borderRadius: BorderRadius.circular(
-                                          JimSpacings.radiusSmall),
-                                    ),
-                                  ),
-                                  IconButton(
-                                    icon: Icon(Icons.add),
-                                    onPressed: () =>
-                                        controller.increaseSet(index),
-                                    color: JimColors.black,
-                                  ),
-                                ],
-                              ),
-                              Text(
-                                'Sets',
-                                style: JimTextStyles.body
-                                    .copyWith(color: Colors.grey),
-                              ),
-                            ],
+                            ),
+                            const SizedBox(height: 4),
+                            Row(
+                              children: [
+                                // Decrease Set Button
+                                SetButton(
+                                  onPressed: () =>
+                                      controller.decreaseSet(index),
+                                  icon: Icons.remove,
+                                ),
+                                // Set Count
+                                Text(
+                                  exercise.set.toString(),
+                                  style: JimTextStyles.body,
+                                ),
+                                // Increase Set Button
+                                SetButton(
+                                  onPressed: () =>
+                                      controller.increaseSet(index),
+                                  icon: Icons.add,
+                                ),
+                                Text('Sets', style: JimTextStyles.body),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      // Rest Time Icon and Value
+                      Column(
+                        children: [
+                          JimIconButton(
+                            icon: Icons.more_time_rounded,
+                            color: JimColors.darkBlue,
+                            onPressed: () async {
+                              final newRestTime = await Get.to<int>(
+                                RestTimePicker(
+                                  initialRestTime: exercise.restTimeSecond,
+                                  exerciseIndex: index,
+                                ),
+                              );
+
+                              if (newRestTime != null) {
+                                controller.updateRestTime(index, newRestTime);
+                              }
+                            },
+                          ),
+                          // Display Rest Time
+                          Text(
+                            "${exercise.restTimeSecond}s",
+                            style:
+                                JimTextStyles.body.copyWith(color: JimColors.whiteGrey),
                           ),
                         ],
                       ),
-                    ),
-                    // Rest Time Icon and Value
-                    Column(
-                      children: [
-                        IconButton(
-                          icon:
-                              Icon(Icons.more_time_rounded, color: Colors.blue),
-                          onPressed: () async {
-                            final newRestTime = await Get.to<int>(
-                              RestTimePicker(
-                                initialRestTime: exercise.restTimeSecond,
-                                exerciseIndex: index,
-                              ),
-                            );
-
-                            if (newRestTime != null) {
-                              controller.updateRestTime(index, newRestTime);
-                            }
-                          },
-                        ),
-                        // Display Rest Time
-                        Text(
-                          "${exercise.restTimeSecond}s",
-                          style:
-                              JimTextStyles.body.copyWith(color: Colors.grey),
-                        ),
-                      ],
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
           );
+        },
+        onReorder: (oldIndex, newIndex) {
+          if (newIndex > oldIndex) {
+            newIndex -= 1; // Adjust for the reordering behavior of the list
+          }
+          if (newIndex >= controller.exercises.length) {
+            newIndex = controller.exercises.length - 1; // Ensure valid index
+          }
+          controller.reorderExercises(oldIndex, newIndex);
         },
       );
     });
@@ -237,7 +254,7 @@ class EditExerciseScreen extends StatelessWidget {
       padding: const EdgeInsets.all(JimSpacings.m),
       child: JimButton(
         text: 'Add Exercise',
-        onPressed: _onPressedAddExercise,
+        onPressed: onPressedAddExercise,
         type: ButtonType.primary,
         icon: Icons.add,
       ),

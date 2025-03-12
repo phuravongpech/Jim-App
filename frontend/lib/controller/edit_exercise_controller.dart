@@ -4,6 +4,7 @@ import '../models/workout_exercise.dart';
 class EditExerciseController extends GetxController {
   var exercises = <WorkoutExercise>[].obs;
 
+  /// Initialize the exercises
   void initializeExercises(List<WorkoutExercise> initialExercises) {
     exercises.assignAll(initialExercises);
   }
@@ -38,7 +39,7 @@ class EditExerciseController extends GetxController {
     }
   }
 
-  // New method to update rest time
+  // Update rest time
   void updateRestTime(int index, int newRestTime) {
     if (index >= 0 && index < exercises.length) {
       exercises[index] = WorkoutExercise(
@@ -47,6 +48,27 @@ class EditExerciseController extends GetxController {
         restTimeSecond: newRestTime,
       );
     }
+  }
+
+  // Remove an exercise at the specified index
+  void removeExercise(int index) {
+    if (index >= 0 && index < exercises.length) {
+      exercises.removeAt(index);
+    }
+  }
+
+  // Reorder exercises
+  void reorderExercises(int oldIndex, int newIndex) {
+    if (oldIndex < 0 ||
+        oldIndex >= exercises.length ||
+        newIndex < 0 ||
+        newIndex > exercises.length) {
+      return;
+    }
+
+    /// Remove the exercise from the old index and insert it at the new index
+    final exercise = exercises.removeAt(oldIndex);
+    exercises.insert(newIndex, exercise);
   }
 
   List<WorkoutExercise> getUpdatedExercises() {

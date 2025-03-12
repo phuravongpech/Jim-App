@@ -8,6 +8,8 @@ class JimColors {
   static const Color stroke = Color(0xFFAEAEB2);
   static const Color black = Color(0xFF000000);
   static const Color transparent = Colors.transparent;
+  static const Color whiteGrey = Color(0xFFE0E0E0);
+  static const Color darkBlue = Color(0xFF345DB4);
 
   static const Color error = Color(0xFFEE3B2B);
   static const Color success = Color(0xFF82DD55);
