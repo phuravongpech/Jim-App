@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/controller/workout_controller.dart';
+import 'package:frontend/theme/theme.dart';
 import 'package:frontend/widgets/action/jim_icon_button.dart';
 import 'package:get/get.dart';
+
+import '../../widgets/navigation/jim_top_bar.dart';
 
 class WorkoutDetailScreen extends StatelessWidget {
   final WorkoutController controller = Get.put(WorkoutController());
@@ -20,26 +23,24 @@ class WorkoutDetailScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
+      appBar: JimTopBar(
+        title: "",
         leading: JimIconButton(
-          icon: Icons.arrow_back, color: Colors.black,
+          icon: Icons.arrow_back,
+          color: JimColors.black,
           onPressed: () => Get.back(),
         ),
         actions: [
           JimIconButton(
-            icon: Icons.delete_outline, color: Colors.black,
-            onPressed: () {
-              // Delete workout logic here
-              Get.back();
-            },
+            icon: Icons.delete_outline,
+            color: JimColors.error,
+            onPressed: () {},
           ),
         ],
       ),
       body: Center(
         child: Text('Workout Details will be shown here'),
-      ),   
+      ),
     );
-  } 
+  }
 }
