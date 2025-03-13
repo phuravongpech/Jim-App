@@ -25,10 +25,21 @@ class WorkoutController extends GetxController {
     super.onInit();
     _workoutService = MockWorkoutService();
     fetchExercises();
+    fetchWorkouts();
 
     String? workoutId = Get.arguments;
     if (workoutId != null) {
       fetchWorkoutDetail(workoutId);
+    }
+  }
+
+  // Fetch workouts
+  void fetchWorkouts() async {
+    try {
+      final fetchedWorkouts = await _workoutService.getWorkouts();
+      xWorkoutList.assignAll(fetchedWorkouts);
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to load workouts: $e');
     }
   }
 
@@ -58,12 +69,22 @@ class WorkoutController extends GetxController {
     final EditExerciseController editExerciseController =
         Get.put(EditExerciseController());
 
+    // Create a new workout object (UUID is generated automatically in the model)
+    final newWorkout = Workout(
+      name: xWorkoutTitle.value,
+      description: xWorkoutDescription.value,
+      exercises: xSelectedExercises.toList(),
+    );
+
     // Create workout exercise relation
     _workoutService.saveWorkouts(
         name: xWorkoutTitle.value,
         description: xWorkoutDescription.value,
         exercises: xSelectedExercises.toList(),
         workoutExercises: editExerciseController.exercises);
+
+    // Add the new workout to the list
+    xWorkoutList.add(newWorkout);
 
     // Clear the form fields after saving
     xWorkoutTitle.value = '';

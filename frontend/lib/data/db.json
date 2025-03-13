@@ -181,6 +181,144 @@
         }
       ],
       "id": "2b8f"
+    },
+    {
+      "name": "a",
+      "description": "aaa",
+      "exercises": [
+        {
+          "id": "0001",
+          "name": "3/4 sit-up",
+          "gifUrl": "https://v2.exercisedb.io/image/9vlfK8MzcJa2Lq",
+          "bodyPart": "waist",
+          "equipment": "body weight",
+          "target": "abs",
+          "instructions": [
+            "Lie flat on your back with your knees bent and feet flat on the ground.",
+            "Place your hands behind your head with your elbows pointing outwards.",
+            "Engaging your abs, slowly lift your upper body off the ground, curling forward until your torso is at a 45-degree angle.",
+            "Pause for a moment at the top, then slowly lower your upper body back down to the starting position.",
+            "Repeat for the desired number of repetitions."
+          ]
+        },
+        {
+          "id": "0002",
+          "name": "45° side bend",
+          "gifUrl": "https://v2.exercisedb.io/image/wWm5ERU4AbDyIa",
+          "bodyPart": "waist",
+          "equipment": "body weight",
+          "target": "abs",
+          "instructions": [
+            "Stand with your feet shoulder-width apart and your arms extended straight down by your sides.",
+            "Keeping your back straight and your core engaged, slowly bend your torso to one side, lowering your hand towards your knee.",
+            "Pause for a moment at the bottom, then slowly return to the starting position.",
+            "Repeat on the other side.",
+            "Continue alternating sides for the desired number of repetitions."
+          ]
+        },
+        {
+          "id": "0003",
+          "name": "air bike",
+          "gifUrl": "https://v2.exercisedb.io/image/66vJCyeymUMW2n",
+          "bodyPart": "waist",
+          "equipment": "body weight",
+          "target": "abs",
+          "instructions": [
+            "Lie flat on your back with your hands placed behind your head.",
+            "Lift your legs off the ground and bend your knees at a 90-degree angle.",
+            "Bring your right elbow towards your left knee while simultaneously straightening your right leg.",
+            "Return to the starting position and repeat the movement on the opposite side, bringing your left elbow towards your right knee while straightening your left leg.",
+            "Continue alternating sides in a pedaling motion for the desired number of repetitions."
+          ]
+        }
+      ],
+      "workoutExercises": [
+        {
+          "exerciseId": "0001",
+          "set": 2,
+          "restTimeSecond": 30
+        },
+        {
+          "exerciseId": "0002",
+          "set": 3,
+          "restTimeSecond": 90
+        },
+        {
+          "exerciseId": "0003",
+          "set": 4,
+          "restTimeSecond": 150
+        }
+      ],
+      "id": "AGl9lOq"
+    },
+    {
+      "name": "b",
+      "description": "bbb",
+      "exercises": [
+        {
+          "id": "0001",
+          "name": "3/4 sit-up",
+          "gifUrl": "https://v2.exercisedb.io/image/9vlfK8MzcJa2Lq",
+          "bodyPart": "waist",
+          "equipment": "body weight",
+          "target": "abs",
+          "instructions": [
+            "Lie flat on your back with your knees bent and feet flat on the ground.",
+            "Place your hands behind your head with your elbows pointing outwards.",
+            "Engaging your abs, slowly lift your upper body off the ground, curling forward until your torso is at a 45-degree angle.",
+            "Pause for a moment at the top, then slowly lower your upper body back down to the starting position.",
+            "Repeat for the desired number of repetitions."
+          ]
+        },
+        {
+          "id": "0002",
+          "name": "45° side bend",
+          "gifUrl": "https://v2.exercisedb.io/image/wWm5ERU4AbDyIa",
+          "bodyPart": "waist",
+          "equipment": "body weight",
+          "target": "abs",
+          "instructions": [
+            "Stand with your feet shoulder-width apart and your arms extended straight down by your sides.",
+            "Keeping your back straight and your core engaged, slowly bend your torso to one side, lowering your hand towards your knee.",
+            "Pause for a moment at the bottom, then slowly return to the starting position.",
+            "Repeat on the other side.",
+            "Continue alternating sides for the desired number of repetitions."
+          ]
+        },
+        {
+          "id": "0003",
+          "name": "air bike",
+          "gifUrl": "https://v2.exercisedb.io/image/66vJCyeymUMW2n",
+          "bodyPart": "waist",
+          "equipment": "body weight",
+          "target": "abs",
+          "instructions": [
+            "Lie flat on your back with your hands placed behind your head.",
+            "Lift your legs off the ground and bend your knees at a 90-degree angle.",
+            "Bring your right elbow towards your left knee while simultaneously straightening your right leg.",
+            "Return to the starting position and repeat the movement on the opposite side, bringing your left elbow towards your right knee while straightening your left leg.",
+            "Continue alternating sides in a pedaling motion for the desired number of repetitions."
+          ]
+        }
+      ],
+      "workoutExercises": [
+        {
+          "exerciseId": "0001",
+          "set": 2,
+          "restTimeSecond": 30
+        },
+        {
+          "exerciseId": "0002",
+          "set": 3,
+          "restTimeSecond": 90
+        },
+        {
+          "exerciseId": "0003",
+          "set": 4,
+          "restTimeSecond": 150
+        }
+      ],
+      "id": "1F_VqEz"
     }
   ]
 }

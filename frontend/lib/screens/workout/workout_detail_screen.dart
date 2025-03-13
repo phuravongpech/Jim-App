@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/controller/workout_controller.dart';
+import 'package:frontend/widgets/action/jim_icon_button.dart';
 import 'package:get/get.dart';
 
 class WorkoutDetailScreen extends StatelessWidget {
   final WorkoutController controller = Get.put(WorkoutController());
 
-  WorkoutDetailScreen({Key? key}) : super(key: key);
+  WorkoutDetailScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,13 +23,13 @@ class WorkoutDetailScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+        leading: JimIconButton(
+          icon: Icons.arrow_back, color: Colors.black,
           onPressed: () => Get.back(),
         ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.delete_outline, color: Colors.black),
+          JimIconButton(
+            icon: Icons.delete_outline, color: Colors.black,
             onPressed: () {
               // Delete workout logic here
               Get.back();

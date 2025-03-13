@@ -39,15 +39,15 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
         items: workoutController.xWorkoutList,
         emptyMessage: "No Workouts Available!",
         itemBuilder: (workout) => GestureDetector(
-            onTap: () {
-              Get.toNamed('/workout-detail', arguments: workout.id);
-            },
-            child: WorkoutCard(
-              title: workout.name,
-              description: workout.description,
-              exercisesCount: workout.exercises.length,
-            ),
+          onTap: () {
+            Get.toNamed('/workout-detail', arguments: workout.id);
+          },
+          child: WorkoutCard(
+            title: workout.name,
+            description: workout.description,
+            exercisesCount: workout.exercises.length,
           ),
+        ),
       ),
       bottomNavigationBar: const CustomBottomNavBar(),
     );
