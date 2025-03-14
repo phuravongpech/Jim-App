@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:frontend/routes/route_manager.dart';
-import 'package:frontend/screens/workout/workout_screen.dart';
 import 'package:frontend/theme/theme.dart';
 import 'package:get/get.dart';
 
@@ -14,8 +13,7 @@ void main() async {
   runApp(GetMaterialApp(
     debugShowCheckedModeBanner: false,
     theme: appTheme,
-    initialRoute: '/',
+    initialRoute: routes[0].name,
     getPages: routes,
-    home: WorkoutScreen(),
   ));
 }
