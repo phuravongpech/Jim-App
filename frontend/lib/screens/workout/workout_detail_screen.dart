@@ -38,8 +38,11 @@ class WorkoutDetailScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Center(
-        child: Text('Workout Details will be shown here'),
+      body: Column(
+        children: [
+          // Text(controller.workout.value),
+
+        ],
       ),
     );
   }
