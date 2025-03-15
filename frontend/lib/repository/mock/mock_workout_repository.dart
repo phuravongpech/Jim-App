@@ -1,21 +1,17 @@
 import 'dart:convert';
 
 import 'package:frontend/models/exercise.dart';
+import 'package:frontend/models/workout.dart';
 import 'package:frontend/models/workout_exercise.dart';
 import 'package:frontend/repository/workout_repository.dart';
+import 'package:frontend/utils/uuid_utils.dart';
 import 'package:http/http.dart';
 
-import '../models/workout.dart';
-
-class MockWorkoutService extends WorkoutRepository {
-  static final MockWorkoutService _instance = MockWorkoutService._internal();
-  factory MockWorkoutService() => _instance;
-  MockWorkoutService._internal();
-
-  final String baseUrl = 'http://localhost:3000';
+class MockWorkoutRepository extends WorkoutRepository {
+  static const String baseUrl = 'http://localhost:3000';
 
   @override
-  Future<List<Workout>> getWorkouts() async {
+  Future<List<Workout>> fetchWorkouts() async {
     try {
       final response = await get(
         Uri.parse('$baseUrl/workouts'),
@@ -62,11 +58,11 @@ class MockWorkoutService extends WorkoutRepository {
           'name': name,
           'description': description,
           'exercises': exercises.map((e) => e.toJson()).toList(),
-          'workoutExercises': workoutExercises.map((we) => we.toJson()).toList(),
+          'workoutExercises': workoutExercises
+              .map((we) =>
+                  {...we.toJson(), 'global_id': UuidUtils.generateUuid()})
+              .toList()
         }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
       );
 
       if (response.statusCode != 201) {

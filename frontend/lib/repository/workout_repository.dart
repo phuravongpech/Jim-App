@@ -4,7 +4,7 @@ import 'package:frontend/models/workout_exercise.dart';
 import '../models/workout.dart';
 
 abstract class WorkoutRepository {
-  Future<List<Workout>> getWorkouts();
+  Future<List<Workout>> fetchWorkouts();
 
   Future<Workout> getWorkoutById(String id);
 

@@ -1,18 +1,8 @@
 import 'package:frontend/models/exercise.dart';
 import 'package:frontend/services/exercise_service.dart';
-import 'package:frontend/services/mock_exercise_service.dart'; // Import Mock service
 import 'package:get/get.dart';
 
-import '../repository/exercise_repository.dart';
-
 class ExerciseController extends GetxController {
-  //
-  // Flag used for swicthing between mock service and real service
-  //
-  static bool useMock = true;
-
-  late final ExerciseRepository _exerciseService;
-
   RxList<Exercise> exercises = <Exercise>[].obs;
   RxBool isLoading = false.obs;
   RxString selectedBodyPart = 'chest'.obs;
@@ -23,7 +13,6 @@ class ExerciseController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _exerciseService = useMock ? MockExerciseService() : ExerciseService();
     fetchExercises();
   }
 
@@ -36,7 +25,7 @@ class ExerciseController extends GetxController {
     try {
       isLoading.value = true;
 
-      final fetchedExercises = await _exerciseService.getExercises(
+      final fetchedExercises = await ExerciseService.instance.fetchExercises(
         page: page.value,
         limit: limit,
       );
@@ -54,24 +43,28 @@ class ExerciseController extends GetxController {
     }
   }
 
-  Future<void> searchExercises(String query) async {
-    if (query.isEmpty) {
-      fetchExercises(reset: true);
-      return;
+  Future<void> searchExercises(String query, {bool reset = false}) async {
+    if (reset) {
+      exercises.clear();
+      page.value = 0;
     }
 
     try {
       isLoading.value = true;
 
-      final allExercises = await _exerciseService.searchExercises(query: query);
+      final searchedExercises = await ExerciseService.instance.searchExercises(
+        query: query,
+        page: page.value,
+        limit: limit,
+      );
 
-      exercises.value = allExercises;
-
-      if (exercises.isEmpty) {
+      if (searchedExercises.isNotEmpty) {
+        exercises.addAll(searchedExercises);
+        page.value++; // Increment page for the next fetch
+      } else if (reset) {
         Get.snackbar('No Results', 'No exercises found for "$query".');
       }
     } catch (e) {
-      exercises.clear();
       Get.snackbar('Error', 'Failed to search exercises: $e');
     } finally {
       isLoading.value = false;

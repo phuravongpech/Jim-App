@@ -1,19 +1,11 @@
 import 'package:frontend/controller/edit_exercise_controller.dart';
 import 'package:frontend/models/exercise.dart';
+import 'package:frontend/services/workout_service.dart';
 import 'package:get/get.dart';
 
 import '../models/workout.dart';
-import '../repository/workout_repository.dart';
-import '../services/mock_workout_service.dart';
 
 class WorkoutController extends GetxController {
-  //
-  // Flag used for swicthing between mock service and real service
-  //
-  static bool useMock = true;
-
-  late final WorkoutRepository _workoutService;
-
   var xWorkoutTitle = ''.obs;
   var xWorkoutDescription = ''.obs;
   var xSelectedExercises = <Exercise>[].obs; // List of selected exercise IDs
@@ -23,7 +15,6 @@ class WorkoutController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _workoutService = MockWorkoutService();
     fetchExercises();
     fetchWorkouts();
 
@@ -36,7 +27,7 @@ class WorkoutController extends GetxController {
   // Fetch workouts
   void fetchWorkouts() async {
     try {
-      final fetchedWorkouts = await _workoutService.getWorkouts();
+      final fetchedWorkouts = await WorkoutService.instance.fetchWorkouts();
       xWorkoutList.assignAll(fetchedWorkouts);
     } catch (e) {
       Get.snackbar('Error', 'Failed to load workouts: $e');
@@ -46,7 +37,7 @@ class WorkoutController extends GetxController {
   // Fetch workout details by ID
   void fetchWorkoutDetail(String id) async {
     try {
-      Workout fetchedWorkout = await _workoutService.getWorkoutById(id);
+      Workout fetchedWorkout = await WorkoutService.instance.getWorkoutById(id);
       workout.value = fetchedWorkout;
     } catch (e) {
       Get.snackbar('Error', 'Failed to load workout details: $e');
@@ -55,7 +46,7 @@ class WorkoutController extends GetxController {
 
   fetchExercises() async {
     try {
-      final fetchedExercises = await _workoutService.getWorkouts();
+      final fetchedExercises = await WorkoutService.instance.fetchWorkouts();
 
       // Add the fetched exercises to the list
       xWorkoutList.addAll(fetchedExercises);
@@ -77,7 +68,7 @@ class WorkoutController extends GetxController {
     );
 
     // Create workout exercise relation
-    _workoutService.saveWorkouts(
+    WorkoutService.instance.saveWorkout(
         name: xWorkoutTitle.value,
         description: xWorkoutDescription.value,
         exercises: xSelectedExercises.toList(),
