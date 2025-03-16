@@ -1,14 +1,19 @@
-import { Entity, Column, ManyToOne, PrimaryGeneratedColumn, JoinColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  JoinColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { WorkoutExercise } from './workoutexercise.entity';
+import { WorkoutSession } from './workoutsession.entity';
 
 @Entity('activity_log')
 export class ActivityLog {
   @PrimaryGeneratedColumn()
   id: number;
-
-  @ManyToOne(() => WorkoutExercise, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'workoutExerciseId' })
-  workoutExerciseId: WorkoutExercise;
 
   @Column({ type: 'int' })
   weight: number;
@@ -18,4 +23,26 @@ export class ActivityLog {
 
   @Column({ type: 'int' })
   setNumber: number;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
+
+  @ManyToOne(
+    () => WorkoutExercise,
+    (workoutExercise) => workoutExercise.activityLogs,
+    { onDelete: 'CASCADE' },
+  )
+  @JoinColumn({ name: 'workoutExerciseId' })
+  workoutExercise: WorkoutExercise;
+
+  @ManyToOne(
+    () => WorkoutSession,
+    (workoutSession) => workoutSession.activityLogs,
+    { onDelete: 'CASCADE' },
+  )
+  @JoinColumn({ name: 'workoutSessionId' })
+  workoutSession: WorkoutSession;
 }

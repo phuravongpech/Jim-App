@@ -26,7 +26,7 @@ export class ActivitylogService {
       }
       const activityLog = this.activityLogRepository.create({
         ...createActivityLogDto,
-        workoutExerciseId: workoutExercise,
+        workoutExercise: workoutExercise,
       });
 
       return this.activityLogRepository.save(activityLog);

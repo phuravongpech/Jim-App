@@ -2,6 +2,7 @@ import { ActivityLog } from '@src/typeorm/entities/activitylog.entity';
 import { Exercise } from '@src/typeorm/entities/exercise.entity';
 import { Workout } from '@src/typeorm/entities/workout.entity';
 import { WorkoutExercise } from '@src/typeorm/entities/workoutexercise.entity';
+import { WorkoutSession } from '@src/typeorm/entities/workoutsession.entity';
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class SeedMultipleWorkouts1740900280771 implements MigrationInterface {
@@ -13,6 +14,8 @@ export class SeedMultipleWorkouts1740900280771 implements MigrationInterface {
         queryRunner.manager.getRepository(WorkoutExercise);
       const activityLogRepository =
         queryRunner.manager.getRepository(ActivityLog);
+      const workoutSessionRepository =
+        queryRunner.manager.getRepository(WorkoutSession);
 
       const allExercisesData = [
         {
@@ -153,14 +156,23 @@ export class SeedMultipleWorkouts1740900280771 implements MigrationInterface {
         });
         const savedWorkout = await workoutRepository.save(workout);
 
+        const workoutSession = workoutSessionRepository.create({
+          workout: savedWorkout,
+          startWorkout: new Date().toISOString(),
+          endWorkout: new Date(Date.now() + 3600000).toISOString(),
+          duration: '1 hour',
+        });
+        const savedWorkoutSession =
+          await workoutSessionRepository.save(workoutSession);
+
         for (const workoutExerciseData of workoutData.workoutExercises) {
           const exercise = createdExercises.find(
             (ex) => ex.id === workoutExerciseData.id,
           );
           if (exercise) {
             const workoutExercise = workoutExerciseRepository.create({
-              workoutId: savedWorkout.id,
-              exerciseId: exercise.id,
+              workout: savedWorkout.id,
+              exercise: exercise,
               restTimeSecond: workoutExerciseData.restTimeSecond,
               setCount: workoutExerciseData.setCount,
             });
@@ -171,6 +183,7 @@ export class SeedMultipleWorkouts1740900280771 implements MigrationInterface {
             for (let i = 1; i <= workoutExerciseData.setCount; i++) {
               activityLogsData.push({
                 workoutExerciseId: savedWorkoutExercise,
+                workoutSessionId: savedWorkoutSession,
                 weight: 15,
                 rep: 10,
                 setNumber: i,

@@ -3,27 +3,31 @@ import { WorkoutExercise } from './workoutexercise.entity';
 
 @Entity('exercise')
 export class Exercise {
-    @PrimaryColumn()
-    id: string;
+  @PrimaryColumn()
+  id: string;
 
-    @Column()
-    gifUrl: string;
+  @Column()
+  gifUrl: string;
 
-    @Column()
-    bodyPart: string;
+  @Column()
+  bodyPart: string;
 
-    @Column()
-    target: string;
+  @Column()
+  target: string;
 
-    @Column()
-    equipment: string;
+  @Column()
+  equipment: string;
 
-    @Column()
-    name: string;
+  @Column()
+  name: string;
 
-    @Column('text')
-    instruction: string;
+  @Column('text')
+  instruction: string;
 
-    @OneToMany(() => WorkoutExercise, workoutExercise => workoutExercise.exerciseId)
-    workoutExercises: WorkoutExercise[];
+  @OneToMany(
+    () => WorkoutExercise,
+    (workoutExercise) => workoutExercise.exercise,
+    { cascade: true },
+  )
+  workoutExercises: WorkoutExercise[];
 }

@@ -1,27 +1,38 @@
-import { Entity, Column, ManyToOne, OneToMany, JoinColumn, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  ManyToOne,
+  OneToMany,
+  JoinColumn,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Exercise } from './exercise.entity';
 import { ActivityLog } from './activitylog.entity';
 import { Workout } from './workout.entity';
 
 @Entity('workout_exercise')
 export class WorkoutExercise {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @ManyToOne(() => Workout, (workout) => workout.workoutExercises, { onDelete: 'CASCADE' })
-    @JoinColumn({ name: "workoutId" })
-    workoutId: number;
+  @Column({ type: 'int' })
+  restTimeSecond: number;
 
-    @ManyToOne(() => Exercise, (exercise) => exercise.workoutExercises, { onDelete: 'CASCADE' })
-    @JoinColumn({ name: "exerciseId" })
-    exerciseId: string;
+  @Column({ type: 'int' })
+  setCount: number;
 
-    @Column({ type: 'int' })
-    restTimeSecond: number;
+  @ManyToOne(() => Workout, (workout) => workout.workoutExercises, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'workoutId' })
+  workout: number;
 
-    @Column({ type: 'int' })
-    setCount: number;
+  @ManyToOne(() => Exercise, (exercise) => exercise.workoutExercises, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'exerciseId' })
+  exercise: Exercise;
 
-    @OneToMany(() => ActivityLog, (activityLog) => activityLog.workoutExerciseId)
-    activityLogs: ActivityLog[];
+  @OneToMany(() => ActivityLog, (activityLog) => activityLog.workoutExercise)
+  activityLogs: ActivityLog[];
 }
