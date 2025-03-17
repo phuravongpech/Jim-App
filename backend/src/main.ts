@@ -14,6 +14,12 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document)
 
+  app.enableCors({
+    origin: [/localhost:\d+$/], // Allows all localhost ports (Flutter web)
+    methods: 'GET,POST,PUT,DELETE',
+    allowedHeaders: 'Content-Type,Authorization',
+  });
+  
   await app.listen(process.env.APP_PORT ?? 3000);
 }
 bootstrap();
