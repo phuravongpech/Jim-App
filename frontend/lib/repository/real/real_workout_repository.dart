@@ -1,20 +1,22 @@
 import 'dart:convert';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:frontend/models/exercise.dart';
 import 'package:frontend/models/workout.dart';
 import 'package:frontend/models/workout_exercise.dart';
 import 'package:frontend/repository/workout_repository.dart';
-import 'package:frontend/utils/uuid_utils.dart';
 import 'package:http/http.dart';
 
-class MockWorkoutRepository extends WorkoutRepository {
-  static const String baseUrl = 'http://127.0.0.1:3000';
+import '../../utils/uuid_utils.dart';
+
+class RealWorkoutRepository implements WorkoutRepository {
+  final String backendUrl = dotenv.env['BACKEND_URL'] ?? 'Default URL';
 
   @override
   Future<List<Workout>> fetchWorkouts() async {
     try {
       final response = await get(
-        Uri.parse('$baseUrl/workouts'),
+        Uri.parse('$backendUrl/workouts'),
       );
 
       if (response.statusCode == 200) {
@@ -31,7 +33,7 @@ class MockWorkoutRepository extends WorkoutRepository {
   @override
   Future<Workout> getWorkoutById(String id) async {
     try {
-      final response = await get(Uri.parse('$baseUrl/workouts/$id'));
+      final response = await get(Uri.parse('$backendUrl/workouts/$id'));
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = json.decode(response.body);
@@ -53,7 +55,7 @@ class MockWorkoutRepository extends WorkoutRepository {
   }) async {
     try {
       final response = await post(
-        Uri.parse('$baseUrl/workouts'),
+        Uri.parse('$backendUrl/workouts'),
         body: json.encode({
           'name': name,
           'description': description,
