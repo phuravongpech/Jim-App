@@ -1,13 +1,14 @@
 import 'dart:convert';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:frontend/models/exercise.dart';
 import 'package:frontend/repository/exercise_repository.dart';
+import 'package:frontend/utils/fuzzywuzzy.dart';
 import 'package:http/http.dart';
 
-import '../../utils/fuzzywuzzy.dart';
-
-class MockExerciseRepository extends ExerciseRepository {
-  static const String baseUrl = 'http://127.0.0.1:3000';
+class RealExerciseRepository implements ExerciseRepository {
+  final String baseUrl = dotenv.env['BASE_URL'] ?? 'default_url';
+  final String apiKey = dotenv.env['API_KEY'] ?? 'default_key';
 
   @override
   Future<List<Exercise>> fetchExercises({
@@ -17,6 +18,10 @@ class MockExerciseRepository extends ExerciseRepository {
     try {
       final response = await get(
         Uri.parse('$baseUrl/exercises'),
+        headers: {
+          "x-rapidapi-host": baseUrl,
+          "x-rapidapi-key": apiKey,
+        },
       );
 
       if (response.statusCode == 200) {
@@ -39,8 +44,12 @@ class MockExerciseRepository extends ExerciseRepository {
     String bestMatchStr = Fuzzywuzzy.searchForExercise(query);
 
     try {
-      final response =
-          await get(Uri.parse('$baseUrl/exercises/name/$bestMatchStr'));
+      final response = await get(
+          Uri.parse('$baseUrl/exercises/name/$bestMatchStr'),
+          headers: {
+            "x-rapidapi-host": baseUrl,
+            "x-rapidapi-key": apiKey,
+          });
 
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
@@ -50,24 +59,6 @@ class MockExerciseRepository extends ExerciseRepository {
       }
     } catch (e) {
       throw Exception('Error searching exercises: $e');
-    }
-  }
-
-  @override
-  Future<Exercise> getExerciseById({required String id}) async {
-    try {
-      final response = await get(
-        Uri.parse('$baseUrl/exercises/$id'),
-      );
-
-      if (response.statusCode == 200) {
-        final Map<String, dynamic> data = json.decode(response.body);
-        return Exercise.fromJson(data);
-      } else {
-        throw Exception('Failed to get exercise by id');
-      }
-    } catch (e) {
-      throw Exception('exercise error fetching from id');
     }
   }
 }
