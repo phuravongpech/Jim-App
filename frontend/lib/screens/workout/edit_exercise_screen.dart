@@ -30,7 +30,7 @@ class EditExerciseScreen extends StatelessWidget {
       final newExercises = (result as List<Exercise>).map((exercise) {
         return WorkoutExercise(
           exerciseId: exercise.id,
-          set: 4,
+          setCount: 4,
           restTimeSecond: 90,
         );
       }).toList();
@@ -187,7 +187,7 @@ class EditExerciseScreen extends StatelessWidget {
                                 ),
                                 // Set Count
                                 Text(
-                                  exercise.set.toString(),
+                                  exercise.setCount.toString(),
                                   style: JimTextStyles.body,
                                 ),
                                 // Increase Set Button

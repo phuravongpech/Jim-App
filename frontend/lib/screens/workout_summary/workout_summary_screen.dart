@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/controller/workout_session_controller.dart';
 import 'package:frontend/screens/workout_summary/widget/workout_summary_list.dart';
 import 'package:frontend/theme/theme.dart';
 import 'package:frontend/widgets/action/jim_button.dart';
 import 'package:frontend/widgets/action/jim_icon_button.dart';
 import 'package:frontend/widgets/navigation/jim_top_bar.dart';
+import 'package:get/get.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -12,7 +14,6 @@ void main() {
 }
 
 class WorkoutSummaryScreen extends StatelessWidget {
-  final String appBarTitle = "Full Body Strength";
   final String duration = "11:00";
   final List<Map<String, dynamic>> exercises = [
     {
@@ -73,7 +74,8 @@ class WorkoutSummaryScreen extends StatelessWidget {
 
   WorkoutSummaryScreen({super.key});
   bool get isWorkoutComplete {
-    return exercises.every((exercise) => exercise['setCount'] == exercise['setNumber']);
+    return exercises
+        .every((exercise) => exercise['setCount'] == exercise['setNumber']);
   }
 
   void _finishWorkout(BuildContext context) {
@@ -82,7 +84,8 @@ class WorkoutSummaryScreen extends StatelessWidget {
         context: context,
         builder: (context) => AlertDialog(
           title: const Text('Workout Incomplete'),
-          content: const Text('Are you sure you want to finish without completing all exercises?'),
+          content: const Text(
+              'Are you sure you want to finish without completing all exercises?'),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
@@ -97,15 +100,17 @@ class WorkoutSummaryScreen extends StatelessWidget {
           ],
         ),
       );
-    } else {
-      
-    }
+    } else {}
   }
+
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<WorkoutSessionController>();
+    final workoutTitle = controller.workout.name;
+
     return Scaffold(
       appBar: JimTopBar(
-        title: appBarTitle,
+        title: workoutTitle,
         centerTitle: true,
         leading: JimIconButton(
           icon: Icons.arrow_back,
@@ -130,7 +135,6 @@ class WorkoutSummaryScreen extends StatelessWidget {
                   style: JimTextStyles.title,
                 ),
                 SizedBox(height: JimSpacings.m),
-                
               ],
             ),
           ),
@@ -142,7 +146,8 @@ class WorkoutSummaryScreen extends StatelessWidget {
             child: JimButton(
               text: "Finish Workout",
               onPressed: () => _finishWorkout(context),
-              type: isWorkoutComplete ? ButtonType.primary : ButtonType.secondary,
+              type:
+                  isWorkoutComplete ? ButtonType.primary : ButtonType.secondary,
             ),
           ),
         ],

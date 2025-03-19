@@ -4,7 +4,7 @@ import 'package:frontend/screens/workout/create_workout_screen.dart';
 import 'package:frontend/screens/workout/edit_exercise_screen.dart';
 import 'package:frontend/screens/workout/workout_detail_screen.dart';
 import 'package:frontend/screens/workout/workout_screen.dart';
-import 'package:frontend/screens/workout_session/session_screen.dart';
+import 'package:frontend/screens/workout_session/set_log_screen.dart';
 import 'package:frontend/screens/workout_session/timer_screen.dart';
 import 'package:get/get.dart';
 
@@ -26,7 +26,7 @@ final routes = [
           )),
   // GetPage(name: '/progress', page: () => SessionScreen()),
 
-  GetPage(name: '/profile', page: () => SessionScreen()),
+  GetPage(name: '/profile', page: () => SetLogScreen()),
   GetPage(
     name: '/select-exercises',
     page: () => SelectExerciseScreen(),

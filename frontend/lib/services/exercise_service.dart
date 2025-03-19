@@ -46,4 +46,7 @@ class ExerciseService {
   }) {
     return repository.searchExercises(page: page, limit: limit, query: query);
   }
+
+  
+
 }

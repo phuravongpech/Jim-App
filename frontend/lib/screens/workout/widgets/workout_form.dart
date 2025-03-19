@@ -36,7 +36,7 @@ class WorkoutForm extends StatelessWidget {
               (e) => e.exerciseId == exercise.id,
               orElse: () => WorkoutExercise(
                 exerciseId: exercise.id,
-                set: 4,
+                setCount: 4,
                 restTimeSecond: 90,
               ),
             );
@@ -63,7 +63,7 @@ class WorkoutForm extends StatelessWidget {
         final newArguments = selectedExercises.map((exercise) {
           return WorkoutExercise(
             exerciseId: exercise.id,
-            set: 4,
+            setCount: 4,
             restTimeSecond: 90,
           );
         }).toList();
@@ -212,7 +212,7 @@ class WorkoutForm extends StatelessWidget {
                       (e) => e.exerciseId == exerciseId,
                       orElse: () => WorkoutExercise(
                         exerciseId: exerciseId,
-                        set: 4,
+                        setCount: 4,
                         restTimeSecond: 90,
                       ),
                     );
@@ -263,7 +263,7 @@ class WorkoutForm extends StatelessWidget {
                                 Row(
                                   children: [
                                     Text(
-                                      "${workoutExercise.set} sets",
+                                      "${workoutExercise.setCount} sets",
                                       style: JimTextStyles.subBody.copyWith(
                                         fontSize: 14,
                                         color: JimColors.textSecondary,

@@ -23,17 +23,17 @@ class EditExerciseController extends GetxController {
     if (index >= 0 && index < exercises.length) {
       exercises[index] = WorkoutExercise(
         exerciseId: exercises[index].exerciseId,
-        set: exercises[index].set + 1,
+        setCount: exercises[index].setCount + 1,
         restTimeSecond: exercises[index].restTimeSecond,
       );
     }
   }
 
   void decreaseSet(int index) {
-    if (index >= 0 && index < exercises.length && exercises[index].set > 1) {
+    if (index >= 0 && index < exercises.length && exercises[index].setCount > 1) {
       exercises[index] = WorkoutExercise(
         exerciseId: exercises[index].exerciseId,
-        set: exercises[index].set - 1,
+        setCount: exercises[index].setCount - 1,
         restTimeSecond: exercises[index].restTimeSecond,
       );
     }
@@ -44,7 +44,7 @@ class EditExerciseController extends GetxController {
     if (index >= 0 && index < exercises.length) {
       exercises[index] = WorkoutExercise(
         exerciseId: exercises[index].exerciseId,
-        set: exercises[index].set,
+        setCount: exercises[index].setCount,
         restTimeSecond: newRestTime,
       );
     }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
-import 'package:frontend/screens/workout_session/widgets/session_button.dart';
+import 'package:frontend/controller/workout_session_controller.dart';
+import 'package:frontend/screens/workout_session/widgets/set_log_button.dart';
 import 'package:frontend/theme/theme.dart';
+import 'package:get/get.dart';
 
 class TimerScreen extends StatefulWidget {
   final int restTimeSecond;
@@ -14,9 +16,6 @@ class TimerScreen extends StatefulWidget {
 class _TimerScreenState extends State<TimerScreen> {
   final CountDownController _controller = CountDownController();
   bool isPaused = false;
-  //TODO implement setsCompleted and totalSets
-  int setsCompleted = 2;
-  int totalSets = 3;
   late int currentTimeInSeconds;
 
   void _addTime(int seconds) {
@@ -34,6 +33,11 @@ class _TimerScreenState extends State<TimerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<WorkoutSessionController>();
+
+    int setsCompleted = controller.currentSetIndex.value + 1;
+    int totalSets = controller.currentWorkoutExercise.setCount;
+
     return Scaffold(
       backgroundColor: JimColors.backgroundAccent,
       body: Padding(
@@ -95,7 +99,11 @@ class _TimerScreenState extends State<TimerScreen> {
               ],
             ),
             const SizedBox(height: JimSpacings.xl),
-            SessionButton(text: 'Next set', onPressed: () {})
+            SetLogButton(
+                text: 'Next set',
+                onPressed: () {
+                  controller.handleRestComplete();
+                }),
           ],
         ),
       ),
