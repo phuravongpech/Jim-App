@@ -39,8 +39,8 @@ class MockExerciseRepository extends ExerciseRepository {
     String bestMatchStr = Fuzzywuzzy.searchForExercise(query);
 
     try {
-      final response = await get(
-          Uri.parse('$baseUrl/exercises/name/$bestMatchStr'));
+      final response =
+          await get(Uri.parse('$baseUrl/exercises/name/$bestMatchStr'));
 
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
@@ -50,6 +50,24 @@ class MockExerciseRepository extends ExerciseRepository {
       }
     } catch (e) {
       throw Exception('Error searching exercises: $e');
+    }
+  }
+
+  @override
+  Future<Exercise> getExerciseById({required String id}) async {
+    try {
+      final response = await get(
+        Uri.parse('$baseUrl/exercises/$id'),
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = json.decode(response.body);
+        return Exercise.fromJson(data);
+      } else {
+        throw Exception('Failed to get exercise by id');
+      }
+    } catch (e) {
+      throw Exception('exercise error fetching from id');
     }
   }
 }

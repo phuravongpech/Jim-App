@@ -170,15 +170,15 @@
       "workoutExercises": [
         {
           "exerciseId": "0006",
-          "set": 2,
+          "setCount": 2,
           "restTimeSecond": 30,
-          "global_id": "f3a21dbe-476c-4862-a40b-33c13fa8356a"
+          "globalId": "f3a21dbe-476c-4862-a40b-33c13fa8356a"
         },
         {
           "exerciseId": "0007",
-          "set": 6,
+          "setCount": 3,
           "restTimeSecond": 90,
-          "global_id": "30d3fe10-981b-4f86-b9aa-51584326131f"
+          "globalId": "30d3fe10-981b-4f86-b9aa-51584326131f"
         }
       ]
     }

@@ -106,11 +106,11 @@ class WorkoutSummaryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<WorkoutSessionController>();
-    final workoutTitle = controller.workout.name;
+    // final workoutTitle = controller.workout.name;
 
     return Scaffold(
       appBar: JimTopBar(
-        title: workoutTitle,
+        title: "Workout Summary",
         centerTitle: true,
         leading: JimIconButton(
           icon: Icons.arrow_back,

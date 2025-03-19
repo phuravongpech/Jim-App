@@ -14,4 +14,6 @@ abstract class WorkoutRepository {
     required List<Exercise> exercises,
     required List<WorkoutExercise> workoutExercises,
   });
+
+  Future<List<WorkoutExercise>> getWorkoutExercises(String workoutId);
 }

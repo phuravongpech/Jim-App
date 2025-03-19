@@ -30,6 +30,7 @@ class MockWorkoutRepository extends WorkoutRepository {
 
   @override
   Future<Workout> getWorkoutById(String id) async {
+    print('Fetching workout details for $id');
     try {
       final response = await get(Uri.parse('$baseUrl/workouts/$id'));
 
@@ -37,7 +38,7 @@ class MockWorkoutRepository extends WorkoutRepository {
         final Map<String, dynamic> data = json.decode(response.body);
         return Workout.fromJson(data);
       } else {
-        throw Exception('Failed to load workout details');
+        throw Exception('Failed to load workout details for $id');
       }
     } catch (e) {
       throw Exception('Error fetching workout details: $e');
@@ -70,6 +71,24 @@ class MockWorkoutRepository extends WorkoutRepository {
       }
     } catch (e) {
       throw Exception('Error saving workouts: $e');
+    }
+  }
+
+  @override
+  Future<List<WorkoutExercise>> getWorkoutExercises(String workoutId) async {
+    try {
+      final response = await get(
+        Uri.parse('$baseUrl/workoutExercises?workoutId=$workoutId'),
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body);
+        return data.map((json) => WorkoutExercise.fromJson(json)).toList();
+      } else {
+        throw Exception('Failed to load workout exercises');
+      }
+    } catch (e) {
+      throw Exception('Error fetching workout exercises: $e');
     }
   }
 }

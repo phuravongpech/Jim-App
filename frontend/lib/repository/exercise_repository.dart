@@ -11,4 +11,7 @@ abstract class ExerciseRepository {
     required int limit,
     required String query,
   });
+
+  //because cant access exercise without the function
+  Future<Exercise> getExerciseById({required String id});
 }

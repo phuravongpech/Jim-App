@@ -1,27 +1,75 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/controller/workout_controller.dart';
+import 'package:frontend/models/exercise.dart';
+import 'package:frontend/screens/workout_session/set_log_screen.dart';
+import 'package:frontend/services/exercise_service.dart';
+import 'package:frontend/services/workout_session_service.dart';
 import 'package:frontend/controller/workout_session_controller.dart';
 import 'package:frontend/screens/workout_session/widgets/set_log_button.dart';
 import 'package:frontend/theme/theme.dart';
 import 'package:frontend/widgets/action/jim_icon_button.dart';
 import 'package:get/get.dart';
-
 import '../../widgets/navigation/jim_top_bar.dart';
 
 class WorkoutDetailScreen extends StatelessWidget {
-  final WorkoutController controller = Get.put(WorkoutController());
+  WorkoutDetailScreen({super.key}) {
+    // Get service instance
+    _service = WorkoutSessionService.instance;
 
-  WorkoutDetailScreen({super.key});
+    // Load workout data from arguments
+    final workoutId = Get.arguments as String?;
+    if (workoutId != null) {
+      _loadWorkout(workoutId);
+    }
+  }
+
+  late final WorkoutSessionService _service;
+  final isLoading = true.obs;
+  final hasError = false.obs;
+  final errorMessage = ''.obs;
+
+  Future<void> _loadWorkout(String id) async {
+    try {
+      isLoading(true);
+      hasError(false);
+      errorMessage('');
+
+      final success = await _service.loadWorkout(id);
+      if (!success) {
+        throw Exception('Failed to load workout');
+      }
+    } catch (e) {
+      hasError(true);
+      errorMessage(e.toString());
+    } finally {
+      isLoading(false);
+    }
+  }
+
+  void _startWorkout() {
+    if (!_canStartWorkout()) return;
+    Get.lazyPut(() => WorkoutSessionController());
+    Get.to(() => SetLogScreen());
+  }
+
+  bool _canStartWorkout() {
+    if (isLoading.value) {
+      Get.snackbar('Error', 'Please wait for workout to load');
+      return false;
+    }
+
+    if (hasError.value ||
+        _service.activeWorkout.value == null ||
+        _service.activeWorkoutExercises.isEmpty) {
+      Get.snackbar('Error', 'Workout data not available');
+      return false;
+    }
+
+    return true;
+  }
 
   @override
   Widget build(BuildContext context) {
-    final workoutId = Get.arguments is String ? Get.arguments : null;
-
-    if (workoutId != null && controller.workout.value == null) {
-      controller.fetchWorkoutDetail(workoutId);
-    }
-
-    final sesionController = Get.find<WorkoutSessionController>();
+    final exerciseService = ExerciseService.instance;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -41,12 +89,29 @@ class WorkoutDetailScreen extends StatelessWidget {
         ],
       ),
       body: Obx(() {
-        final workout = controller.workout.value;
+        if (isLoading.value) {
+          return const Center(child: CircularProgressIndicator());
+        }
 
-        if (workout == null) {
-          return const Center(
-            child: CircularProgressIndicator(),
+        if (hasError.value) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(errorMessage.value),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () => _loadWorkout(Get.arguments),
+                  child: const Text('Retry'),
+                ),
+              ],
+            ),
           );
+        }
+
+        final workout = _service.activeWorkout.value;
+        if (workout == null) {
+          return const Center(child: Text('No workout data available'));
         }
 
         return Padding(
@@ -74,26 +139,63 @@ class WorkoutDetailScreen extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Expanded(
-                child: ListView.separated(
-                  itemCount: workout.exercises.length,
-                  separatorBuilder: (context, index) => const Divider(),
-                  itemBuilder: (context, index) {
-                    final exercise = workout.exercises[index];
-                    return ListTile(
-                      title: Text(exercise.name),
-                      // subtitle: Text('Sets: ${exercise.} | Reps: ${exercise.reps}'),
-                      trailing: const Icon(Icons.chevron_right),
-                      onTap: () {
-                        // Handle exercise tap
+                child: Obx(() => ListView.separated(
+                      itemCount: _service.activeWorkoutExercises.length,
+                      separatorBuilder: (context, index) => const Divider(),
+                      itemBuilder: (context, index) {
+                        final workoutExercise =
+                            _service.activeWorkoutExercises[index];
+                        final exerciseFuture = exerciseService.repository
+                            .getExerciseById(id: workoutExercise.exerciseId);
+
+                        return FutureBuilder<Exercise>(
+                          future: exerciseFuture,
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const ListTile(
+                                title: Text('Loading...'),
+                                trailing: SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child:
+                                      CircularProgressIndicator(strokeWidth: 2),
+                                ),
+                              );
+                            }
+
+                            if (snapshot.hasError || !snapshot.hasData) {
+                              return ListTile(
+                                title: Text('Error loading exercise'),
+                                subtitle: Text('Tap to retry'),
+                                trailing: Icon(Icons.refresh),
+                                onTap: () {
+                                  // Add refresh logic here
+                                },
+                              );
+                            }
+
+                            final exercise = snapshot.data!;
+                            return ListTile(
+                              title: Text(exercise.name),
+                              subtitle: Text(
+                                'Sets: ${workoutExercise.setCount} | Rest: ${workoutExercise.restTimeSecond}s',
+                              ),
+                              trailing: const Icon(Icons.chevron_right),
+                              onTap: () {
+                                // Handle exercise tap
+                              },
+                            );
+                          },
+                        );
                       },
-                    );
-                  },
-                ),
+                    )),
               ),
-              SetLogButton(text: "Start Workout", onPressed: () {}),
-              SizedBox(
-                height: 20,
-              )
+              SetLogButton(
+                text: "Start Workout",
+                onPressed: _startWorkout,
+              ),
+              const SizedBox(height: 20),
             ],
           ),
         );

@@ -57,4 +57,8 @@ class WorkoutService {
         exercises: exercises,
         workoutExercises: workoutExercises);
   }
+
+  Future<List<WorkoutExercise>> getWorkoutExercises(String workoutId) {
+    return repository.getWorkoutExercises(workoutId);
+  }
 }

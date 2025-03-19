@@ -19,11 +19,7 @@ final routes = [
     page: () => ExerciseDetail(exercise: Get.arguments),
   ),
   // GetPage(name: '/progress', page: () => ProgressScreen()),
-  GetPage(
-      name: '/progress',
-      page: () => TimerScreen(
-            restTimeSecond: 20,
-          )),
+  GetPage(name: '/progress', page: () => TimerScreen()),
   // GetPage(name: '/progress', page: () => SessionScreen()),
 
   GetPage(name: '/profile', page: () => SetLogScreen()),
