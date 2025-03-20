@@ -9,6 +9,7 @@ import 'package:http/http.dart';
 class RealExerciseRepository implements ExerciseRepository {
   final String baseUrl = dotenv.env['BASE_URL'] ?? 'default_url';
   final String apiKey = dotenv.env['API_KEY'] ?? 'default_key';
+  final String backendUrl = dotenv.env['BACKEND_URL'] ?? 'Default URL';
 
   @override
   Future<List<Exercise>> fetchExercises({
@@ -54,6 +55,26 @@ class RealExerciseRepository implements ExerciseRepository {
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
         return data.map((json) => Exercise.fromJson(json)).toList();
+      } else {
+        throw Exception('Failed to search exercises');
+      }
+    } catch (e) {
+      throw Exception('Error searching exercises: $e');
+    }
+  }
+
+  @override
+  Future<Exercise> getExerciseById({required String id}) async {
+    try {
+      final response =
+          await get(Uri.parse('$backendUrl/exercises/$id'), headers: {
+        "x-rapidapi-host": baseUrl,
+        "x-rapidapi-key": apiKey,
+      });
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        return data.map((json) => Exercise.fromJson(json));
       } else {
         throw Exception('Failed to search exercises');
       }

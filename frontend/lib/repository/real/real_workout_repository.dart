@@ -74,4 +74,21 @@ class RealWorkoutRepository implements WorkoutRepository {
       throw Exception('Error saving workouts: $e');
     }
   }
+
+  @override
+  Future<List<WorkoutExercise>> getWorkoutExercises(String workoutId) async {
+    try {
+      final response =
+          await get(Uri.parse('$backendUrl/workoutexercise/$workoutId'));
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body);
+        return data.map((we) => WorkoutExercise.fromJson(we)).toList();
+      } else {
+        throw Exception('Failed to load workout details');
+      }
+    } catch (e) {
+      throw Exception('Error fetching workout details: $e');
+    }
+  }
 }
