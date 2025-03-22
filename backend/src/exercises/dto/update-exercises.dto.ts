@@ -44,6 +44,6 @@ export class UpdateExerciseDto {
     required: false,
   })
   @IsOptional()
-  @IsString()
-  instruction?: string;
+  @IsString({ each: true })
+  instruction?: string[];
 }
