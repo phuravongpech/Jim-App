@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/controller/workout_session_controller.dart';
 import 'package:frontend/screens/workout_summary/widget/workout_summary_list.dart';
 import 'package:frontend/theme/theme.dart';
 import 'package:frontend/widgets/action/jim_button.dart';
 import 'package:frontend/widgets/action/jim_icon_button.dart';
 import 'package:frontend/widgets/navigation/jim_top_bar.dart';
-import 'package:get/get.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -105,9 +103,6 @@ class WorkoutSummaryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<WorkoutSessionController>();
-    // final workoutTitle = controller.workout.name;
-
     return Scaffold(
       appBar: JimTopBar(
         title: "Workout Summary",

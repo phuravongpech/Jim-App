@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/controller/exercise_detail_controller.dart';
 import 'package:frontend/theme/theme.dart';
+
 class ExerciseDetailBody extends StatelessWidget {
   const ExerciseDetailBody({super.key, required this.controller});
 
@@ -9,7 +10,8 @@ class ExerciseDetailBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: JimSpacings.m), // Updated padding
+      padding: const EdgeInsets.symmetric(
+          horizontal: JimSpacings.m), // Updated padding
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -191,11 +193,7 @@ class ExerciseDetailBody extends StatelessWidget {
             borderRadius: BorderRadius.circular(JimSpacings.radius),
           ),
           child: Column(
-            children: controller.formattedInstructions
-                .split('\n')
-                .asMap()
-                .entries
-                .map((entry) {
+            children: controller.instructions.asMap().entries.map((entry) {
               final index = entry.key + 1;
               final instruction = entry.value;
               return Padding(

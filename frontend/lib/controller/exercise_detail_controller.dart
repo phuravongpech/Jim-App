@@ -27,21 +27,6 @@ class ExerciseDetailController extends GetxController {
       .map((word) => word[0].toUpperCase() + word.substring(1))
       .join(' ');
 
-  /// Get the formatted instructions of the exercise
-  String get formattedInstructions {
-    if (exercise.instructions == null || exercise.instructions!.isEmpty) {
-      return 'No instructions available.';
-    }
-
-    // Split instructions into sentences (assuming sentences are separated by '. ')
-    List<String> sentences = exercise.instructions!.split('. ');
-
-    // Capitalize the first letter of each sentence and join them back
-    return sentences
-        .map((sentence) =>
-            sentence.isNotEmpty
-                ? sentence[0].toUpperCase() + sentence.substring(1)
-                : '')
-        .join('. ');
-  }
+  /// Get the instructions of the exercise
+  List<String> get instructions => exercise.instructions;
 }

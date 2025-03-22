@@ -3,7 +3,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:frontend/bindings/initial_binding.dart';
 import 'package:frontend/repository/mock/mock_exercise_repository.dart';
 import 'package:frontend/repository/mock/mock_workout_repository.dart';
-import 'package:frontend/repository/real/real_workout_repository.dart';
 import 'package:frontend/routes/route_manager.dart';
 import 'package:frontend/services/exercise_service.dart';
 import 'package:frontend/services/workout_service.dart';

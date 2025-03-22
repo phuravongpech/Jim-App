@@ -10,7 +10,7 @@ import 'package:frontend/theme/theme.dart';
 import 'package:flutter/services.dart';
 
 class SetLogScreen extends GetView<WorkoutSessionController> {
-  SetLogScreen({Key? key}) : super(key: key);
+  SetLogScreen({super.key});
 
   final _service = WorkoutSessionService.instance;
   final weightController = TextEditingController(text: '0');

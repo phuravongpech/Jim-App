@@ -30,7 +30,6 @@ class MockWorkoutRepository extends WorkoutRepository {
 
   @override
   Future<Workout> getWorkoutById(String id) async {
-    print('Fetching workout details for $id');
     try {
       final response = await get(Uri.parse('$baseUrl/workouts/$id'));
 

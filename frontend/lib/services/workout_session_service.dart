@@ -111,7 +111,7 @@ class WorkoutSessionService {
       weight: weight,
     );
 
-    log.d(' now just logged set = ${loggedSet}');
+    log.d(' now just logged set = $loggedSet');
 
     loggedSets.add(loggedSet);
   }
@@ -126,7 +126,7 @@ class WorkoutSessionService {
   void moveToNextExercise() {
     if (!hasMoreExercises) return;
     currentExerciseIndex.value++;
-    log.d('now move to next workoutExercise =${currentExercise}');
+    log.d('now move to next workoutExercise =$currentExercise');
     currentSetIndex.value = 0;
   }
 }

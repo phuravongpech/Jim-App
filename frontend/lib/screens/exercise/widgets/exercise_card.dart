@@ -25,7 +25,7 @@ class ExerciseCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(JimSpacings.radius),
         ),
         elevation: 2,
-        color: JimColors.primary.withOpacity(0.5),
+        color: JimColors.primary.withAlpha(128),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
