@@ -38,7 +38,8 @@ class ExerciseDetailBody extends StatelessWidget {
         ),
         const SizedBox(height: JimSpacings.xs),
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: JimSpacings.s, vertical: JimSpacings.xs),
+          padding: const EdgeInsets.symmetric(
+              horizontal: JimSpacings.s, vertical: JimSpacings.xs),
           decoration: BoxDecoration(
             color: JimColors.primary,
             borderRadius: BorderRadius.circular(JimSpacings.radiusSmall),
@@ -68,7 +69,7 @@ class ExerciseDetailBody extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: JimColors.white, 
+            color: JimColors.white,
             borderRadius: BorderRadius.circular(JimSpacings.radius),
           ),
           child: Column(
@@ -173,10 +174,6 @@ class ExerciseDetailBody extends StatelessWidget {
   }
 
   Widget _buildInstructions() {
-    if (controller.instructions.isEmpty) {
-      return const SizedBox.shrink();
-    }
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -194,7 +191,11 @@ class ExerciseDetailBody extends StatelessWidget {
             borderRadius: BorderRadius.circular(JimSpacings.radius),
           ),
           child: Column(
-            children: controller.instructions.asMap().entries.map((entry) {
+            children: controller.formattedInstructions
+                .split('\n')
+                .asMap()
+                .entries
+                .map((entry) {
               final index = entry.key + 1;
               final instruction = entry.value;
               return Padding(
@@ -207,7 +208,8 @@ class ExerciseDetailBody extends StatelessWidget {
                       height: 28,
                       decoration: BoxDecoration(
                         color: JimColors.primary,
-                        borderRadius: BorderRadius.circular(JimSpacings.radiusSmall),
+                        borderRadius:
+                            BorderRadius.circular(JimSpacings.radiusSmall),
                       ),
                       child: Center(
                         child: Text(

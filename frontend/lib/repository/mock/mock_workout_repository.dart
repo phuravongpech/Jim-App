@@ -8,7 +8,7 @@ import 'package:frontend/utils/uuid_utils.dart';
 import 'package:http/http.dart';
 
 class MockWorkoutRepository extends WorkoutRepository {
-  static const String baseUrl = 'http://127.0.0.1:3000';
+  static const String baseUrl = 'http://localhost:3000';
 
   @override
   Future<List<Workout>> fetchWorkouts() async {

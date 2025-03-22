@@ -7,7 +7,7 @@ import 'package:http/http.dart';
 import '../../utils/fuzzywuzzy.dart';
 
 class MockExerciseRepository extends ExerciseRepository {
-  static const String baseUrl = 'http://127.0.0.1:3000';
+  static const String baseUrl = 'http://localhost:3000';
 
   @override
   Future<List<Exercise>> fetchExercises({

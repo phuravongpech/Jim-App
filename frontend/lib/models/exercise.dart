@@ -5,7 +5,7 @@ class Exercise {
   final String bodyPart;
   final String equipment;
   final String target;
-  final List<String>? instructions;
+  final String? instructions;
 
   Exercise(
       {required this.id,
@@ -24,9 +24,7 @@ class Exercise {
       bodyPart: json['bodyPart']?.toString() ?? '',
       equipment: json['equipment']?.toString() ?? '',
       target: json['target']?.toString() ?? '',
-      instructions: (json['instructions'] as List<dynamic>?)
-          ?.map((item) => item.toString())
-          .toList(),
+      instructions: json['instructions']?.toString(),
     );
   }
 
