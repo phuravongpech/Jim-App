@@ -24,6 +24,6 @@ export class Exercise {
     @Column("json")
     instruction: string[];
 
-    @OneToMany(() => WorkoutExercise, workoutExercise => workoutExercise.exerciseId)
+    @OneToMany(() => WorkoutExercise, workoutExercise => workoutExercise.exercise)
     workoutExercises: WorkoutExercise[];
 }

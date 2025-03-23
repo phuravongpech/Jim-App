@@ -18,6 +18,6 @@ export class Workout{
     @UpdateDateColumn()
     updatedAt: Date;
 
-    @OneToMany(() => WorkoutExercise, workoutExercise => workoutExercise.workoutId, { cascade: true })
+    @OneToMany(() => WorkoutExercise, workoutExercise => workoutExercise.workout, { cascade: true })
     workoutExercises: WorkoutExercise[];
 }

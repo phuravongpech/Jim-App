@@ -56,4 +56,12 @@ export class WorkoutsController {
   async delete(@Param('id') id: number): Promise<void> {
     return this.workoutsService.delete(id);
   }
+
+  @Get(':id/exercises')
+  @ApiOperation({ summary: 'Find a workout by ID with exercises' })
+  @ApiResponse({ status: 200, description: 'Found Workout with exercises', type: Workout })
+  @ApiResponse({ status: 404, description: 'Workout not found' })
+  async findOneWithExercises(@Param('id') id: number): Promise<Workout> {
+    return this.workoutsService.findOneWithExercises(id);
+  }
 }

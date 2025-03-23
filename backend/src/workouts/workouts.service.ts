@@ -20,7 +20,7 @@ export class WorkoutsService {
     private workoutRepository: Repository<Workout>,
     private readonly exerciseService: ExercisesService,
     private readonly workoutExerciseService: WorkoutExerciseService,
-  ) {}
+  ) { }
 
   async create(createWorkoutDto: CreateWorkoutDto): Promise<Workout> {
     try {
@@ -157,5 +157,16 @@ export class WorkoutsService {
     if (result.affected === 0) {
       throw new NotFoundException(`Workout with ID ${id} not found`);
     }
+  }
+
+  async findOneWithExercises(id: number): Promise<Workout> {
+    const workout = await this.workoutRepository.findOne({
+      where: { id },
+      relations: ['workoutExercises', 'workoutExercises.exercise'],
+    });
+    if (!workout) {
+      throw new NotFoundException(`Workout with ID ${id} Not Found`);
+    }
+    return workout;
   }
 }

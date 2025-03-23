@@ -1,11 +1,11 @@
-import { MigrationInterface, QueryRunner } from 'typeorm';
-import { ActivityLog } from '@src/typeorm/entities/activitylog.entity';
-import { Exercise } from '@src/typeorm/entities/exercise.entity';
-import { Workout } from '@src/typeorm/entities/workout.entity';
-import { WorkoutExercise } from '@src/typeorm/entities/workoutexercise.entity';
+import { ActivityLog } from "@src/typeorm/entities/activitylog.entity";
+import { Exercise } from "@src/typeorm/entities/exercise.entity";
+import { Workout } from "@src/typeorm/entities/workout.entity";
+import { WorkoutExercise } from "@src/typeorm/entities/workoutexercise.entity";
+import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class SEEDER1742726480756 implements MigrationInterface {
-    name = 'SeedDatabase1742726480756';
+export class SEEDER1742732979598 implements MigrationInterface {
+    name = 'SEEDER1742732979598';
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         try {
@@ -183,8 +183,8 @@ export class SEEDER1742726480756 implements MigrationInterface {
                     );
                     if (exercise) {
                         const workoutExercise = workoutExerciseRepository.create({
-                            workoutId: savedWorkout.id,
-                            exerciseId: exercise.id,
+                            workout: savedWorkout,
+                            exercise: exercise,
                             restTimeSecond: workoutExerciseData.restTimeSecond,
                             setCount: workoutExerciseData.setCount,
                         });
@@ -223,5 +223,4 @@ export class SEEDER1742726480756 implements MigrationInterface {
             await queryRunner.query(`DELETE FROM "workout" WHERE id = ${workout.id}`);
         }
     }
-
 }
