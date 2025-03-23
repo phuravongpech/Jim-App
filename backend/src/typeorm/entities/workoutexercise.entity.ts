@@ -10,10 +10,16 @@ export class WorkoutExercise {
 
     @ManyToOne(() => Workout, (workout) => workout.workoutExercises, { onDelete: 'CASCADE' })
     @JoinColumn({ name: "workoutId" })
+    workout: Workout;
+
+    @Column({ type: 'int' })
     workoutId: number;
 
     @ManyToOne(() => Exercise, (exercise) => exercise.workoutExercises, { onDelete: 'CASCADE' })
     @JoinColumn({ name: "exerciseId" })
+    exercise: Exercise;
+
+    @Column({ type: 'int' })
     exerciseId: string;
 
     @Column({ type: 'int' })
