@@ -10,7 +10,7 @@ import 'package:http/http.dart';
 import '../../utils/uuid_utils.dart';
 
 class RealWorkoutRepository implements WorkoutRepository {
-  final String backendUrl = dotenv.env['BACKEND_URL'] ?? 'Default URL';
+  final String backendUrl = dotenv.env['BACKEND_URL'] ?? '';
 
   @override
   Future<List<Workout>> fetchWorkouts() async {

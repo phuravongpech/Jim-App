@@ -7,9 +7,10 @@ import 'package:frontend/utils/fuzzywuzzy.dart';
 import 'package:http/http.dart';
 
 class RealExerciseRepository implements ExerciseRepository {
-  final String baseUrl = dotenv.env['BASE_URL'] ?? 'default_url';
-  final String apiKey = dotenv.env['API_KEY'] ?? 'default_key';
-  final String backendUrl = dotenv.env['BACKEND_URL'] ?? 'Default URL';
+  final String baseUrl = dotenv.env['BASE_URL'] ?? '';
+  final String apiHost = dotenv.env['API_HOST'] ?? '';
+  final String apiKey = dotenv.env['API_KEY'] ?? '';
+  final String backendUrl = dotenv.env['BACKEND_URL'] ?? '';
 
   @override
   Future<List<Exercise>> fetchExercises({
@@ -20,7 +21,7 @@ class RealExerciseRepository implements ExerciseRepository {
       final response = await get(
         Uri.parse('$baseUrl/exercises'),
         headers: {
-          "x-rapidapi-host": baseUrl,
+          "x-rapidapi-host": apiHost,
           "x-rapidapi-key": apiKey,
         },
       );
