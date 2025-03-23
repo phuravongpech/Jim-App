@@ -51,7 +51,7 @@ class WorkoutSessionService {
   Future<List<Workout>> fetchWorkouts() async {
     try {
       isLoading.value = true;
-      return await repository.fetchWorkouts();
+      return await repository.getWorkoutWithExercises();
     } catch (e) {
       log.d('Error fetching workouts: $e'); // Debug log
       return [];
@@ -64,7 +64,7 @@ class WorkoutSessionService {
     try {
       isLoading.value = true;
 
-      final workout = await repository.getWorkoutById(workoutId);
+      final workout = await repository.getWorkoutWithExercisesFor(workoutId);
       final exercises = await repository.getWorkoutExercises(workoutId);
 
       if (exercises.isEmpty) {

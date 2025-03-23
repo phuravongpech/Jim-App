@@ -7,44 +7,8 @@ import 'package:frontend/models/workout_exercise.dart';
 import 'package:frontend/repository/workout_repository.dart';
 import 'package:http/http.dart';
 
-import '../../utils/uuid_utils.dart';
-
 class RealWorkoutRepository implements WorkoutRepository {
   final String backendUrl = dotenv.env['BACKEND_URL'] ?? '';
-
-  @override
-  Future<List<Workout>> fetchWorkouts() async {
-    try {
-      final response = await get(
-        Uri.parse('$backendUrl/workouts'),
-      );
-
-      if (response.statusCode == 200) {
-        final List<dynamic> data = json.decode(response.body);
-        return data.map((json) => Workout.fromJson(json)).toList();
-      } else {
-        throw Exception('Failed to load workouts');
-      }
-    } catch (e) {
-      throw Exception('Error fetching workouts: $e');
-    }
-  }
-
-  @override
-  Future<Workout> getWorkoutById(String id) async {
-    try {
-      final response = await get(Uri.parse('$backendUrl/workouts/$id'));
-
-      if (response.statusCode == 200) {
-        final Map<String, dynamic> data = json.decode(response.body);
-        return Workout.fromJson(data);
-      } else {
-        throw Exception('Failed to load workout details');
-      }
-    } catch (e) {
-      throw Exception('Error fetching workout details: $e');
-    }
-  }
 
   @override
   Future<void> saveWorkouts({
@@ -54,16 +18,19 @@ class RealWorkoutRepository implements WorkoutRepository {
     required List<WorkoutExercise> workoutExercises,
   }) async {
     try {
+      var test = workoutExercises.map((we) => we.toJson()).toList();
+      print(test);
       final response = await post(
         Uri.parse('$backendUrl/workouts'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: json.encode({
           'name': name,
           'description': description,
           'exercises': exercises.map((e) => e.toJson()).toList(),
-          'workoutExercises': workoutExercises
-              .map((we) =>
-                  {...we.toJson(), 'global_id': UuidUtils.generateUuid()})
-              .toList()
+          'workoutExercises':
+              workoutExercises.map((we) => we.toJson()).toList(),
         }),
       );
 
@@ -83,7 +50,43 @@ class RealWorkoutRepository implements WorkoutRepository {
 
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
-        return data.map((we) => WorkoutExercise.fromJson(we)).toList();
+        return List<WorkoutExercise>.from(
+            data.map((we) => WorkoutExercise.fromJson(we)));
+      } else {
+        throw Exception('Failed to load workout details');
+      }
+    } catch (e) {
+      throw Exception('Error fetching workout details: $e');
+    }
+  }
+
+  @override
+  Future<List<Workout>> getWorkoutWithExercises() async {
+    try {
+      final response = await get(Uri.parse('$backendUrl/workouts/exercises'));
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body);
+        var test = data.map((json) => Workout.fromJson(json)).toList();
+        return test;
+      } else {
+        throw Exception('Failed to load workout details');
+      }
+    } catch (e) {
+      throw Exception('Error fetching workout details: $e');
+    }
+  }
+
+  @override
+  Future<Workout> getWorkoutWithExercisesFor(String workoutId) async {
+    try {
+      final response = await get(
+        Uri.parse('$backendUrl/workouts/exercises/$workoutId'),
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        return Workout.fromJson(data);
       } else {
         throw Exception('Failed to load workout details');
       }

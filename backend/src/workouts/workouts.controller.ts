@@ -29,6 +29,14 @@ export class WorkoutsController {
     return this.workoutsService.findAll();
   }
 
+  @Get('exercises')
+  @ApiOperation({ summary: 'Get all workouts with exercises' })
+  @ApiResponse({ status: 200, description: 'Found workouts with exercises', type: Workout })
+  @ApiResponse({ status: 404, description: 'No workout not found' })
+  async findWithExercises(): Promise<Workout[]> {
+    return this.workoutsService.findWithExercises();
+  }
+
   @Get(':id')
   @ApiOperation({ summary: 'Find a workout by ID' })
   @ApiResponse({ status: 200, description: 'Found Wokrout', type: Workout })
@@ -57,7 +65,7 @@ export class WorkoutsController {
     return this.workoutsService.delete(id);
   }
 
-  @Get(':id/exercises')
+  @Get('exercises/:id')
   @ApiOperation({ summary: 'Find a workout by ID with exercises' })
   @ApiResponse({ status: 200, description: 'Found Workout with exercises', type: Workout })
   @ApiResponse({ status: 404, description: 'Workout not found' })

@@ -20,11 +20,11 @@ void main() async {
   }
 
   // Initialize the services
-  final repository = MockWorkoutRepository();
+  // final repository = MockWorkoutRepository();
 
   ExerciseService.initialize(RealExerciseRepository());
   WorkoutService.initialize(RealWorkoutRepository());
-  WorkoutSessionService.instance.initialize(repository);
+  // WorkoutSessionService.instance.initialize(repository);
   // Initialize the controllers
 
   runApp(GetMaterialApp(

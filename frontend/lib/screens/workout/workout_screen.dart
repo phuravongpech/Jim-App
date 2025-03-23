@@ -45,7 +45,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
           child: WorkoutCard(
             title: workout.name,
             description: workout.description,
-            exercisesCount: workout.exercises.length,
+            exercisesCount: workout.exerciseCount,
           ),
         ),
       ),

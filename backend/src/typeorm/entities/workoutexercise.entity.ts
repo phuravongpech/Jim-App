@@ -11,10 +11,16 @@ export class WorkoutExercise {
     @ManyToOne(() => Workout, (workout) => workout.workoutExercises, { onDelete: 'CASCADE' })
     @JoinColumn({ name: "workoutId" })
     workout: Workout;
-
+    
     @ManyToOne(() => Exercise, (exercise) => exercise.workoutExercises, { onDelete: 'CASCADE' })
     @JoinColumn({ name: "exerciseId" })
     exercise: Exercise;
+
+    @Column({ type: 'int' })
+    workoutId: number;
+
+    @Column({ type: 'string' })
+    exerciseId: string;
 
     @Column({ type: 'int' })
     restTimeSecond: number;

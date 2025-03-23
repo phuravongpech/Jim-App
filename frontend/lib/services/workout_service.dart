@@ -37,12 +37,8 @@ class WorkoutService {
   ///
   ///
 
-  Future<List<Workout>> fetchWorkouts() {
-    return repository.fetchWorkouts();
-  }
-
   Future<Workout> getWorkoutById(String id) {
-    return repository.getWorkoutById(id);
+    return repository.getWorkoutWithExercisesFor(id);
   }
 
   Future<void> saveWorkout({
@@ -52,13 +48,18 @@ class WorkoutService {
     required List<WorkoutExercise> workoutExercises,
   }) {
     return repository.saveWorkouts(
-        name: name,
-        description: description,
-        exercises: exercises,
-        workoutExercises: workoutExercises);
+      name: name,
+      description: description,
+      exercises: exercises,
+      workoutExercises: workoutExercises,
+    );
   }
 
-  Future<List<WorkoutExercise>> getWorkoutExercises(String workoutId) {
-    return repository.getWorkoutExercises(workoutId);
+  Future<List<Workout>> getWorkoutWithExercises() {
+    return repository.getWorkoutWithExercises();
+  }
+
+  Future<Workout> getWorkoutWithExercisesFor(String workoutId) {
+    return repository.getWorkoutWithExercisesFor(workoutId);
   }
 }

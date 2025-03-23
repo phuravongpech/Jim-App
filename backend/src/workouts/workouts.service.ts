@@ -159,6 +159,23 @@ export class WorkoutsService {
     }
   }
 
+  async findWithExercises(): Promise<any> {
+    const workouts = await this.workoutRepository.find({
+      relations: ['workoutExercises', 'workoutExercises.exercise']
+    });
+
+    const formattedWorkout = workouts.map(workout => ({
+      id: workout.id,
+      name: workout.name,
+      description: workout.description,
+      createdAt: workout.createdAt,
+      updatedAt: workout.updatedAt,
+      exerciseCount: workout.workoutExercises.length,
+    }));
+
+    return formattedWorkout;
+  }
+
   async findOneWithExercises(id: number): Promise<Workout> {
     const workout = await this.workoutRepository.findOne({
       where: { id },

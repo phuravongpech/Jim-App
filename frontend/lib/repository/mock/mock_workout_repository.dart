@@ -4,45 +4,10 @@ import 'package:frontend/models/exercise.dart';
 import 'package:frontend/models/workout.dart';
 import 'package:frontend/models/workout_exercise.dart';
 import 'package:frontend/repository/workout_repository.dart';
-import 'package:frontend/utils/uuid_utils.dart';
 import 'package:http/http.dart';
 
 class MockWorkoutRepository extends WorkoutRepository {
   static const String baseUrl = 'http://localhost:3000';
-
-  @override
-  Future<List<Workout>> fetchWorkouts() async {
-    try {
-      final response = await get(
-        Uri.parse('$baseUrl/workouts'),
-      );
-
-      if (response.statusCode == 200) {
-        final List<dynamic> data = json.decode(response.body);
-        return data.map((json) => Workout.fromJson(json)).toList();
-      } else {
-        throw Exception('Failed to load workouts');
-      }
-    } catch (e) {
-      throw Exception('Error fetching workouts: $e');
-    }
-  }
-
-  @override
-  Future<Workout> getWorkoutById(String id) async {
-    try {
-      final response = await get(Uri.parse('$baseUrl/workouts/$id'));
-
-      if (response.statusCode == 200) {
-        final Map<String, dynamic> data = json.decode(response.body);
-        return Workout.fromJson(data);
-      } else {
-        throw Exception('Failed to load workout details for $id');
-      }
-    } catch (e) {
-      throw Exception('Error fetching workout details: $e');
-    }
-  }
 
   @override
   Future<void> saveWorkouts({
@@ -58,10 +23,7 @@ class MockWorkoutRepository extends WorkoutRepository {
           'name': name,
           'description': description,
           'exercises': exercises.map((e) => e.toJson()).toList(),
-          'workoutExercises': workoutExercises
-              .map((we) =>
-                  {...we.toJson(), 'global_id': UuidUtils.generateUuid()})
-              .toList()
+          'workoutExercises': workoutExercises.map((we) => we.toJson()).toList(),
         }),
       );
 
@@ -82,12 +44,30 @@ class MockWorkoutRepository extends WorkoutRepository {
 
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
-        return data.map((json) => WorkoutExercise.fromJson(json)).toList();
+        return List<WorkoutExercise>.from(data.map((we) => WorkoutExercise.fromJson(we)));
       } else {
         throw Exception('Failed to load workout exercises');
       }
     } catch (e) {
       throw Exception('Error fetching workout exercises: $e');
     }
+  }
+  
+  @override
+  Future<List<Workout>> getExerciseForWorkout(String workoutId) {
+    // TODO: implement getExerciseForWorkout
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<List<Workout>> getWorkoutWithExercises() {
+    // TODO: implement getWorkoutWithExercises
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<Workout> getWorkoutWithExercisesFor(String workoutId) {
+    // TODO: implement getWorkoutWithExercisesFor
+    throw UnimplementedError();
   }
 }
