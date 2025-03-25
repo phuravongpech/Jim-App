@@ -12,6 +12,8 @@ class WorkoutController extends GetxController {
   var xWorkoutList = <Workout>[].obs; // List to store workouts
   var workout = Rxn<Workout>(); // Store workout details
 
+  final service = WorkoutService.instance;
+
   @override
   void onInit() {
     super.onInit();
@@ -69,7 +71,7 @@ class WorkoutController extends GetxController {
       description: xWorkoutDescription.value,
       exerciseCount: xSelectedExercises.length,
     );
-    
+
     // Create workout exercise relation
     WorkoutService.instance.saveWorkout(
         name: xWorkoutTitle.value,
@@ -87,5 +89,16 @@ class WorkoutController extends GetxController {
 
     // Exit create workout form
     Get.back();
+  }
+
+  Future<void> deleteWorkout(String workoutId) async {
+    try {
+      await service.deleteWorkout(workoutId);
+      xWorkoutList.removeWhere((workout) => workout.id == workoutId);
+      Get.snackbar('Success', 'Workout deleted successfully');
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to delete workout: ${e.toString()}');
+      throw Exception('Failed to delete workout: $e');
+    }
   }
 }

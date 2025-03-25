@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/controller/workout_controller.dart';
 import 'package:frontend/models/exercise.dart';
 import 'package:frontend/screens/workout_session/set_log_screen.dart';
 import 'package:frontend/services/exercise_service.dart';
@@ -12,10 +13,7 @@ import '../../widgets/navigation/jim_top_bar.dart';
 
 class WorkoutDetailScreen extends StatelessWidget {
   WorkoutDetailScreen({super.key}) {
-    // Get service instance
     _service = WorkoutSessionService.instance;
-
-    // Load workout data from arguments
     final workoutId = Get.arguments as String?;
     if (workoutId != null) {
       _loadWorkout(workoutId);
@@ -67,6 +65,75 @@ class WorkoutDetailScreen extends StatelessWidget {
     return true;
   }
 
+  void _showDeleteDialog(String workoutId) {
+    Get.dialog(
+      AlertDialog(
+        backgroundColor: JimColors.white,
+        title: Text(
+          'Delete Workout',
+          style: JimTextStyles.heading,
+        ),
+        content: Text(
+          'Are you sure you want to delete this workout?',
+          style: JimTextStyles.body,
+        ),
+        actions: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  Get.back();
+                },
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.black,
+                  backgroundColor: Colors.white,
+                  side: BorderSide(color: Colors.black),
+                  minimumSize: Size(120, 50),
+                ),
+                child: Text('Cancel', style: TextStyle(fontSize: 16)),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  _deleteWorkout(workoutId);
+                  Get.offNamed('/workout');
+                },
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.red,
+                  minimumSize: Size(120, 50),
+                ),
+                child: Text('Yes', style: TextStyle(fontSize: 16)),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  Future<void> _deleteWorkout(String workoutId) async {
+    try {
+      final workoutController = Get.find<WorkoutController>();
+      await workoutController.deleteWorkout(workoutId);
+      Get.snackbar(
+        'Success',
+        'Workout deleted successfully',
+        snackPosition: SnackPosition.BOTTOM,
+        duration: const Duration(seconds: 2),
+      );
+      Get.back();
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        e.toString().replaceAll('Exception: ', ''),
+        snackPosition: SnackPosition.BOTTOM,
+        duration: const Duration(seconds: 2),
+        colorText: JimColors.error,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final exerciseService = ExerciseService.instance;
@@ -84,7 +151,7 @@ class WorkoutDetailScreen extends StatelessWidget {
           JimIconButton(
             icon: Icons.delete_outline,
             color: JimColors.error,
-            onPressed: () {},
+            onPressed: () => _showDeleteDialog(Get.arguments),
           ),
         ],
       ),

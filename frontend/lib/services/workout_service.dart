@@ -62,4 +62,8 @@ class WorkoutService {
   Future<Workout> getWorkoutWithExercisesFor(String workoutId) {
     return repository.getWorkoutWithExercisesFor(workoutId);
   }
+
+  Future<void> deleteWorkout(String workoutId) {
+    return repository.deleteWorkout(workoutId);
+  }
 }
