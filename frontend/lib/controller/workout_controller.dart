@@ -27,7 +27,8 @@ class WorkoutController extends GetxController {
   // Fetch workouts
   void fetchWorkouts() async {
     try {
-      final fetchedWorkouts = await WorkoutService.instance.getWorkoutWithExercises();
+      final fetchedWorkouts =
+          await WorkoutService.instance.getWorkoutWithExercises();
       xWorkoutList.assignAll(fetchedWorkouts);
     } catch (e) {
       Get.snackbar('Error', 'Failed to load workouts: $e');
@@ -37,7 +38,8 @@ class WorkoutController extends GetxController {
   // Fetch workout details by ID
   void fetchWorkoutDetail(String id) async {
     try {
-      Workout fetchedWorkout = await WorkoutService.instance.getWorkoutWithExercisesFor(id);
+      Workout fetchedWorkout =
+          await WorkoutService.instance.getWorkoutWithExercisesFor(id);
       workout.value = fetchedWorkout;
     } catch (e) {
       Get.snackbar('Error', 'Failed to load workout details: $e');
@@ -46,7 +48,8 @@ class WorkoutController extends GetxController {
 
   fetchExercises() async {
     try {
-      final fetchedExercises = await WorkoutService.instance.getWorkoutWithExercises();
+      final fetchedExercises =
+          await WorkoutService.instance.getWorkoutWithExercises();
 
       // Add the fetched exercises to the list
       xWorkoutList.addAll(fetchedExercises);
@@ -60,15 +63,13 @@ class WorkoutController extends GetxController {
     final EditExerciseController editExerciseController =
         Get.put(EditExerciseController());
 
-    // Create a new workout object (UUID is generated automatically in the model)
-    // final newWorkout = Workout(
-    //   name: xWorkoutTitle.value,
-    //   description: xWorkoutDescription.value,
-    //   exerciseCount: xSelectedExercises.toList(),
-    // );
-
-    print(editExerciseController.exercises);
-
+    final newWorkout = Workout(
+      id: '',
+      name: xWorkoutTitle.value,
+      description: xWorkoutDescription.value,
+      exerciseCount: xSelectedExercises.length,
+    );
+    
     // Create workout exercise relation
     WorkoutService.instance.saveWorkout(
         name: xWorkoutTitle.value,
@@ -77,7 +78,7 @@ class WorkoutController extends GetxController {
         workoutExercises: editExerciseController.exercises);
 
     // Add the new workout to the list
-    // xWorkoutList.add(newWorkout);
+    xWorkoutList.add(newWorkout);
 
     // Clear the form fields after saving
     xWorkoutTitle.value = '';
