@@ -70,4 +70,16 @@ class MockWorkoutRepository extends WorkoutRepository {
     // TODO: implement getWorkoutWithExercisesFor
     throw UnimplementedError();
   }
+  
+  @override
+  Future<void> deleteWorkout(String workoutId) {
+    // TODO: implement deleteWorkout
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<void> updateWorkout({required String workoutId, required String name, required String description, required List<Exercise> exercises, required List<WorkoutExercise> workoutExercises}) {
+    // TODO: implement updateWorkout
+    throw UnimplementedError();
+  }
 }

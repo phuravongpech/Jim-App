@@ -16,4 +16,14 @@ abstract class WorkoutRepository {
   Future<List<Workout>> getWorkoutWithExercises();
 
   Future<Workout> getWorkoutWithExercisesFor(String workoutId);
+
+  Future<void> deleteWorkout(String workoutId);
+
+  Future<void> updateWorkout({
+    required String workoutId,
+    required String name,
+    required String description,
+    required List<Exercise> exercises,
+    required List<WorkoutExercise> workoutExercises,
+  });
 }

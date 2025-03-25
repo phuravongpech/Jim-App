@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, Patch, UseInterceptors, ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Patch, UseInterceptors, ClassSerializerInterceptor, ValidationPipe, HttpCode } from '@nestjs/common';
 import { WorkoutsService } from './workouts.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Workout } from '@src/typeorm/entities/workout.entity';
@@ -61,7 +61,7 @@ export class WorkoutsController {
   @ApiResponse({ status: 200, description: 'Workout deleted', type: Workout })
   @ApiResponse({ status: 204, description: 'Workout deleted, no response body', type: Workout })
   @ApiResponse({ status: 404, description: 'Workout does not exist', type: Workout })
-  async delete(@Param('id') id: number): Promise<void> {
+  async delete(@Param('id') id: number): Promise<{ message: string }> {
     return this.workoutsService.delete(id);
   }
 

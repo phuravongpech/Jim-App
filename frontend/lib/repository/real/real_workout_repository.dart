@@ -18,8 +18,6 @@ class RealWorkoutRepository implements WorkoutRepository {
     required List<WorkoutExercise> workoutExercises,
   }) async {
     try {
-      var test = workoutExercises.map((we) => we.toJson()).toList();
-      print(test);
       final response = await post(
         Uri.parse('$backendUrl/workouts'),
         headers: {
@@ -92,6 +90,51 @@ class RealWorkoutRepository implements WorkoutRepository {
       }
     } catch (e) {
       throw Exception('Error fetching workout details: $e');
+    }
+  }
+
+  @override
+  Future<void> deleteWorkout(String workoutId) async {
+    try {
+      final response =
+          await delete(Uri.parse('$backendUrl/workouts/$workoutId'));
+
+      if (response.statusCode != 200) {
+        throw Exception('Failed to delete workout');
+      }
+    } catch (e) {
+      throw Exception('Error deleting workout: $e');
+    }
+  }
+
+  @override
+  Future<void> updateWorkout({
+    required String workoutId,
+    required String name,
+    required String description,
+    required List<Exercise> exercises,
+    required List<WorkoutExercise> workoutExercises,
+  }) async {
+    try {
+      final response = await put(
+        Uri.parse('$backendUrl/workouts/$workoutId'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({
+          'name': name,
+          'description': description,
+          'exercises': exercises.map((e) => e.toJson()).toList(),
+          'workoutExercises':
+              workoutExercises.map((we) => we.toJson()).toList(),
+        }),
+      );
+
+      if (response.statusCode != 200) {
+        throw Exception('Failed to update workout');
+      }
+    } catch (e) {
+      throw Exception('Error updating workout: $e');
     }
   }
 }

@@ -77,4 +77,19 @@ export class WorkoutExerciseService {
       throw new NotFoundException(`Workout Exercise with ID ${id} not found`);
     }
   }
+
+  async deleteByWorkoutId(workoutId: number): Promise<void> {
+    try {
+      const result = await this.workoutExerciseRepository.delete({ workoutId });
+  
+      if (result.affected === 0) {
+        console.warn(`No WorkoutExercise entries found for workoutId ${workoutId}`);
+      }
+    } catch (e) {
+      console.error(e);
+      throw new InternalServerErrorException(
+        `Failed to delete Workout Exercises for workoutId ${workoutId}`,
+      );
+    }
+  }
 }

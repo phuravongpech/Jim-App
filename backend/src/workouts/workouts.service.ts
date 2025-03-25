@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   InternalServerErrorException,
@@ -11,7 +12,6 @@ import { CreateWorkoutDto } from './dto/create-workout.dto';
 import { UpdateWorkoutDto } from './dto/update-workout.dto';
 import { ExercisesService } from '@src/exercises/exercises.service';
 import { WorkoutExerciseService } from '@src/workoutexercise/workoutexercise.service';
-import { WorkoutExercise } from '@src/typeorm/entities/workoutexercise.entity';
 
 @Injectable()
 export class WorkoutsService {
@@ -35,6 +35,7 @@ export class WorkoutsService {
       const workoutId = savedWorkout.id;
 
       // Process exercises saving concurrently
+      // (only new exercises get saved because of create method machanism in exerciseService)
       const exerciseResults = await Promise.allSettled(
         exercises.map((exercise) => this.exerciseService.create(exercise)),
       );
@@ -98,51 +99,75 @@ export class WorkoutsService {
     id: number,
     updateWorkoutDto: UpdateWorkoutDto,
   ): Promise<Workout> {
+
+    // Check if the workout exists
+    const existingWorkout = await this.workoutRepository.findOne({ where: { id } });
+    if (!existingWorkout) {
+      throw new NotFoundException(`Workout with ID ${id} not found`);
+    }
+    
     try {
-      const { exercises, workoutExercises, ...workoutDetails } =
-        updateWorkoutDto;
+      const { exercises, workoutExercises, ...workoutDetails } = updateWorkoutDto;
 
+      // Check if exercises and workoutExercises are provided
+      if (!exercises || exercises.length === 0) {
+        throw new BadRequestException('No exercises provided for the workout');
+      }
+      if (!workoutExercises || workoutExercises.length === 0) {
+        throw new BadRequestException('No workout exercises provided for the workout');
+      }
+
+      // Update workout details first
       await this.workoutRepository.update(id, workoutDetails);
+      const updatedWorkout = await this.findOne(id); // Ensure workout exists
 
-      if (exercises && exercises.length > 0) {
-        const exerciseResults = await Promise.allSettled(
-          exercises.map((exercise) => this.exerciseService.create(exercise)),
-        );
+      // Delete existing workout-exercise relationships
+      // We can update the existing workout-exercise relationships
+      // This will be more efficient, but for simplicity, we will delete and reattach them
+      await this.workoutExerciseService.deleteByWorkoutId(id);
 
-        exerciseResults.forEach((result, index) => {
-          if (result.status === 'rejected') {
-            console.warn(
-              `Exercise creation failed: ${exercises[index].name}`,
-              result.reason,
-            );
-          }
-        });
-      }
+      // Process exercises saving concurrently
+      // (only new exercises get saved because of create method machanism in exerciseService)
+      const exerciseResults = await Promise.allSettled(
+        (exercises).map((exercise) => this.exerciseService.create(exercise))
+      );
 
-      if (workoutExercises && workoutExercises.length > 0) {
-        const relationshipResults = await Promise.allSettled(
-          workoutExercises.map((workoutExercise) => {
-            return this.workoutExerciseService.update(
-              workoutExercise.id,
-              {
-                restTimeSecond: workoutExercise.restTimeSecond,
-                setCount: workoutExercise.setCount,
-              },
-            );
-          }),
-        );
+      const exerciseIds = exerciseResults
+        .map((result) => (result.status === 'fulfilled' && result.value ? result.value.id : null))
+        .filter((id) => id !== null);
 
-        relationshipResults.forEach((result, index) => {
-          if (result.status === 'rejected') {
-            console.warn(
-              `WorkoutExercise update failed: exerciseId ${workoutExercises[index].id}`,
-              result.reason,
-            );
-          }
-        });
-      }
+      exerciseResults.forEach((result, index) => {
+        if (result.status === 'rejected') {
+          console.warn(
+            `Exercise creation failed: ${exercises[index].name}`,
+            result.reason
+          );
+        }
+      });
 
-      return this.findOne(id);
+      // Process workout-exercise relationships concurrently (reattaching)
+      const relationshipResults = await Promise.allSettled(
+        workoutExercises.map((workoutExercise, index) => {
+          if (!exerciseIds[index]) return Promise.resolve(); // Skip failed exercises
+          return this.workoutExerciseService.create({
+            workoutId: id,
+            exerciseId: String(exerciseIds[index]),
+            restTimeSecond: workoutExercise.restTimeSecond,
+            setCount: workoutExercise.setCount,
+          });
+        })
+      );
+
+      relationshipResults.forEach((result, index) => {
+        if (result.status === 'rejected') {
+          console.warn(
+            `WorkoutExercise relationship creation failed: ${workoutExercises[index].id}`,
+            result.reason
+          );
+        }
+      });
+
+      return updatedWorkout;
     } catch (e) {
       console.error(e);
       if (e.code === 'ER_DUP_ENTRY') {
@@ -152,11 +177,12 @@ export class WorkoutsService {
     }
   }
 
-  async delete(id: number): Promise<void> {
+  async delete(id: number): Promise<{ message: string }> {
     const result = await this.workoutRepository.delete(id);
     if (result.affected === 0) {
       throw new NotFoundException(`Workout with ID ${id} not found`);
     }
+    return { message: `Workout with ID ${id} deleted successfully` };
   }
 
   async findWithExercises(): Promise<any> {
