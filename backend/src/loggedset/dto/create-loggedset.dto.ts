@@ -1,7 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsInt, IsNotEmpty, IsNumber } from "class-validator";
 
-export class CreateActivityLogDto {
+export class CreateLoggedSetDto {
   @ApiProperty({ description: 'The ID of the workout exercise' })
   @IsNotEmpty()
   @IsNumber()

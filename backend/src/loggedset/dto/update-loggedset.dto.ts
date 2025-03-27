@@ -1,7 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsInt, IsOptional } from "class-validator";
 
-export class UpdateActivityLogDto {
+export class UpdateLoggedSetDto {
   @ApiProperty({ description: 'The weight used', required: false })
   @IsOptional()
   @IsInt()
