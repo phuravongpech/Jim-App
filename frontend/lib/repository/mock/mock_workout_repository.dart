@@ -6,6 +6,8 @@ import 'package:frontend/models/workout_exercise.dart';
 import 'package:frontend/repository/workout_repository.dart';
 import 'package:http/http.dart';
 
+import '../../models/workout_with_exercise.dart';
+
 class MockWorkoutRepository extends WorkoutRepository {
   static const String baseUrl = 'http://localhost:3000';
 
@@ -66,7 +68,7 @@ class MockWorkoutRepository extends WorkoutRepository {
   }
   
   @override
-  Future<Workout> getWorkoutWithExercisesFor(String workoutId) {
+  Future<WorkoutWithExercise> getWorkoutWithExercisesFor(String workoutId) {
     // TODO: implement getWorkoutWithExercisesFor
     throw UnimplementedError();
   }

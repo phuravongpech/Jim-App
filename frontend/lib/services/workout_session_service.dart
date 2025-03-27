@@ -1,5 +1,7 @@
+import 'package:frontend/models/custom_exercise.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
+import '../models/exercise.dart';
 import '../models/logged_set.dart';
 import '../models/workout.dart';
 import '../models/workout_exercise.dart';
@@ -34,6 +36,8 @@ class WorkoutSessionService {
   final isWorkoutActive = false.obs;
   final isLoading = false.obs;
 
+  final xExercise = <Exercise>[].obs;
+
   // Computed properties
   WorkoutExercise? get currentExercise =>
       currentExerciseIndex.value < activeWorkoutExercises.length
@@ -64,14 +68,33 @@ class WorkoutSessionService {
     try {
       isLoading.value = true;
 
-      final workout = await repository.getWorkoutWithExercisesFor(workoutId);
-      final exercises = await repository.getWorkoutExercises(workoutId);
+      final workoutDetails =
+          await repository.getWorkoutWithExercisesFor(workoutId);
 
-      if (exercises.isEmpty) {
+      xExercise.assignAll(workoutDetails.workoutExercises
+          .map((workoutExercise) => workoutExercise.exercise)
+          .cast<Exercise>()
+          .toList());
+
+      final workoutExercises = workoutDetails.workoutExercises
+          .map((we) => WorkoutExercise(
+                exerciseId: we.exerciseId,
+                restTimeSecond: we.restTimeSecond,
+                setCount: we.setCount,
+              ))
+          .toList();
+
+      final workout = Workout(
+          id: workoutDetails.id.toString(),
+          name: workoutDetails.name,
+          description: workoutDetails.description,
+          exerciseCount: workoutExercises.length);
+
+      if (workoutExercises.isEmpty) {
         throw Exception('No exercises found');
       }
 
-      startWorkoutSession(workout, exercises);
+      startWorkoutSession(workout, workoutExercises);
       return true;
     } catch (e) {
       log.d('Error loading workout: $e'); // Debug log

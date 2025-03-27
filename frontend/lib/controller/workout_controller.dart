@@ -4,6 +4,7 @@ import 'package:frontend/services/workout_service.dart';
 import 'package:get/get.dart';
 
 import '../models/workout.dart';
+import '../models/workout_with_exercise.dart';
 
 class WorkoutController extends GetxController {
   var xWorkoutTitle = ''.obs;
@@ -40,9 +41,13 @@ class WorkoutController extends GetxController {
   // Fetch workout details by ID
   void fetchWorkoutDetail(String id) async {
     try {
-      Workout fetchedWorkout =
+      WorkoutWithExercise fetchedWorkout =
           await WorkoutService.instance.getWorkoutWithExercisesFor(id);
-      workout.value = fetchedWorkout;
+      workout.value = Workout(
+          id: id,
+          name: fetchedWorkout.name,
+          description: fetchedWorkout.description,
+          exerciseCount: fetchedWorkout.workoutExercises.length);
     } catch (e) {
       Get.snackbar('Error', 'Failed to load workout details: $e');
     }

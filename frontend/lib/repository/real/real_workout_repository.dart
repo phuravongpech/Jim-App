@@ -7,6 +7,8 @@ import 'package:frontend/models/workout_exercise.dart';
 import 'package:frontend/repository/workout_repository.dart';
 import 'package:http/http.dart';
 
+import '../../models/workout_with_exercise.dart';
+
 class RealWorkoutRepository implements WorkoutRepository {
   final String backendUrl = dotenv.env['BACKEND_URL'] ?? '';
 
@@ -76,7 +78,8 @@ class RealWorkoutRepository implements WorkoutRepository {
   }
 
   @override
-  Future<Workout> getWorkoutWithExercisesFor(String workoutId) async {
+  Future<WorkoutWithExercise> getWorkoutWithExercisesFor(
+      String workoutId) async {
     try {
       final response = await get(
         Uri.parse('$backendUrl/workouts/exercises/$workoutId'),
@@ -84,7 +87,7 @@ class RealWorkoutRepository implements WorkoutRepository {
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-        return Workout.fromJson(data);
+        return WorkoutWithExercise.fromJson(data);
       } else {
         throw Exception('Failed to load workout details');
       }

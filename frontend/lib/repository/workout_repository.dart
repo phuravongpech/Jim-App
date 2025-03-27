@@ -2,6 +2,7 @@ import 'package:frontend/models/exercise.dart';
 import 'package:frontend/models/workout_exercise.dart';
 
 import '../models/workout.dart';
+import '../models/workout_with_exercise.dart';
 
 abstract class WorkoutRepository {
   Future<void> saveWorkouts({
@@ -15,7 +16,7 @@ abstract class WorkoutRepository {
 
   Future<List<Workout>> getWorkoutWithExercises();
 
-  Future<Workout> getWorkoutWithExercisesFor(String workoutId);
+  Future<WorkoutWithExercise> getWorkoutWithExercisesFor(String workoutId);
 
   Future<void> deleteWorkout(String workoutId);
 

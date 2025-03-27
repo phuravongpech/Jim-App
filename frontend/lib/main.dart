@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 
 import 'repository/real/real_exercise_repository.dart';
 import 'repository/real/real_workout_repository.dart';
+import 'services/workout_session_service.dart';
 
 void main() async {
   try {
@@ -17,12 +18,9 @@ void main() async {
     throw Exception('Error loading .env file: $e');
   }
 
-  // Initialize the services
-  // final repository = MockWorkoutRepository();
-
   ExerciseService.initialize(RealExerciseRepository());
   WorkoutService.initialize(RealWorkoutRepository());
-  // WorkoutSessionService.instance.initialize(repository);
+  WorkoutSessionService.instance.initialize(RealWorkoutRepository());
   // Initialize the controllers
 
   runApp(GetMaterialApp(

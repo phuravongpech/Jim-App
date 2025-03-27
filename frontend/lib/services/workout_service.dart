@@ -3,6 +3,7 @@ import 'package:frontend/repository/workout_repository.dart';
 import '../models/exercise.dart';
 import '../models/workout.dart';
 import '../models/workout_exercise.dart';
+import '../models/workout_with_exercise.dart';
 
 class WorkoutService {
   static WorkoutService? _instance;
@@ -37,7 +38,7 @@ class WorkoutService {
   ///
   ///
 
-  Future<Workout> getWorkoutById(String id) {
+  Future<WorkoutWithExercise> getWorkoutById(String id) {
     return repository.getWorkoutWithExercisesFor(id);
   }
 
@@ -59,7 +60,7 @@ class WorkoutService {
     return repository.getWorkoutWithExercises();
   }
 
-  Future<Workout> getWorkoutWithExercisesFor(String workoutId) {
+  Future<WorkoutWithExercise> getWorkoutWithExercisesFor(String workoutId) {
     return repository.getWorkoutWithExercisesFor(workoutId);
   }
 

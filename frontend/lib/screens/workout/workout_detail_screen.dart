@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/controller/workout_controller.dart';
-import 'package:frontend/models/exercise.dart';
 import 'package:frontend/screens/workout_session/set_log_screen.dart';
 import 'package:frontend/services/exercise_service.dart';
 import 'package:frontend/services/workout_session_service.dart';
@@ -136,8 +135,6 @@ class WorkoutDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final exerciseService = ExerciseService.instance;
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: JimTopBar(
@@ -212,47 +209,17 @@ class WorkoutDetailScreen extends StatelessWidget {
                       itemBuilder: (context, index) {
                         final workoutExercise =
                             _service.activeWorkoutExercises[index];
-                        final exerciseFuture = exerciseService.repository
-                            .getExerciseById(id: workoutExercise.exerciseId);
 
-                        return FutureBuilder<Exercise>(
-                          future: exerciseFuture,
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return const ListTile(
-                                title: Text('Loading...'),
-                                trailing: SizedBox(
-                                  width: 20,
-                                  height: 20,
-                                  child:
-                                      CircularProgressIndicator(strokeWidth: 2),
-                                ),
-                              );
-                            }
+                        final exercise = _service.xExercise[index];
 
-                            if (snapshot.hasError || !snapshot.hasData) {
-                              return ListTile(
-                                title: Text('Error loading exercise'),
-                                subtitle: Text('Tap to retry'),
-                                trailing: Icon(Icons.refresh),
-                                onTap: () {
-                                  // Add refresh logic here
-                                },
-                              );
-                            }
-
-                            final exercise = snapshot.data!;
-                            return ListTile(
-                              title: Text(exercise.name),
-                              subtitle: Text(
-                                'Sets: ${workoutExercise.setCount} | Rest: ${workoutExercise.restTimeSecond}s',
-                              ),
-                              trailing: const Icon(Icons.chevron_right),
-                              onTap: () {
-                                // Handle exercise tap
-                              },
-                            );
+                        return ListTile(
+                          title: Text(exercise.name),
+                          subtitle: Text(
+                            'Sets: ${workoutExercise.setCount} | Rest: ${workoutExercise.restTimeSecond}s',
+                          ),
+                          trailing: const Icon(Icons.chevron_right),
+                          onTap: () {
+                            // Handle exercise tap
                           },
                         );
                       },
