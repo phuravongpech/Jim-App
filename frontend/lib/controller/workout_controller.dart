@@ -66,23 +66,26 @@ class WorkoutController extends GetxController {
   }
 
   // Save the workout data and perform validation
-  void saveWorkout() {
+  void saveWorkout() async{
     final EditExerciseController editExerciseController =
         Get.put(EditExerciseController());
 
+    try {
+    // Save the workout and get the response from the backend
+    final savedWorkoutId = await WorkoutService.instance.saveWorkout(
+      name: xWorkoutTitle.value,
+      description: xWorkoutDescription.value,
+      exercises: xSelectedExercises.toList(),
+      workoutExercises: editExerciseController.exercises,
+    );
+
+    // Create a new workout object with the returned ID
     final newWorkout = Workout(
-      id: '',
+      id: savedWorkoutId, // Use the ID returned by the backend
       name: xWorkoutTitle.value,
       description: xWorkoutDescription.value,
       exerciseCount: xSelectedExercises.length,
     );
-
-    // Create workout exercise relation
-    WorkoutService.instance.saveWorkout(
-        name: xWorkoutTitle.value,
-        description: xWorkoutDescription.value,
-        exercises: xSelectedExercises.toList(),
-        workoutExercises: editExerciseController.exercises);
 
     // Add the new workout to the list
     xWorkoutList.add(newWorkout);
@@ -94,7 +97,10 @@ class WorkoutController extends GetxController {
 
     // Exit create workout form
     Get.back();
+  } catch (e) {
+    Get.snackbar('Error', 'Failed to save workout: ${e.toString()}');
   }
+}
 
   Future<void> deleteWorkout(String workoutId) async {
     try {

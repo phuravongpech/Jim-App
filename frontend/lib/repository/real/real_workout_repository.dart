@@ -13,7 +13,7 @@ class RealWorkoutRepository implements WorkoutRepository {
   final String backendUrl = dotenv.env['BACKEND_URL'] ?? '';
 
   @override
-  Future<void> saveWorkouts({
+  Future<String> saveWorkouts({
     required String name,
     required String description,
     required List<Exercise> exercises,
@@ -37,6 +37,11 @@ class RealWorkoutRepository implements WorkoutRepository {
       if (response.statusCode != 201) {
         throw Exception('Failed to save workouts');
       }
+
+      // We want the new id assigned at the backend immediately
+      // So that we can push the workout card with id attaced without having to hot reload the app
+      final Map<String, dynamic> responseBody = json.decode(response.body);
+      return responseBody['id'].toString();
     } catch (e) {
       throw Exception('Error saving workouts: $e');
     }

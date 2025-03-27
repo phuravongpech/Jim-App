@@ -42,7 +42,7 @@ class WorkoutService {
     return repository.getWorkoutWithExercisesFor(id);
   }
 
-  Future<void> saveWorkout({
+  Future<dynamic> saveWorkout({
     required String name,
     required String description,
     required List<Exercise> exercises,
