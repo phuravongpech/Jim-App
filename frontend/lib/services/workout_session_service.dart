@@ -39,10 +39,14 @@ class WorkoutSessionService {
   final xExercise = <Exercise>[].obs;
 
   // Computed properties
+  //this one refers to workoutExercises 
   WorkoutExercise? get currentExercise =>
       currentExerciseIndex.value < activeWorkoutExercises.length
           ? activeWorkoutExercises[currentExerciseIndex.value]
           : null;
+
+  //get the current exercise
+  Exercise? get exercise => xExercise[currentExerciseIndex.value];  
 
   bool get hasMoreSets =>
       currentExercise != null &&
