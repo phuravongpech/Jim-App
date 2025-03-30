@@ -25,7 +25,7 @@ class ExerciseCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(JimSpacings.radius),
         ),
         elevation: 2,
-        color: JimColors.primary.withAlpha(128),
+        color: JimColors.white,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -59,11 +59,16 @@ class ExerciseCard extends StatelessWidget {
                 ),
               ),
             ),
+            const Divider(
+              height: 1,
+              thickness: 1,
+              color: JimColors.stroke,
+            ),
             Padding(
               padding: const EdgeInsets.only(
                   left: JimSpacings.l,
-                  top: JimSpacings.s,
-                  bottom: JimSpacings.s),
+                  top: JimSpacings.l,
+                  bottom: JimSpacings.l),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

@@ -31,6 +31,8 @@ class SetLogScreen extends GetView<WorkoutSessionController> {
   Widget build(BuildContext context) {
     final currentExercise = _service.exercise;
     final exerciseName = currentExercise?.name ?? 'unknown';
+    final exerciseGifUrl =
+        currentExercise?.gifUrl ?? 'https://picsum.photos/250?image=10';
 
     return Scaffold(
         backgroundColor: JimColors.backgroundAccent,
@@ -79,7 +81,7 @@ class SetLogScreen extends GetView<WorkoutSessionController> {
                 ),
                 padding: EdgeInsets.all(JimSpacings.l),
                 child: Image.network(
-                  'https://picsum.photos/250?image=10',
+                  exerciseGifUrl,
                   fit: BoxFit.cover,
                   width: 200,
                   height: 350,

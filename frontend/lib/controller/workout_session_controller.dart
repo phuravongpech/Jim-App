@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:frontend/screens/workout_complete/workout_summary_screen.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import '../services/workout_session_service.dart';
@@ -31,6 +33,32 @@ class WorkoutSessionController extends GetxController {
   void finishWorkout() {
     service.endWorkoutSession();
     Get.offAll(() => WorkoutSummaryScreen());
+  }
+
+
+  void confirmExit() {
+    Get.dialog(
+      AlertDialog(
+        title: Text('Exit Workout?'),
+        content: Text('You will lose all current workout progress.'),
+        actions: [
+          TextButton(
+            child: Text('Cancel'),
+            onPressed: () => Get.back(),
+          ),
+          TextButton(
+            child: Text(
+              'Exit',
+              style: TextStyle(color: Colors.red),
+            ),
+            onPressed: () {
+              service.endWorkoutSession();
+              Get.offAllNamed('/home'); // Adjust route as needed
+            },
+          ),
+        ],
+      ),
+    );
   }
 
   @override

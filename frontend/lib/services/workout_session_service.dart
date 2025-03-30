@@ -38,14 +38,14 @@ class WorkoutSessionService {
   final xExercise = <Exercise>[].obs;
 
   // Computed properties
-  //this one refers to workoutExercises 
+  //this one refers to workoutExercises
   WorkoutExercise? get currentExercise =>
       currentExerciseIndex.value < activeWorkoutExercises.length
           ? activeWorkoutExercises[currentExerciseIndex.value]
           : null;
 
   //get the current exercise
-  Exercise? get exercise => xExercise[currentExerciseIndex.value];  
+  Exercise? get exercise => xExercise[currentExerciseIndex.value];
 
   bool get hasMoreSets =>
       currentExercise != null &&
@@ -118,12 +118,21 @@ class WorkoutSessionService {
   }
 
   void endWorkoutSession() {
-    activeWorkout.value = null;
-    activeWorkoutExercises.clear();
-    loggedSets.clear();
     currentExerciseIndex.value = 0;
     currentSetIndex.value = 0;
     isWorkoutActive.value = false;
+    log.d('Workout session ended');
+    log.d('Workout session ended with logged sets: $loggedSets');
+    log.d('Workout session ended with active workout: $activeWorkout');
+  }
+
+  void clearSessionData() {
+    activeWorkout.value = null;
+    activeWorkoutExercises.clear();
+    loggedSets.clear();
+    xExercise.clear();
+
+    log.d('Session data cleared');
   }
 
   // Set logging and navigation
