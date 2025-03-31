@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/screens/workout_complete/workout_summary_screen.dart';
+import 'package:frontend/screens/workout_session/workout_summary_screen.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import '../services/workout_session_service.dart';
 import '../screens/workout_session/timer_screen.dart';
 import '../screens/workout_session/set_log_screen.dart';
-import '../screens/workout_summary/workout_summary_screen.dart';
 
 class WorkoutSessionController extends GetxController {
   final service = WorkoutSessionService.instance;

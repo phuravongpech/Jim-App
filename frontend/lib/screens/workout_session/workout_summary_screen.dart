@@ -77,8 +77,9 @@ class WorkoutSummaryScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _buildInfoItem(Icons.calendar_today, '21-12-2025'),
-                _buildInfoItem(Icons.access_time, '69h 30m'),
+                _buildInfoItem(Icons.calendar_today,
+                    '${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}'),
+                // _buildInfoItem(Icons.access_time, '69h 30m'),
               ],
             ),
             const SizedBox(height: JimSpacings.l),
@@ -145,26 +146,23 @@ class WorkoutSummaryScreen extends StatelessWidget {
             Column(
               children: [
                 // Header
-                _buildSetHeader(),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: JimSpacings.xs),
+                  child: Row(
+                    children: [
+                      Expanded(child: Text('Set', style: JimTextStyles.label)),
+                      Expanded(
+                          child: Text('Weight', style: JimTextStyles.label)),
+                      Expanded(child: Text('Reps', style: JimTextStyles.label)),
+                    ],
+                  ),
+                ),
                 // Set rows
                 ...sets.map((set) => _buildSetRow(set)),
               ],
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildSetHeader() {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: JimSpacings.xs),
-      child: Row(
-        children: [
-          Expanded(child: Text('Set', style: JimTextStyles.label)),
-          Expanded(child: Text('Weight', style: JimTextStyles.label)),
-          Expanded(child: Text('Reps', style: JimTextStyles.label)),
-        ],
       ),
     );
   }
@@ -203,7 +201,7 @@ class WorkoutSummaryScreen extends StatelessWidget {
           // First clear the session data
           _service.clearSessionData();
           // Then navigate to home using GetX navigation
-          Get.offAllNamed('/home');
+          Get.offAllNamed('/workout');
         },
         child: Text('Finish Workout', style: JimTextStyles.button),
       ),
