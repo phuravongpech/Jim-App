@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -17,28 +18,32 @@ import { LoggedSet } from '@src/typeorm/entities/loggedset.entity';
 @ApiTags('LoggedSet')
 @Controller('LoggedSets')
 export class LoggedSetController {
-  constructor(private readonly loggedSetService: LoggedSetService) {}
+  constructor(private readonly loggedSetService: LoggedSetService) { }
   @Post()
-  @ApiOperation({ summary: 'Create a new LoggedSet' })
+  @ApiOperation({ summary: 'Create one or multiple LoggedSets' })
   @ApiResponse({
     status: 201,
-    description: 'Created LoggedSet',
+    description: 'Created LoggedSet(s)',
     type: LoggedSet,
+    isArray: true,
   })
   @ApiResponse({
     status: 400,
     description: 'Invalid or missing data',
     type: LoggedSet,
+    isArray: true,
   })
   @ApiResponse({
     status: 409,
     description: 'Duplicate data',
     type: LoggedSet,
+    isArray: true,
   })
   async create(
-    @Body(new ValidationPipe()) CreateLoggedSetDto: CreateLoggedSetDto,
-  ): Promise<LoggedSet> {
-    return this.loggedSetService.create(CreateLoggedSetDto);
+    @Body(new ValidationPipe({ transform: true, whitelist: true }))
+    createLoggedSetDto: CreateLoggedSetDto | CreateLoggedSetDto[],
+  ): Promise<LoggedSet | LoggedSet[]> {
+    return this.loggedSetService.create(createLoggedSetDto)
   }
 
   @Get()
