@@ -7,6 +7,11 @@ export class CreateLoggedSetDto {
   @IsNumber()
   workoutExerciseId: number;
 
+  @ApiProperty({ description: 'The ID of the workout session' })
+  @IsNotEmpty()
+  @IsNumber()
+  workoutSessionId: number;
+
   @ApiProperty({ description: 'The weight used' })
   @IsNotEmpty()
   @IsInt()

@@ -34,7 +34,7 @@ export class WorkoutSessionService {
   }
 
   async findAll(): Promise<WorkoutSession[]> {
-    return this.workoutSessionRepository.find({ relations: ['workout'] });
+    return this.workoutSessionRepository.find();
   }
 
   async update(sessionId: number, workoutSession: Partial<WorkoutSession>): Promise<WorkoutSession> {

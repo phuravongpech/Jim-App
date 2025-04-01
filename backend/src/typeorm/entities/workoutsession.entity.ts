@@ -15,6 +15,9 @@ export class WorkoutSession {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column({ type: 'int', nullable: true })
+  workoutId: number
+
   @Column()
   startWorkout: string;
 

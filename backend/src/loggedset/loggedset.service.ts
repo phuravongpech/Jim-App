@@ -24,10 +24,8 @@ export class LoggedSetService {
       if (!workoutExercise) {
         throw new NotFoundException(`Logged Set with ID ${createLoggedSetDto.workoutExerciseId} not found`);
       }
-      const LoggedSet = this.loggedSetRepository.create({
-        ...createLoggedSetDto,
-        workoutExerciseId: workoutExercise,
-      });
+
+      const LoggedSet = this.loggedSetRepository.create(createLoggedSetDto);
 
       return this.loggedSetRepository.save(LoggedSet);
     }
