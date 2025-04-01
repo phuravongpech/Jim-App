@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, Patch, UseInterceptors, ClassSerializerInterceptor, ValidationPipe, HttpCode } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, UseInterceptors, ClassSerializerInterceptor, ValidationPipe, Put } from '@nestjs/common';
 import { WorkoutsService } from './workouts.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Workout } from '@src/typeorm/entities/workout.entity';
@@ -46,7 +46,7 @@ export class WorkoutsController {
     return this.workoutsService.findOne(id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   @ApiOperation({ summary: 'Update a workout' })
   @ApiResponse({ status: 200, description: 'Updated workout sucessfully', type: Workout })
   @ApiResponse({ status: 400, description: 'Invalid request', type: Workout })

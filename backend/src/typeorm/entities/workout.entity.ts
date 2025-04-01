@@ -33,8 +33,6 @@ export class Workout {
   )
   workoutExercises: WorkoutExercise[];
 
-  @OneToMany(() => WorkoutSession, (workoutSession) => workoutSession.workout, {
-    cascade: true,
-  })
+  @OneToMany(() => WorkoutSession, (workoutSession) => workoutSession.workout)
   workoutSessions: WorkoutSession[];
 }

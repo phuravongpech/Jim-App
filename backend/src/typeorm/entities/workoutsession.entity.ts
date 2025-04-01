@@ -27,7 +27,7 @@ export class WorkoutSession {
   @CreateDateColumn()
   createdAt: Date;
 
-  @ManyToOne(() => Workout, (workout) => workout.workoutSessions)
+  @ManyToOne(() => Workout, (workout) => workout.workoutSessions, { onDelete: 'SET NULL' })
   @JoinColumn({ name: 'workoutId' })
   workout: Workout;
 
