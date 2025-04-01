@@ -126,7 +126,12 @@ class WorkoutSessionService {
     log.d('Workout session ended with active workout: $activeWorkout');
   }
 
-  void clearSessionData() {
+  void clearSessionData({bool save = true}) {
+    if (save && loggedSets.isNotEmpty) {
+      log.d('Saving logged sets: $loggedSets');
+      repository.saveLoggedSets(loggedSets: loggedSets);
+    }
+
     activeWorkout.value = null;
     activeWorkoutExercises.clear();
     loggedSets.clear();

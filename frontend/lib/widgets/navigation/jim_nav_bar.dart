@@ -10,15 +10,13 @@ class JimNavBar extends StatelessWidget {
   static final List<String> _routes = [
     '/workout',
     '/exercise',
-    '/log',
-    '/profile',
+    '/history',
   ];
 
   static final List<IconData> _icons = [
     Icons.home,
     Icons.assignment,
     Icons.bar_chart,
-    Icons.person,
   ];
 
   int _getSelectedIndex() => _routes.indexOf(Get.currentRoute);

@@ -34,7 +34,6 @@ class WorkoutSessionController extends GetxController {
     Get.offAll(() => WorkoutSummaryScreen());
   }
 
-
   void confirmExit() {
     Get.dialog(
       AlertDialog(
@@ -51,8 +50,9 @@ class WorkoutSessionController extends GetxController {
               style: TextStyle(color: Colors.red),
             ),
             onPressed: () {
-              service.endWorkoutSession();
-              Get.offAllNamed('/home'); // Adjust route as needed
+              service.endWorkoutSession(); // Clear logged sets
+              service.clearSessionData(save: false); // Clear logged sets
+              Get.offAllNamed('/workout'); // Adjust route as needed
             },
           ),
         ],

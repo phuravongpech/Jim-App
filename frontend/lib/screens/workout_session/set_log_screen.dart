@@ -27,6 +27,10 @@ class SetLogScreen extends GetView<WorkoutSessionController> {
     controller.logSetAndNavigate(reps, weight);
   }
 
+  void quit() {
+    controller.confirmExit();
+  }
+
   @override
   Widget build(BuildContext context) {
     final currentExercise = _service.exercise;
@@ -39,9 +43,8 @@ class SetLogScreen extends GetView<WorkoutSessionController> {
         appBar: AppBar(
           backgroundColor: JimColors.white,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: JimColors.textPrimary),
-            onPressed: () => Get.back(),
-          ),
+              icon: Icon(Icons.arrow_back, color: JimColors.textPrimary),
+              onPressed: quit),
           title: Text(exerciseName, style: JimTextStyles.heading),
         ),
         body: Padding(

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:frontend/models/exercise.dart';
+import 'package:frontend/models/logged_set.dart';
 import 'package:frontend/models/workout.dart';
 import 'package:frontend/models/workout_exercise.dart';
 import 'package:frontend/repository/workout_repository.dart';
@@ -25,7 +26,8 @@ class MockWorkoutRepository extends WorkoutRepository {
           'name': name,
           'description': description,
           'exercises': exercises.map((e) => e.toJson()).toList(),
-          'workoutExercises': workoutExercises.map((we) => we.toJson()).toList(),
+          'workoutExercises':
+              workoutExercises.map((we) => we.toJson()).toList(),
         }),
       );
 
@@ -46,7 +48,8 @@ class MockWorkoutRepository extends WorkoutRepository {
 
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
-        return List<WorkoutExercise>.from(data.map((we) => WorkoutExercise.fromJson(we)));
+        return List<WorkoutExercise>.from(
+            data.map((we) => WorkoutExercise.fromJson(we)));
       } else {
         throw Exception('Failed to load workout exercises');
       }
@@ -67,22 +70,33 @@ class MockWorkoutRepository extends WorkoutRepository {
     // TODO: implement getWorkoutWithExercises
     throw UnimplementedError();
   }
-  
+
   @override
   Future<WorkoutWithExercise> getWorkoutWithExercisesFor(String workoutId) {
     // TODO: implement getWorkoutWithExercisesFor
     throw UnimplementedError();
   }
-  
+
   @override
   Future<void> deleteWorkout(String workoutId) {
     // TODO: implement deleteWorkout
     throw UnimplementedError();
   }
-  
+
   @override
-  Future<void> updateWorkout({required String workoutId, required String name, required String description, required List<Exercise> exercises, required List<WorkoutExercise> workoutExercises}) {
+  Future<void> updateWorkout(
+      {required String workoutId,
+      required String name,
+      required String description,
+      required List<Exercise> exercises,
+      required List<WorkoutExercise> workoutExercises}) {
     // TODO: implement updateWorkout
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> saveLoggedSets({required List<LoggedSet> loggedSets}) {
+    // TODO: implement saveLoggedSets
     throw UnimplementedError();
   }
 }

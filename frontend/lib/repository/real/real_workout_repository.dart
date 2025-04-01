@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:frontend/models/exercise.dart';
+import 'package:frontend/models/logged_set.dart';
 import 'package:frontend/models/workout.dart';
 import 'package:frontend/models/workout_exercise.dart';
 import 'package:frontend/repository/workout_repository.dart';
@@ -143,6 +144,38 @@ class RealWorkoutRepository implements WorkoutRepository {
       }
     } catch (e) {
       throw Exception('Error updating workout: $e');
+    }
+  }
+
+  @override
+  Future<void> saveLoggedSets({
+    required List<LoggedSet> loggedSets,
+  }) async {
+    try {
+      //   final response = await post(
+      //     Uri.parse('$backendUrl/logged-sets'),
+      //     headers: {
+      //       'Content-Type': 'application/json',
+      //     },
+      //     body: json.encode({
+      //       'loggedSets': LoggedSet.listToJson(loggedSets),
+      //     }),
+      //   );
+
+      //   if (response.statusCode != 201) {
+      //     throw Exception('Failed to save logged sets');
+      //   }
+      // } catch (e) {
+      //   throw Exception('Error saving logged sets: $e');
+      // }
+
+      final data = {
+        'loggedSets': LoggedSet.listToJson(loggedSets),
+      };
+
+      Logger().d('Saving logged sets: $data');
+    } catch (e) {
+      throw Exception('Error saving logged sets: $e');
     }
   }
 }

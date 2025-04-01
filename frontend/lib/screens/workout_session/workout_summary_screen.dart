@@ -202,8 +202,9 @@ class WorkoutSummaryScreen extends StatelessWidget {
           _service.clearSessionData();
           // Then navigate to home using GetX navigation
           Get.offAllNamed('/workout');
+          
         },
-        child: Text('Finish Workout', style: JimTextStyles.button),
+        child: Text('Back to Home', style: JimTextStyles.button),
       ),
     );
   }

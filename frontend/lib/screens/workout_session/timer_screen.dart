@@ -42,17 +42,17 @@ class _TimerScreenState extends State<TimerScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Text('Rest Time',
+                style: JimTextStyles.heading.copyWith(fontSize: 40)),
+            const SizedBox(height: JimSpacings.l),
             Obx(() {
               final currentSet = _service.currentSetIndex.value + 1;
               final totalSets = _service.currentExercise?.setCount ?? 0;
 
               return Text('Set $currentSet of $totalSets',
-                  style: JimTextStyles.heading.copyWith(fontSize: 40));
+                  style: JimTextStyles.title
+                      .copyWith(color: JimColors.textSecondary));
             }),
-            const SizedBox(height: JimSpacings.l),
-            Text('Rest Time',
-                style: JimTextStyles.title
-                    .copyWith(color: JimColors.textSecondary)),
             const SizedBox(height: JimSpacings.xxl),
             Obx(() => CircularCountDownTimer(
                   duration: currentTimeInSeconds.value,

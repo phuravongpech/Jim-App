@@ -18,14 +18,18 @@ class WorkoutCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: JimSpacings.m),
+      margin: const EdgeInsets.only(
+          bottom: JimSpacings.m, left: JimSpacings.xs, right: JimSpacings.xs),
       decoration: BoxDecoration(
-        color: JimColors.backgroundAccent,
+        color: JimColors.white,
         borderRadius: BorderRadius.circular(JimSpacings.radius),
-        border: Border.all(
-          color: JimColors.stroke,
-          width: 1,
-        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 6,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: Padding(
         padding: const EdgeInsets.all(JimSpacings.m),
@@ -63,13 +67,13 @@ class WorkoutCard extends StatelessWidget {
                 const Icon(
                   Icons.fitness_center,
                   size: JimIconSizes.small,
-                  color: JimColors.textPrimary,
+                  color: JimColors.primary,
                 ),
                 const SizedBox(width: JimSpacings.s),
                 Text(
                   '$exercisesCount exercises',
                   style: JimTextStyles.subBody.copyWith(
-                    color: JimColors.primary,
+                    color: JimColors.textSecondary,
                   ),
                 ),
               ],

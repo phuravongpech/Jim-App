@@ -1,4 +1,5 @@
 import 'package:frontend/models/exercise.dart';
+import 'package:frontend/models/logged_set.dart';
 import 'package:frontend/models/workout_exercise.dart';
 
 import '../models/workout.dart';
@@ -26,5 +27,11 @@ abstract class WorkoutRepository {
     required String description,
     required List<Exercise> exercises,
     required List<WorkoutExercise> workoutExercises,
+  });
+
+  //deal with the logged sets
+
+  Future<void> saveLoggedSets({
+    required List<LoggedSet> loggedSets,
   });
 }
