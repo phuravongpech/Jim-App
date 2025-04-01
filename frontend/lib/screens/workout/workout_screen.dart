@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/controller/select_exercise_controller.dart';
 import 'package:frontend/screens/workout/widgets/workout_card.dart';
 import 'package:frontend/theme/theme.dart';
 import 'package:frontend/widgets/display/jim_list_view.dart';
@@ -8,6 +9,7 @@ import 'package:get/get.dart';
 import '../../../controller/workout_controller.dart';
 import '../../widgets/action/jim_text_button.dart';
 import '../../widgets/navigation/jim_nav_bar.dart';
+import 'edit_workout_screen.dart';
 
 class WorkoutScreen extends StatefulWidget {
   const WorkoutScreen({super.key});
@@ -17,8 +19,22 @@ class WorkoutScreen extends StatefulWidget {
 }
 
 class _WorkoutScreenState extends State<WorkoutScreen> {
-  final WorkoutController workoutController =
-      Get.put(WorkoutController()); // Initialize the controller
+  // Initialize the controller
+  final WorkoutController workoutController = Get.put(WorkoutController());
+  final SelectExerciseController selectExerciseController =
+      Get.put(SelectExerciseController());
+
+  void initState() {
+    super.initState();
+    _fetchData();
+  }
+
+  void _fetchData() {
+    // Check if navigation passed a refresh flag
+    if (Get.arguments != null && Get.arguments['refresh'] == true) {
+      workoutController.fetchWorkouts();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +62,8 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
             title: workout.name,
             description: workout.description,
             exercisesCount: workout.exerciseCount,
+            onEditPressed: () =>
+                Get.to(() => EditWorkoutScreen(workoutId: workout.id)),
           ),
         ),
       ),

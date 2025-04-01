@@ -29,100 +29,103 @@ class SelectExerciseCard extends StatelessWidget {
         ),
         elevation: 2,
         color: JimColors.white,
-        child: Row(
-          children: [
-            // Custom Radio Button (Checkmark)
-            GestureDetector(
-              onTap: () => onSelected(!isSelected),
-              child: Padding(
-                padding: const EdgeInsets.all(4),
-                child: Container(
-                  width: 24,
-                  height: 24,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color:
-                        isSelected ? JimColors.primary : JimColors.transparent,
-                    border: Border.all(
-                      color: isSelected
-                          ? JimColors.primary
-                          : JimColors.textSecondary,
-                      width: 1,
+        child: Padding(
+          padding: const EdgeInsets.only(left: JimSpacings.s),
+          child: Row(
+            children: [
+              // Custom Radio Button (Checkmark)
+              GestureDetector(
+                onTap: () => onSelected(!isSelected),
+                child: Padding(
+                  padding: const EdgeInsets.all(4),
+                  child: Container(
+                    width: 24,
+                    height: 24,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color:
+                          isSelected ? JimColors.primary : JimColors.transparent,
+                      border: Border.all(
+                        color: isSelected
+                            ? JimColors.primary
+                            : JimColors.textSecondary,
+                        width: 1,
+                      ),
                     ),
+                    child: isSelected
+                        ? Icon(
+                            Icons.check,
+                            size: 16,
+                            color: JimColors.white,
+                          )
+                        : null,
                   ),
-                  child: isSelected
-                      ? Icon(
-                          Icons.check,
-                          size: 16,
-                          color: JimColors.white,
-                        )
-                      : null,
                 ),
               ),
-            ),
-
-            // Exercise Details and Image
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: JimSpacings.s, vertical: JimSpacings.s),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    // Exercise Image
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: CachedNetworkImage(
-                        imageUrl: exercise.gifUrl,
-                        width: 60,
-                        height: 60,
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) => Container(
+          
+              // Exercise Details and Image
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: JimSpacings.s, vertical: JimSpacings.s),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      // Exercise Image
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: CachedNetworkImage(
+                          imageUrl: exercise.gifUrl,
                           width: 60,
                           height: 60,
-                          color: JimColors.white,
-                          child: const Center(
-                            child: CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                  JimColors.placeholder),
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) => Container(
+                            width: 60,
+                            height: 60,
+                            color: JimColors.white,
+                            child: const Center(
+                              child: CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                    JimColors.placeholder),
+                              ),
                             ),
                           ),
-                        ),
-                        errorWidget: (context, url, error) => Container(
-                          width: 60,
-                          height: 60,
-                          color: JimColors.stroke,
-                          child:
-                              const Icon(Icons.error, color: JimColors.error),
+                          errorWidget: (context, url, error) => Container(
+                            width: 60,
+                            height: 60,
+                            color: JimColors.stroke,
+                            child:
+                                const Icon(Icons.error, color: JimColors.error),
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(width: JimSpacings.s),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Exercise Name
-                          Text(
-                            exercise.name,
-                            style: JimTextStyles.body.copyWith(
-                              fontWeight: FontWeight.bold,
+                      const SizedBox(width: JimSpacings.s),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Exercise Name
+                            Text(
+                              exercise.name,
+                              style: JimTextStyles.body.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 4),
-                          // Target and Equipment
-                          Text(
-                            "${exercise.target}, ${exercise.equipment}",
-                            style: JimTextStyles.label,
-                          ),
-                        ],
+                            const SizedBox(height: 4),
+                            // Target and Equipment
+                            Text(
+                              "${exercise.target}, ${exercise.equipment}",
+                              style: JimTextStyles.label,
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

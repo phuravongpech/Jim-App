@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/controller/workout_controller.dart';
 import 'package:frontend/screens/workout_session/set_log_screen.dart';
-import 'package:frontend/services/exercise_service.dart';
 import 'package:frontend/services/workout_session_service.dart';
 import 'package:frontend/controller/workout_session_controller.dart';
 import 'package:frontend/screens/workout_session/widgets/set_log_button.dart';

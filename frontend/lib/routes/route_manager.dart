@@ -36,4 +36,5 @@ final routes = [
     page: () => WorkoutDetailScreen(),
     // No need to specify return type in the route definition
   ),
+  GetPage(name: '/edit-workout', page: () => EditExerciseScreen()),
 ];

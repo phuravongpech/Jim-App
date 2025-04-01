@@ -29,6 +29,52 @@ class Exercise {
     );
   }
 
+  factory Exercise.fromCustomWorkoutExercise(dynamic customWorkoutExercise) {
+    // First approach: Try direct access if properties exist at top level
+    try {
+      return Exercise(
+        id: customWorkoutExercise.exerciseId?.toString() ?? '',
+        name: customWorkoutExercise.name?.toString() ?? '',
+        gifUrl: customWorkoutExercise.gifUrl?.toString() ?? '',
+        bodyPart: customWorkoutExercise.bodyPart?.toString() ?? '',
+        equipment: customWorkoutExercise.equipment?.toString() ?? '',
+        target: customWorkoutExercise.target?.toString() ?? '',
+        instructions: (customWorkoutExercise.instructions is List)
+            ? List<String>.from(customWorkoutExercise.instructions)
+            : [],
+      );
+    } catch (e) {
+      // Fallback approach: Try nested exercise object
+      try {
+        return Exercise(
+          id: customWorkoutExercise.exercise?.id?.toString() ??
+              customWorkoutExercise.exerciseId?.toString() ??
+              '',
+          name: customWorkoutExercise.exercise?.name?.toString() ?? '',
+          gifUrl: customWorkoutExercise.exercise?.gifUrl?.toString() ?? '',
+          bodyPart: customWorkoutExercise.exercise?.bodyPart?.toString() ?? '',
+          equipment:
+              customWorkoutExercise.exercise?.equipment?.toString() ?? '',
+          target: customWorkoutExercise.exercise?.target?.toString() ?? '',
+          instructions: (customWorkoutExercise.exercise?.instructions is List)
+              ? List<String>.from(customWorkoutExercise.exercise.instructions)
+              : [],
+        );
+      } catch (e) {
+        // Ultimate fallback with default values
+        return Exercise(
+          id: '',
+          name: 'Unknown Exercise',
+          gifUrl: '',
+          bodyPart: '',
+          equipment: '',
+          target: '',
+          instructions: [],
+        );
+      }
+    }
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'id': id,

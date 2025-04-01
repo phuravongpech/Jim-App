@@ -67,4 +67,20 @@ class WorkoutService {
   Future<void> deleteWorkout(String workoutId) {
     return repository.deleteWorkout(workoutId);
   }
+
+  Future<void> updateWorkout({
+    required String workoutId,
+    required String name,
+    required String description,
+    required List<Exercise> exercises,
+    required List<WorkoutExercise> workoutExercises,
+  }) async {
+    await repository.updateWorkout(
+      workoutId: workoutId,
+      name: name,
+      description: description,
+      exercises: exercises,
+      workoutExercises: workoutExercises,
+    );
+  }
 }

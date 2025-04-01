@@ -222,15 +222,6 @@ class WorkoutForm extends StatelessWidget {
                           const EdgeInsets.symmetric(vertical: JimSpacings.s),
                       child: Row(
                         children: [
-                          // Menu/Edit Icon
-                          JimIconButton(
-                            icon: Icons.menu,
-                            color: JimColors.textSecondary,
-                            onPressed: () {
-                              // Handle edit action
-                            },
-                          ),
-
                           // Exercise Image
                           Container(
                             width: 70,

@@ -5,12 +5,14 @@ class WorkoutCard extends StatelessWidget {
   final String title;
   final String description;
   final int exercisesCount;
+  final VoidCallback? onEditPressed;
 
   const WorkoutCard({
     super.key,
     required this.title,
     required this.description,
     required this.exercisesCount,
+    this.onEditPressed,
   });
 
   @override
@@ -22,7 +24,7 @@ class WorkoutCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(JimSpacings.radius),
         border: Border.all(
           color: JimColors.stroke,
-          width: 1, // Border width
+          width: 1,
         ),
       ),
       child: Padding(
@@ -30,11 +32,24 @@ class WorkoutCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              title,
-              style: JimTextStyles.heading.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  title,
+                  style: JimTextStyles.heading.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                if (onEditPressed !=
+                    null)
+                  IconButton(
+                    icon: const Icon(Icons.edit, size: JimIconSizes.small),
+                    color: JimColors.primary,
+                    onPressed: onEditPressed,
+                    tooltip: 'Edit Workout',
+                  ),
+              ],
             ),
             const SizedBox(height: JimSpacings.s),
             Text(

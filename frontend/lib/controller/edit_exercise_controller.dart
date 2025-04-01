@@ -6,7 +6,8 @@ class EditExerciseController extends GetxController {
 
   /// Initialize the exercises
   void initializeExercises(List<WorkoutExercise> initialExercises) {
-    exercises.assignAll(initialExercises);
+    exercises.clear();
+    exercises.addAll(initialExercises);
   }
 
   void addExercises(List<WorkoutExercise> newExercises) {
@@ -72,6 +73,6 @@ class EditExerciseController extends GetxController {
   }
 
   List<WorkoutExercise> getUpdatedExercises() {
-    return exercises;
+    return exercises.toList();
   }
 }

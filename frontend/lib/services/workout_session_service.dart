@@ -1,4 +1,3 @@
-import 'package:frontend/models/custom_exercise.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import '../models/exercise.dart';
