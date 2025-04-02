@@ -44,7 +44,7 @@ class Exercise {
             : [],
       );
     } catch (e) {
-      // Fallback approach: Try nested exercise object
+      
       try {
         return Exercise(
           id: customWorkoutExercise.exercise?.id?.toString() ??
@@ -61,16 +61,7 @@ class Exercise {
               : [],
         );
       } catch (e) {
-        // Ultimate fallback with default values
-        return Exercise(
-          id: '',
-          name: 'Unknown Exercise',
-          gifUrl: '',
-          bodyPart: '',
-          equipment: '',
-          target: '',
-          instructions: [],
-        );
+        rethrow;
       }
     }
   }

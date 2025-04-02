@@ -1,12 +1,14 @@
 import 'package:frontend/models/exercise.dart';
 import 'package:frontend/services/exercise_service.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 
 class ExerciseController extends GetxController {
   RxList<Exercise> exercises = <Exercise>[].obs;
   RxBool isLoading = false.obs;
   RxString selectedBodyPart = 'chest'.obs;
   RxInt page = 0.obs;
+  final log = Logger();
 
   final int limit = 10;
 
@@ -34,10 +36,10 @@ class ExerciseController extends GetxController {
         exercises.addAll(fetchedExercises);
         page.value++; // Increment page for the next fetch
       } else {
-        Get.snackbar('End of List', 'No more exercises available.');
+        log.i('No more exercises available.');
       }
     } catch (e) {
-      Get.snackbar('Error', 'Failed to load exercises: $e');
+      log.e('Error fetching exercises: $e');
     } finally {
       isLoading.value = false;
     }
@@ -62,10 +64,10 @@ class ExerciseController extends GetxController {
         exercises.addAll(searchedExercises);
         page.value++; // Increment page for the next fetch
       } else if (reset) {
-        Get.snackbar('No Results', 'No exercises found for "$query".');
+        log.i('No exercises found for "$query".');
       }
     } catch (e) {
-      Get.snackbar('Error', 'Failed to search exercises: $e');
+      log.e('Error searching exercises: $e');
     } finally {
       isLoading.value = false;
     }

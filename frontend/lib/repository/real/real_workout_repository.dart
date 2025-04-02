@@ -6,7 +6,6 @@ import 'package:frontend/models/workout.dart';
 import 'package:frontend/models/workout_exercise.dart';
 import 'package:frontend/repository/workout_repository.dart';
 import 'package:http/http.dart';
-import 'package:logger/logger.dart';
 
 import '../../models/workout_with_exercise.dart';
 
@@ -125,7 +124,6 @@ class RealWorkoutRepository implements WorkoutRepository {
     required List<WorkoutExercise> workoutExercises,
   }) async {
     try {
-      print(workoutId);
       final response = await put(
         Uri.parse('$backendUrl/workouts/$workoutId'),
         headers: {

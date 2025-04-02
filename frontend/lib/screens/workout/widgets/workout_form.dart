@@ -68,7 +68,6 @@ class WorkoutForm extends StatelessWidget {
           );
         }).toList();
         editExerciseController.initializeExercises(newArguments);
-        
       } else {
         // If coming from the EditExerciseScreen, update the selected exercises
         final updatedExercises =
@@ -117,6 +116,9 @@ class WorkoutForm extends StatelessWidget {
             decoration: InputDecoration(
               hintText: 'Input Workout Title',
               border: OutlineInputBorder(),
+              focusedBorder: OutlineInputBorder(  
+                borderSide: BorderSide(color: JimColors.primary),
+              ),
               hintStyle: JimTextStyles.subBody
                   .copyWith(color: JimColors.textSecondary),
             ),
@@ -148,6 +150,9 @@ class WorkoutForm extends StatelessWidget {
             decoration: InputDecoration(
               hintText: 'Description...',
               border: OutlineInputBorder(),
+              focusedBorder: OutlineInputBorder(  
+                borderSide: BorderSide(color: JimColors.primary),
+              ),
               hintStyle: JimTextStyles.subBody
                   .copyWith(color: JimColors.textSecondary),
             ),

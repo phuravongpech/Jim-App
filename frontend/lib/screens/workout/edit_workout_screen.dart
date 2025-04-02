@@ -57,7 +57,7 @@ class _EditWorkoutScreenState extends State<EditWorkoutScreen> {
     super.dispose();
   }
 
-  void onPressedSaveWorkout() {
+  void onPressedUpdateWorkout() {
     if (controller.xWorkoutTitle.isEmpty) {
       Get.snackbar(
         'Error',
@@ -87,7 +87,6 @@ class _EditWorkoutScreenState extends State<EditWorkoutScreen> {
   Widget build(BuildContext context) {
     Get.put(SelectExerciseController());
     controller.fetchWorkoutDetail(widget.workoutId);
-    print("Fetching details for Workout ID: ${widget.workoutId}");
     return Scaffold(
       backgroundColor: JimColors.backgroundAccent,
       appBar: JimTopBar(
@@ -101,7 +100,7 @@ class _EditWorkoutScreenState extends State<EditWorkoutScreen> {
         actions: [
           JimTextButton(
             text: "Save",
-            onPressed: onPressedSaveWorkout,
+            onPressed: onPressedUpdateWorkout,
           ),
         ],
       ),
@@ -126,6 +125,9 @@ class _EditWorkoutScreenState extends State<EditWorkoutScreen> {
                 decoration: InputDecoration(
                   hintText: 'Input Workout Title',
                   border: OutlineInputBorder(),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: JimColors.primary),
+                  ),
                   hintStyle: JimTextStyles.subBody
                       .copyWith(color: JimColors.textSecondary),
                 ),
@@ -149,6 +151,9 @@ class _EditWorkoutScreenState extends State<EditWorkoutScreen> {
                 decoration: InputDecoration(
                   hintText: 'Description...',
                   border: OutlineInputBorder(),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: JimColors.primary),
+                  ),
                   hintStyle: JimTextStyles.subBody
                       .copyWith(color: JimColors.textSecondary),
                 ),

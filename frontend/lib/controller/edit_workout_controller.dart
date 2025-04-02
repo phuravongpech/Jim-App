@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 
 import '../models/exercise.dart';
 import '../models/workout_exercise.dart';
@@ -13,6 +14,8 @@ class EditWorkoutController extends GetxController {
   var xWorkoutDescription = ''.obs;
   var xSelectedExercises = <Exercise>[].obs;
   var workoutExercises = <WorkoutExercise>[].obs;
+
+  final log = Logger();
 
   EditWorkoutController({required this.workoutId}) {
     fetchWorkoutDetail(workoutId);
@@ -44,34 +47,24 @@ class EditWorkoutController extends GetxController {
                 restTimeSecond: e.restTimeSecond,
                 // Add any other necessary fields
               )));
-      List<int> workoutExerciseId =
-          workoutDetail.workoutExercises.map((e) => e.id).toList();
-      print(workoutExerciseId);
       // Initialize edit exercise controller
       editExerciseController.initializeExercises(workoutExercises.toList());
     } catch (e) {
-      Get.snackbar('Error', 'Failed to load workout details: $e');
+      log.e('Error fetching workout details: $e');
     }
   }
 
   Future<void> refreshWorkoutList() async {
     try {
-      // Get the WorkoutController instance
       final workoutController = Get.find<WorkoutController>();
-      // Refresh the workout list
       workoutController.fetchWorkouts();
     } catch (e) {
-      Get.snackbar('Error', 'Failed to refresh workout list: $e');
+      log.e('Error refreshing workout list: $e');
     }
   }
 
-// Update workout data
+  // Update workout data
   Future<void> updateWorkout(String workoutId) async {
-    // print("Updating Workout ID: $workoutId");
-    // print("Workout Title: ${xWorkoutTitle.value}");
-    // print("Workout Description: ${xWorkoutDescription.value}");
-    print("Selected Exercises: ${xSelectedExercises}");
-    print("Workout Exercises: ${workoutExercises}");
     try {
       await service.updateWorkout(
         workoutId: workoutId,
@@ -84,10 +77,10 @@ class EditWorkoutController extends GetxController {
       // Refresh the workout list
       await refreshWorkoutList();
 
-      Get.snackbar('Success', 'Workout updated successfully.');
+      log.i('Workout updated successfully!');
       Get.back(result: true);
     } catch (e) {
-      Get.snackbar('Error', 'Failed to update workout: $e');
+      log.e('Error updating workout: $e');
     }
   }
 
@@ -107,7 +100,7 @@ class EditWorkoutController extends GetxController {
       return fullExercise ??
           Exercise(
             id: workoutExercise.exerciseId,
-            name: 'Unknown Exercise', // Temporary placeholder
+            name: 'Unknown Exercise',
             gifUrl: '',
             bodyPart: '',
             equipment: '',

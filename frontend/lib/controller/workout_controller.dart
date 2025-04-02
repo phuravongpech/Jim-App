@@ -2,6 +2,7 @@ import 'package:frontend/controller/edit_exercise_controller.dart';
 import 'package:frontend/models/exercise.dart';
 import 'package:frontend/services/workout_service.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 
 import '../models/workout.dart';
 import '../models/workout_with_exercise.dart';
@@ -12,6 +13,8 @@ class WorkoutController extends GetxController {
   var xSelectedExercises = <Exercise>[].obs; // List of selected exercise IDs
   var xWorkoutList = <Workout>[].obs; // List to store workouts
   var workout = Rxn<Workout>(); // Store workout details
+
+  final log = Logger();
 
   final service = WorkoutService.instance;
 
@@ -34,7 +37,7 @@ class WorkoutController extends GetxController {
           await WorkoutService.instance.getWorkoutWithExercises();
       xWorkoutList.assignAll(fetchedWorkouts);
     } catch (e) {
-      Get.snackbar('Error', 'Failed to load workouts: $e');
+      log.e('Error fetching workouts: $e');
     }
   }
 
@@ -49,7 +52,7 @@ class WorkoutController extends GetxController {
           description: fetchedWorkout.description,
           exerciseCount: fetchedWorkout.workoutExercises.length);
     } catch (e) {
-      Get.snackbar('Error', 'Failed to load workout details: $e');
+      log.e('Error fetching workout details: $e');
     }
   }
 
@@ -61,7 +64,7 @@ class WorkoutController extends GetxController {
       // Add the fetched exercises to the list
       xWorkoutList.addAll(fetchedExercises);
     } catch (e) {
-      Get.snackbar('Error', 'Failed to load workouts: $e');
+      log.e('Error fetching exercises: $e');
     }
   }
 
@@ -98,7 +101,7 @@ class WorkoutController extends GetxController {
     // Exit create workout form
     Get.back();
   } catch (e) {
-    Get.snackbar('Error', 'Failed to save workout: ${e.toString()}');
+    log.e('Error saving workout: $e');
   }
 }
 
@@ -106,9 +109,9 @@ class WorkoutController extends GetxController {
     try {
       await service.deleteWorkout(workoutId);
       xWorkoutList.removeWhere((workout) => workout.id == workoutId);
-      Get.snackbar('Success', 'Workout deleted successfully');
+      log.i('Workout deleted successfully!');
     } catch (e) {
-      Get.snackbar('Error', 'Failed to delete workout: ${e.toString()}');
+      log.e('Error deleting workout: $e');
       throw Exception('Failed to delete workout: $e');
     }
   }

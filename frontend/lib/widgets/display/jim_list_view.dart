@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/theme/theme.dart';
 import 'package:get/get.dart';
 
 class JimListView<T> extends StatelessWidget {
@@ -27,7 +28,7 @@ class JimListView<T> extends StatelessWidget {
       }
 
       return ListView.builder(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(JimSpacings.m),
         itemCount: items.length,
         itemBuilder: (context, index) => itemBuilder(items[index]),
       );

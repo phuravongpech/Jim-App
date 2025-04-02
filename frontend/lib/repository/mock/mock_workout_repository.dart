@@ -56,6 +56,7 @@ class MockWorkoutRepository extends WorkoutRepository {
   }
   
   @override
+  // ignore: override_on_non_overriding_member
   Future<List<Workout>> getExerciseForWorkout(String workoutId) {
     // TODO: implement getExerciseForWorkout
     throw UnimplementedError();

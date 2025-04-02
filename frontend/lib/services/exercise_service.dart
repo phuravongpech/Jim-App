@@ -31,7 +31,7 @@ class ExerciseService {
   }
 
   ///
-  ///
+  /// fetchExercises
   ///
 
   Future<List<Exercise>> fetchExercises(
@@ -46,7 +46,4 @@ class ExerciseService {
   }) {
     return repository.searchExercises(page: page, limit: limit, query: query);
   }
-
-  
-
 }

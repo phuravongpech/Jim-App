@@ -41,8 +41,7 @@ class WorkoutCard extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                if (onEditPressed !=
-                    null)
+                if (onEditPressed != null)
                   IconButton(
                     icon: const Icon(Icons.edit, size: JimIconSizes.small),
                     color: JimColors.primary,

@@ -7,6 +7,7 @@ import 'package:frontend/screens/workout_session/widgets/set_log_button.dart';
 import 'package:frontend/theme/theme.dart';
 import 'package:frontend/widgets/action/jim_icon_button.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 import '../../widgets/navigation/jim_top_bar.dart';
 
 class WorkoutDetailScreen extends StatelessWidget {
@@ -22,6 +23,8 @@ class WorkoutDetailScreen extends StatelessWidget {
   final isLoading = true.obs;
   final hasError = false.obs;
   final errorMessage = ''.obs;
+
+  final log = Logger();
 
   Future<void> _loadWorkout(String id) async {
     try {
@@ -49,14 +52,14 @@ class WorkoutDetailScreen extends StatelessWidget {
 
   bool _canStartWorkout() {
     if (isLoading.value) {
-      Get.snackbar('Error', 'Please wait for workout to load');
+      log.w('Loading workout data, please wait...');
       return false;
     }
 
     if (hasError.value ||
         _service.activeWorkout.value == null ||
         _service.activeWorkoutExercises.isEmpty) {
-      Get.snackbar('Error', 'Workout data not available');
+      log.w('No workout data available or workout is empty');
       return false;
     }
 

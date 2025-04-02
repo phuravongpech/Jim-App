@@ -1,5 +1,6 @@
 import 'package:frontend/models/exercise.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 
 import '../services/exercise_service.dart';
 
@@ -12,6 +13,8 @@ class SelectExerciseController extends GetxController {
   RxInt page = 0.obs; // Pagination page
   final int limit = 10; // Number of exercises per page
   var allExercises = <Exercise>[].obs;
+
+  final log = Logger();
 
   @override
   void onInit() {
@@ -42,13 +45,12 @@ class SelectExerciseController extends GetxController {
         allExercises.addAll(fetchedExercises); // Populate allExercises
         page.value++; // Increment the page for the next fetch
       } else if (reset) {
-        Get.snackbar(
-            'No Exercises', 'No exercises found for the selected body part.');
+        log.i('No more exercises available.');
       } else {
-        Get.snackbar('End of List', 'No more exercises available.');
+        log.i('No more exercises available for the current filter.');
       }
     } catch (e) {
-      Get.snackbar('Error', 'Failed to load exercises: $e');
+      log.e('Error fetching exercises: $e');
     } finally {
       isLoading.value = false; // Reset loading state
     }
@@ -86,11 +88,11 @@ class SelectExerciseController extends GetxController {
       allExercises.addAll(allFetchedExercises);
 
       if (exercises.isEmpty) {
-        Get.snackbar('No Results', 'No exercises found for "$query".');
+        log.i('No exercises found for "$query".');
       }
     } catch (e) {
       exercises.clear(); // Clear the list on error
-      Get.snackbar('Error', 'Failed to search exercises: $e');
+      log.e('Error searching exercises: $e');
     } finally {
       isLoading.value = false; // Reset loading state
     }
