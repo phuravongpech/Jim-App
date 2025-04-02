@@ -2,13 +2,15 @@ import { Injectable, NotFoundException, InternalServerErrorException } from '@ne
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { WorkoutSession } from '@src/typeorm/entities/workoutsession.entity';
+import { GroupedLoggedSetDto, LoggedSetDto, WorkoutDto, WorkoutExerciseDto, WorkoutSessionDetailDto, WorkoutSessionDto } from './dto/get-workoutsession.dto';
+import { LoggedSet } from '@src/typeorm/entities/loggedset.entity';
 
 @Injectable()
 export class WorkoutSessionService {
   constructor(
     @InjectRepository(WorkoutSession)
     private readonly workoutSessionRepository: Repository<WorkoutSession>,
-  ) {}
+  ) { }
 
   async create(workoutSession: Partial<WorkoutSession>): Promise<WorkoutSession> {
     try {
@@ -20,27 +22,89 @@ export class WorkoutSessionService {
     }
   }
 
-  async findOne(sessionId: number): Promise<WorkoutSession> {
+  async findOne(sessionId: number): Promise<WorkoutSessionDetailDto> {
     const workoutSession = await this.workoutSessionRepository.findOne({
       where: { id: sessionId },
-      relations: ['workout'],
+      relations: ['workout', 'loggedSets.workoutExercise.exercise'],
     });
 
     if (!workoutSession) {
       throw new NotFoundException(`Workout session with ID ${sessionId} not found`);
     }
 
-    return workoutSession;
+    // Grouping logged sets by thier exercise
+    const groupedLoggedSets: GroupedLoggedSetDto[] = Object.values(
+      workoutSession.loggedSets.reduce((group, currentSet) => {
+        const workoutExerciseId = currentSet.workoutExercise.id;
+
+        // Using workoutExerciseId as a key
+        // If group[workoutExerciseId] doesn't aleady exist, create a a group for it
+        if (!group[workoutExerciseId]) {
+          group[workoutExerciseId] = new GroupedLoggedSetDto(
+            workoutExerciseId,
+            currentSet.workoutExercise.exercise.name,
+            []
+          );
+        }
+
+        // Add logged set to the group
+        group[workoutExerciseId].sets.push(
+          new LoggedSetDto(
+            currentSet.setNumber,
+            currentSet.weight,
+            currentSet.rep
+          )
+        );
+
+        return group;
+
+      }, {} as Record<number, GroupedLoggedSetDto>)
+    );
+
+    return new WorkoutSessionDetailDto(
+      workoutSession.id,
+      workoutSession.createdAt.toISOString(),
+      workoutSession.endWorkout,
+      workoutSession.duration,
+      workoutSession.workout.name,
+      groupedLoggedSets
+    );
   }
 
-  async findAll(): Promise<WorkoutSession[]> {
-    return this.workoutSessionRepository.find();
+  async findAll(): Promise<WorkoutSessionDto[]> {
+    const workoutSessions = await this.workoutSessionRepository.find({
+      relations: ['workout', 'workout.workoutExercises'],
+    });
+
+    return workoutSessions.map((workoutSession) => {
+      const workoutDto = new WorkoutDto(
+        workoutSession.workout.id,
+        workoutSession.workout.name,
+        workoutSession.workout.workoutExercises.map((exercise) =>
+          new WorkoutExerciseDto(
+            exercise.id,
+            exercise.exerciseId,
+            exercise.restTimeSecond,
+            exercise.setCount
+          )
+        )
+      );
+
+      return new WorkoutSessionDto(
+        workoutSession.id,
+        workoutSession.createdAt.toISOString(),
+        workoutSession.endWorkout,
+        workoutSession.duration,
+        workoutDto.name,
+        workoutDto.workoutExercises
+      );
+    });
   }
 
   async update(sessionId: number, workoutSession: Partial<WorkoutSession>): Promise<WorkoutSession> {
     try {
       await this.workoutSessionRepository.update(sessionId, workoutSession);
-      return this.findOne(sessionId);
+      return this.workoutSessionRepository.findOneOrFail({ where: { id: sessionId } });
     } catch (error) {
       console.error('Error updating workout session:', error);
       throw new InternalServerErrorException('Failed to update workout session');
@@ -61,14 +125,14 @@ export class WorkoutSessionService {
         where: { id: sessionId },
         relations: ['workout', 'loggedSets'],
       });
-  
+
       if (!workoutSession) {
         throw new Error('Workout session not found');
       }
-  
+
       //workoutSession contains both the Workout and related LoggedSets
       console.log('Workout Session:', workoutSession);
-  
+
       return {
         workoutSession,
       };

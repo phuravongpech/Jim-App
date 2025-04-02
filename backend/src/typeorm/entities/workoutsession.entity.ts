@@ -19,9 +19,6 @@ export class WorkoutSession {
   workoutId: number
 
   @Column()
-  startWorkout: string;
-
-  @Column()
   endWorkout: string;
 
   @Column()
