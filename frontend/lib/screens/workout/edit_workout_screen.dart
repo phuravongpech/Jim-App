@@ -79,9 +79,8 @@ class _EditWorkoutScreenState extends State<EditWorkoutScreen> {
       );
       return;
     }
-    controller.updateWorkout(widget.workoutId).then((_) {
-      Get.offNamed('/workout', arguments: {'refresh': true});
-    });
+    controller.updateWorkout(widget.workoutId);
+    Get.back(result: true);
   }
 
   @override
@@ -229,21 +228,17 @@ class _EditWorkoutScreenState extends State<EditWorkoutScreen> {
                         children: [
                           // Exercise Image (if available)
                           Container(
-                            width: 70,
-                            height: 70,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(
-                                  JimSpacings.radiusSmall),
-                              color: JimColors.backgroundAccent,
-                            ),
-                            child: exercise.gifUrl != null
-                                ? Image.network(
-                                    exercise.gifUrl!,
-                                    fit: BoxFit.cover,
-                                  )
-                                : Icon(Icons.fitness_center,
-                                    color: JimColors.primary),
-                          ),
+                              width: 70,
+                              height: 70,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(
+                                    JimSpacings.radiusSmall),
+                                color: JimColors.backgroundAccent,
+                              ),
+                              child: Image.network(
+                                exercise.gifUrl,
+                                fit: BoxFit.cover,
+                              )),
                           const SizedBox(width: JimSpacings.s),
 
                           // Exercise details

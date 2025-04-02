@@ -5,6 +5,7 @@ import '../models/workout_exercise.dart';
 import '../services/workout_service.dart';
 import 'edit_exercise_controller.dart';
 import 'select_exercise_controller.dart';
+import 'workout_controller.dart';
 
 class EditWorkoutController extends GetxController {
   late final String workoutId;
@@ -53,6 +54,17 @@ class EditWorkoutController extends GetxController {
     }
   }
 
+  Future<void> refreshWorkoutList() async {
+    try {
+      // Get the WorkoutController instance
+      final workoutController = Get.find<WorkoutController>();
+      // Refresh the workout list
+      workoutController.fetchWorkouts();
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to refresh workout list: $e');
+    }
+  }
+
 // Update workout data
   Future<void> updateWorkout(String workoutId) async {
     // print("Updating Workout ID: $workoutId");
@@ -68,6 +80,9 @@ class EditWorkoutController extends GetxController {
         exercises: xSelectedExercises.toList(),
         workoutExercises: workoutExercises.toList(),
       );
+
+      // Refresh the workout list
+      await refreshWorkoutList();
 
       Get.snackbar('Success', 'Workout updated successfully.');
       Get.back(result: true);

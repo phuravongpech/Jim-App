@@ -24,16 +24,14 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
   final SelectExerciseController selectExerciseController =
       Get.put(SelectExerciseController());
 
+  @override
   void initState() {
     super.initState();
     _fetchData();
   }
 
   void _fetchData() {
-    // Check if navigation passed a refresh flag
-    if (Get.arguments != null && Get.arguments['refresh'] == true) {
-      workoutController.fetchWorkouts();
-    }
+    workoutController.fetchWorkouts();
   }
 
   @override
