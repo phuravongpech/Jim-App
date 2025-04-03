@@ -32,6 +32,9 @@ abstract class WorkoutRepository {
   //deal with the logged sets
 
   Future<void> saveLoggedSets({
+    required String workoutId,
+    required DateTime startWorkout,
+    required DateTime endWorkout,
     required List<LoggedSet> loggedSets,
   });
 }

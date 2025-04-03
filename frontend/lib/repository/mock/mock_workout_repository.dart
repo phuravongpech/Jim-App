@@ -93,10 +93,12 @@ class MockWorkoutRepository extends WorkoutRepository {
     // TODO: implement updateWorkout
     throw UnimplementedError();
   }
-
+  
   @override
-  Future<void> saveLoggedSets({required List<LoggedSet> loggedSets}) {
+  Future<void> saveLoggedSets({required String workoutId, required DateTime startWorkout, required DateTime endWorkout, required List<LoggedSet> loggedSets}) {
     // TODO: implement saveLoggedSets
     throw UnimplementedError();
   }
+
+
 }

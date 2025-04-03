@@ -37,6 +37,9 @@ class WorkoutSessionService {
 
   final xExercise = <Exercise>[].obs;
 
+  DateTime? _startTime;
+  DateTime? _endTime;
+
   // Computed properties
   //this one refers to workoutExercises
   WorkoutExercise? get currentExercise =>
@@ -115,9 +118,11 @@ class WorkoutSessionService {
     currentSetIndex.value = 0;
     loggedSets.clear();
     isWorkoutActive.value = true;
+    _startTime = DateTime.now();
   }
 
   void endWorkoutSession() {
+    _endTime = DateTime.now();
     currentExerciseIndex.value = 0;
     currentSetIndex.value = 0;
     isWorkoutActive.value = false;
@@ -129,13 +134,20 @@ class WorkoutSessionService {
   void clearSessionData({bool save = true}) {
     if (save && loggedSets.isNotEmpty) {
       log.d('Saving logged sets: $loggedSets');
-      repository.saveLoggedSets(loggedSets: loggedSets);
+      repository.saveLoggedSets(
+        workoutId: activeWorkout.value?.id ?? '',
+        startWorkout: _startTime ?? DateTime.now(),
+        endWorkout: _endTime ?? DateTime.now(),
+        loggedSets: loggedSets,
+      );
     }
 
     activeWorkout.value = null;
     activeWorkoutExercises.clear();
     loggedSets.clear();
     xExercise.clear();
+    _startTime = null;
+    _endTime = null;
 
     log.d('Session data cleared');
   }
@@ -145,7 +157,7 @@ class WorkoutSessionService {
     if (currentExercise == null) return;
 
     final loggedSet = LoggedSet(
-      workoutExercise: currentExercise!,
+      workoutExerciseId: currentExercise?.id,
       setNumber: currentSetIndex.value + 1,
       rep: reps,
       weight: weight,

@@ -3,7 +3,7 @@ import 'workout_exercise.dart';
 
 class LoggedSet {
   final String id; // Unique identifier for the workout log
-  late String? workoutExerciseId;
+  late int? workoutExerciseId;
   final WorkoutExercise? workoutExercise;
   late double? weight;
   late int? rep;

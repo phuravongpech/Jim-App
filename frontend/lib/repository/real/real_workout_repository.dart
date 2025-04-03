@@ -7,6 +7,7 @@ import 'package:frontend/models/workout.dart';
 import 'package:frontend/models/workout_exercise.dart';
 import 'package:frontend/repository/workout_repository.dart';
 import 'package:http/http.dart';
+import 'package:logger/logger.dart';
 
 import '../../models/workout_with_exercise.dart';
 
@@ -149,31 +150,52 @@ class RealWorkoutRepository implements WorkoutRepository {
 
   @override
   Future<void> saveLoggedSets({
+    required String workoutId,
+    required DateTime startWorkout,
+    required DateTime endWorkout,
     required List<LoggedSet> loggedSets,
   }) async {
+    Logger().d('Saving logged sets: $workoutId, $startWorkout, $endWorkout');
+    final data = json.encode({
+      'workoutId': int.parse(workoutId),
+      'startWorkout': startWorkout.toUtc().toIso8601String(),
+      'endWorkout': endWorkout.toUtc().toIso8601String(),
+      'loggedSets': loggedSets
+          .map((set) => {
+                'workoutExerciseId': set.workoutExerciseId,
+                'weight': set.weight,
+                'rep': set.rep,
+                'setNumber': set.setNumber,
+              })
+          .toList(),
+    });
+    Logger().d('Data to send: $data');
     try {
-      //   final response = await post(
-      //     Uri.parse('$backendUrl/logged-sets'),
-      //     headers: {
-      //       'Content-Type': 'application/json',
-      //     },
-      //     body: json.encode({
-      //       'loggedSets': LoggedSet.listToJson(loggedSets),
-      //     }),
-      //   );
+      final response = await post(
+        Uri.parse('$backendUrl/LoggedSets'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({
+          'workoutId': int.parse(workoutId), // Ensure workoutId is an integer
+          'startWorkout': startWorkout.toUtc().toIso8601String(),
+          'endWorkout': endWorkout.toUtc().toIso8601String(),
+          'loggedSets': loggedSets
+              .map((set) => {
+                    'workoutExerciseId': set.workoutExercise?.exerciseId,
+                    'weight': set.weight,
+                    'rep': set.rep,
+                    'setNumber': set.setNumber,
+                  })
+              .toList(),
+        }),
+      );
 
-      //   if (response.statusCode != 201) {
-      //     throw Exception('Failed to save logged sets');
-      //   }
-      // } catch (e) {
-      //   throw Exception('Error saving logged sets: $e');
-      // }
+      Logger().d('Response: ${response.body}');
 
-      final data = {
-        'loggedSets': LoggedSet.listToJson(loggedSets),
-      };
-
-      Logger().d('Saving logged sets: $data');
+      if (response.statusCode != 201) {
+        throw Exception('Failed to save logged sets');
+      }
     } catch (e) {
       throw Exception('Error saving logged sets: $e');
     }

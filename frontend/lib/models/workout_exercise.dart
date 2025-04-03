@@ -1,9 +1,11 @@
 class WorkoutExercise {
+  final int? id;
   final String exerciseId;
   int setCount;
   int restTimeSecond;
 
   WorkoutExercise({
+    this.id,
     required this.exerciseId,
     required this.setCount,
     required this.restTimeSecond,
@@ -38,6 +40,7 @@ class WorkoutExercise {
   static Future<List<WorkoutExercise>> fromJson(List<dynamic> json) async {
     return json
         .map((item) => WorkoutExercise(
+              id: item['id'],
               exerciseId: item['id'],
               setCount: item['setCount'],
               restTimeSecond: item['restTimeSecond'],
