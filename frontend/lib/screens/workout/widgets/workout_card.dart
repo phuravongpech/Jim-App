@@ -54,7 +54,6 @@ class WorkoutCard extends StatelessWidget {
                   ),
               ],
             ),
-            const SizedBox(height: JimSpacings.s),
             Text(
               description,
               style: JimTextStyles.subBody.copyWith(
