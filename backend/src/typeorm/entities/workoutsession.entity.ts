@@ -19,13 +19,10 @@ export class WorkoutSession {
   workoutId: number
 
   @Column()
-  endWorkout: string;
+  startWorkout: string;
 
   @Column()
-  duration: string;
-
-  @CreateDateColumn()
-  createdAt: Date;
+  endWorkout: string;
 
   @ManyToOne(() => Workout, (workout) => workout.workoutSessions, { onDelete: 'SET NULL' })
   @JoinColumn({ name: 'workoutId' })

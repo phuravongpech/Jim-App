@@ -1,10 +1,11 @@
-import { ConflictException, HttpException, Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { LoggedSet } from '@src/typeorm/entities/loggedset.entity';
 import { In, Repository } from 'typeorm';
-import { CreateLoggedSetDto } from './dto/create-loggedset.dto';
+import { CreateLoggedSetDto, CreateWorkoutSessionWithSetsDto } from './dto/create-loggedset.dto';
 import { UpdateLoggedSetDto } from './dto/update-loggedset.dto';
 import { WorkoutExercise } from '@src/typeorm/entities/workoutexercise.entity';
+import { WorkoutSession } from '@src/typeorm/entities/workoutsession.entity';
 
 @Injectable()
 export class LoggedSetService {
@@ -13,44 +14,50 @@ export class LoggedSetService {
     private readonly loggedSetRepository: Repository<LoggedSet>,
     @InjectRepository(WorkoutExercise)
     private workoutExerciseRepository: Repository<WorkoutExercise>,
+    @InjectRepository(WorkoutSession)
+    private workoutSessionRepository: Repository<WorkoutSession>,
   ) { }
 
-  async create(createLoggedSetDto: CreateLoggedSetDto | CreateLoggedSetDto[]): Promise<LoggedSet | LoggedSet[]> {
+  async create(createWorkoutSessionWithSetsDto: CreateWorkoutSessionWithSetsDto): Promise<LoggedSet[]> {
     try {
-      if (Array.isArray(createLoggedSetDto)) {
-        // Extract unique workoutExerciseIds from the DTOs
-        const uniqueWorkoutExerciseIds = [
-          ...new Set(createLoggedSetDto.map(dto => dto.workoutExerciseId))
-        ];
+      const { workoutId, startWorkout: startTime, endWorkout: endTime, loggedSets } = createWorkoutSessionWithSetsDto;
 
-        // Fetch only unique workout exercises from the database
-        const workoutExercises = await this.workoutExerciseRepository.findBy({
-          id: In(uniqueWorkoutExerciseIds),
-        });
+      // Extract unique workoutExerciseIds from the DTOs
+      const uniqueWorkoutExerciseIds = [
+        ...new Set(loggedSets.map(dto => dto.workoutExerciseId))
+      ];
 
-        // Validate that all required workoutExerciseIds exist
-        const foundExerciseIds = new Set(workoutExercises.map(we => we.id));
-        const missingIds = uniqueWorkoutExerciseIds.filter(id => !foundExerciseIds.has(id));
-
-        if (missingIds.length > 0) {
-          throw new NotFoundException(`Workout Exercises not found for IDs: ${missingIds.join(', ')}`);
-        }
-
-        const loggedSets = this.loggedSetRepository.create(createLoggedSetDto);
-        return this.loggedSetRepository.save(loggedSets);
-      }
-
-      // Handle a single object
-      const workoutExercise = await this.workoutExerciseRepository.findOne({
-        where: { id: createLoggedSetDto.workoutExerciseId },
+      // Fetch only unique workout exercises from the database
+      const workoutExercises = await this.workoutExerciseRepository.findBy({
+        id: In(uniqueWorkoutExerciseIds),
       });
 
-      if (!workoutExercise) {
-        throw new NotFoundException(`Logged Set with ID ${createLoggedSetDto.workoutExerciseId} not found`);
+      // Validate that all required workoutExerciseIds exist
+      const foundExerciseIds = new Set(workoutExercises.map(we => we.id));
+      const missingIds = uniqueWorkoutExerciseIds.filter(id => !foundExerciseIds.has(id));
+
+      if (missingIds.length > 0) {
+        throw new NotFoundException(`Workout Exercises not found for IDs: ${missingIds.join(', ')}`);
       }
 
-      const loggedSet = this.loggedSetRepository.create(createLoggedSetDto);
+      const workoutSession = this.workoutSessionRepository.create({
+        workoutId: workoutId,
+        startWorkout: startTime,
+        endWorkout: endTime,
+      });
+
+      const workoutSessionId = (await this.workoutSessionRepository.save(workoutSession)).id;
+
+      // Attach workoutSessionId to each logged set
+      const loggedSetsWithSession = loggedSets.map(set => ({
+        ...set,
+        workoutSessionId: workoutSessionId, // Add the session ID
+      }));
+
+      // Save logged sets with workoutSessionId
+      const loggedSet = this.loggedSetRepository.create(loggedSetsWithSession);
       return this.loggedSetRepository.save(loggedSet);
+
     } catch (e) {
       console.error(e);
 

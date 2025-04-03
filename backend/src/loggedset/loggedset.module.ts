@@ -5,9 +5,10 @@ import { LoggedSetService } from './loggedset.service';
 import { LoggedSet } from '@src/typeorm/entities/loggedset.entity';
 import { WorkoutExercise } from '@src/typeorm/entities/workoutexercise.entity';
 import { WorkoutexerciseModule } from '@src/workoutexercise/workoutexercise.module';
+import { WorkoutSession } from '@src/typeorm/entities/workoutsession.entity';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([LoggedSet, WorkoutExercise]), WorkoutexerciseModule],
+    imports: [TypeOrmModule.forFeature([LoggedSet, WorkoutExercise, WorkoutSession]), WorkoutexerciseModule],
     controllers: [LoggedSetController],
     providers: [LoggedSetService],
 })

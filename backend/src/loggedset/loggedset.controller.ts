@@ -1,16 +1,6 @@
-import {
-  BadRequestException,
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post,
-  ValidationPipe,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, ValidationPipe } from '@nestjs/common';
 import { LoggedSetService } from './loggedset.service';
-import { CreateLoggedSetDto } from './dto/create-loggedset.dto';
+import { CreateWorkoutSessionWithSetsDto } from './dto/create-loggedset.dto';
 import { UpdateLoggedSetDto } from './dto/update-loggedset.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LoggedSet } from '@src/typeorm/entities/loggedset.entity';
@@ -41,9 +31,9 @@ export class LoggedSetController {
   })
   async create(
     @Body(new ValidationPipe({ transform: true, whitelist: true }))
-    createLoggedSetDto: CreateLoggedSetDto | CreateLoggedSetDto[],
-  ): Promise<LoggedSet | LoggedSet[]> {
-    return this.loggedSetService.create(createLoggedSetDto)
+    createWorkoutSessionWithSetsDto: CreateWorkoutSessionWithSetsDto,
+  ): Promise<LoggedSet[]> {
+    return this.loggedSetService.create(createWorkoutSessionWithSetsDto);
   }
 
   @Get()

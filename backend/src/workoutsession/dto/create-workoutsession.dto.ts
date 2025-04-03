@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsDate, IsNumber, IsOptional } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateWorkoutSessionDto {

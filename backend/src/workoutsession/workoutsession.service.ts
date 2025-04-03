@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { WorkoutSession } from '@src/typeorm/entities/workoutsession.entity';
 import { GroupedLoggedSetDto, LoggedSetDto, WorkoutDto, WorkoutExerciseDto, WorkoutSessionDetailDto, WorkoutSessionDto } from './dto/get-workoutsession.dto';
-import { LoggedSet } from '@src/typeorm/entities/loggedset.entity';
 
 @Injectable()
 export class WorkoutSessionService {
@@ -63,9 +62,8 @@ export class WorkoutSessionService {
 
     return new WorkoutSessionDetailDto(
       workoutSession.id,
-      workoutSession.createdAt.toISOString(),
+      workoutSession.startWorkout,
       workoutSession.endWorkout,
-      workoutSession.duration,
       workoutSession.workout.name,
       groupedLoggedSets
     );
@@ -82,7 +80,6 @@ export class WorkoutSessionService {
         workoutSession.workout.name,
         workoutSession.workout.workoutExercises.map((exercise) =>
           new WorkoutExerciseDto(
-            exercise.id,
             exercise.exerciseId,
             exercise.restTimeSecond,
             exercise.setCount
@@ -92,9 +89,8 @@ export class WorkoutSessionService {
 
       return new WorkoutSessionDto(
         workoutSession.id,
-        workoutSession.createdAt.toISOString(),
+        workoutSession.startWorkout,
         workoutSession.endWorkout,
-        workoutSession.duration,
         workoutDto.name,
         workoutDto.workoutExercises
       );

@@ -6,7 +6,6 @@ export class WorkoutSessionDto {
         public id: number,
         public startWorkout: string,
         public endWorkout: string,
-        public duration: string,
         public workoutName: string,
         public workoutExercises: WorkoutExerciseDto[]
     ) { }
@@ -28,7 +27,6 @@ export class WorkoutDto {
  */
 export class WorkoutExerciseDto {
     constructor(
-        public id: number,
         public exerciseId: string,
         public restTimeSecond: number,
         public setCount: number
@@ -45,7 +43,6 @@ export class WorkoutSessionDetailDto {
         public id: number,
         public startWorkout: string,
         public endWorkout: string,
-        public duration: string,
         public workoutName: string,
         public loggedSets: GroupedLoggedSetDto[]
     ) { }
