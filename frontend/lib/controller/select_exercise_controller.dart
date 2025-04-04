@@ -19,7 +19,13 @@ class SelectExerciseController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchExercises(); // Fetch exercises on initialization
+    final initialSelectedIds = Get.arguments as List<String>? ?? [];
+    selectedExercises.value = Set.from(initialSelectedIds);
+    fetchExercises();
+  }
+
+  void setInitialSelectedExercises(List<String> initialIds) {
+    selectedExercises.value = Set.from(initialIds);
   }
 
   /// Fetches exercises from the service with pagination and filtering.

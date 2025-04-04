@@ -3,11 +3,15 @@ import '../models/workout_exercise.dart';
 
 class EditExerciseController extends GetxController {
   var exercises = <WorkoutExercise>[].obs;
+  bool isInitialized = false;
 
   /// Initialize the exercises
   void initializeExercises(List<WorkoutExercise> initialExercises) {
-    exercises.clear();
-    exercises.addAll(initialExercises);
+    if (!isInitialized) {
+      exercises.clear();
+      exercises.addAll(initialExercises);
+      isInitialized = true;
+    }
   }
 
   void addExercises(List<WorkoutExercise> newExercises) {

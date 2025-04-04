@@ -16,7 +16,7 @@ class SelectExerciseScreen extends StatelessWidget {
   SelectExerciseScreen({super.key});
 
   final SelectExerciseController controller =
-      Get.put(SelectExerciseController(), permanent: true);
+      Get.put(SelectExerciseController());
   final TextEditingController _searchController = TextEditingController();
 
   void _onSearchSubmitted(String query) {
@@ -51,6 +51,9 @@ class SelectExerciseScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final initialSelectedIds = Get.arguments as List<String>? ?? [];
+    controller.setInitialSelectedExercises(initialSelectedIds);
+    
     return Scaffold(
       appBar: JimTopBar(
         title: 'Select Exercises',

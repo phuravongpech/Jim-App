@@ -22,18 +22,43 @@ class EditExerciseScreen extends StatelessWidget {
   EditExerciseScreen({super.key});
 
   void onPressedAddExercise() async {
-    final result = await Get.toNamed('/select-exercises');
+    // Get current exercise IDs from the controller
+    final currentExerciseIds =
+        controller.exercises.map((e) => e.exerciseId).toList();
+
+    // Navigate and pass current IDs to exclude them
+    final result = await Get.toNamed(
+      '/select-exercises',
+      arguments: currentExerciseIds,
+    );
 
     if (result != null) {
-      final newExercises = (result as List<Exercise>).map((exercise) {
-        return WorkoutExercise(
-          exerciseId: exercise.id,
-          setCount: 4,
-          restTimeSecond: 90,
-        );
-      }).toList();
+      final selectedExercises = result as List<Exercise>;
+      final selectedIds = selectedExercises.map((e) => e.id).toSet();
 
-      controller.addExercises(newExercises);
+      // Merge existing exercises with new selections
+      final newExercises = <WorkoutExercise>[];
+
+      // Keep existing exercises that are still selected
+      for (var existing in controller.exercises) {
+        if (selectedIds.contains(existing.exerciseId)) {
+          newExercises.add(existing);
+        }
+      }
+
+      // Add new exercises not already present
+      for (var exercise in selectedExercises) {
+        if (!newExercises.any((e) => e.exerciseId == exercise.id)) {
+          newExercises.add(WorkoutExercise(
+            exerciseId: exercise.id,
+            setCount: 4,
+            restTimeSecond: 90,
+          ));
+        }
+      }
+
+      // Update the controller's exercises
+      controller.exercises.value = newExercises;
     }
   }
 
@@ -97,6 +122,15 @@ class EditExerciseScreen extends StatelessWidget {
 
   Widget _buildExerciseList() {
     return Obx(() {
+      if (controller.exercises.isEmpty) {
+        return Center(
+          child: Text(
+              'No exercises added yet.\nTap the button below to add exercises.',
+              textAlign: TextAlign.center,
+              style:
+                  JimTextStyles.body.copyWith(color: JimColors.error)),
+        );
+      }
       return ReorderableListView.builder(
         itemCount: controller.exercises.length,
         buildDefaultDragHandles: false,
