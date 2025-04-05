@@ -5,7 +5,6 @@ import 'package:frontend/theme/theme.dart';
 import 'package:frontend/widgets/action/jim_text_button.dart';
 import 'package:frontend/widgets/navigation/jim_nav_bar.dart';
 import 'package:frontend/widgets/navigation/jim_top_bar.dart';
-import 'package:get/get.dart';
 
 class WorkoutHistoryScreen extends StatelessWidget {
   // Static data for demonstration

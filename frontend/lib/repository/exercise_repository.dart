@@ -2,7 +2,7 @@ import 'package:frontend/models/exercise.dart';
 
 abstract class ExerciseRepository {
   Future<List<Exercise>> fetchExercises({
-    required int page,
+    required int offset,
     required int limit,
   });
 

@@ -11,7 +11,7 @@ class MockExerciseRepository extends ExerciseRepository {
 
   @override
   Future<List<Exercise>> fetchExercises({
-    required int page,
+    required int offset,
     required int limit,
   }) async {
     try {

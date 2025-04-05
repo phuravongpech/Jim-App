@@ -6,8 +6,7 @@ import 'package:logger/logger.dart';
 class ExerciseController extends GetxController {
   RxList<Exercise> exercises = <Exercise>[].obs;
   RxBool isLoading = false.obs;
-  RxString selectedBodyPart = 'chest'.obs;
-  RxInt page = 0.obs;
+  RxInt offset = 0.obs;
   final log = Logger();
 
   final int limit = 10;
@@ -21,20 +20,20 @@ class ExerciseController extends GetxController {
   Future<void> fetchExercises({bool reset = false}) async {
     if (reset) {
       exercises.clear();
-      page.value = 0;
+      offset.value = 0;
     }
 
     try {
       isLoading.value = true;
 
       final fetchedExercises = await ExerciseService.instance.fetchExercises(
-        page: page.value,
+        offset: offset.value,
         limit: limit,
       );
 
       if (fetchedExercises.isNotEmpty) {
         exercises.addAll(fetchedExercises);
-        page.value++; // Increment page for the next fetch
+        offset.value += 10;
       } else {
         log.i('No more exercises available.');
       }
@@ -48,7 +47,7 @@ class ExerciseController extends GetxController {
   Future<void> searchExercises(String query, {bool reset = false}) async {
     if (reset) {
       exercises.clear();
-      page.value = 0;
+      offset.value = 0;
     }
 
     try {
@@ -56,13 +55,13 @@ class ExerciseController extends GetxController {
 
       final searchedExercises = await ExerciseService.instance.searchExercises(
         query: query,
-        page: page.value,
+        page: offset.value,
         limit: limit,
       );
 
       if (searchedExercises.isNotEmpty) {
         exercises.addAll(searchedExercises);
-        page.value++; // Increment page for the next fetch
+        offset.value++; // Increment page for the next fetch
       } else if (reset) {
         log.i('No exercises found for "$query".');
       }

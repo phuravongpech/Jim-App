@@ -7,6 +7,7 @@ class JimListView<T> extends StatelessWidget {
   final RxBool? isLoading;
   final Widget Function(T item) itemBuilder;
   final String emptyMessage;
+  final ScrollController? scrollController;
 
   const JimListView({
     super.key,
@@ -14,24 +15,33 @@ class JimListView<T> extends StatelessWidget {
     this.isLoading,
     required this.itemBuilder,
     this.emptyMessage = "No items found.",
+    this.scrollController,
   });
 
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      if (isLoading?.value == true) {
+      final bool loading = isLoading?.value == true;
+      final bool empty = items.isEmpty;
+
+      if (loading && empty) {
         return const Center(child: CircularProgressIndicator());
       }
 
-      if (items.isEmpty) {
-        return Center(child: Text(emptyMessage));
+      if (empty) {
+        return Center(child: Text("No more Exercises"));
       }
 
-      return ListView.builder(
-        padding: const EdgeInsets.all(JimSpacings.m),
-        itemCount: items.length,
-        itemBuilder: (context, index) => itemBuilder(items[index]),
-      );
+      return _buildListView();
     });
+  }
+
+  Widget _buildListView() {
+    return ListView.builder(
+      padding: const EdgeInsets.all(JimSpacings.m),
+      itemCount: items.length,
+      itemBuilder: (context, index) => itemBuilder(items[index]),
+      controller: scrollController,
+    );
   }
 }

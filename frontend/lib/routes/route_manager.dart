@@ -5,7 +5,6 @@ import 'package:frontend/screens/workout/edit_exercise_screen.dart';
 import 'package:frontend/screens/workout/workout_detail_screen.dart';
 import 'package:frontend/screens/workout/workout_screen.dart';
 import 'package:frontend/screens/workout_history/workout_history_screen.dart';
-import 'package:frontend/screens/workout_session/set_log_screen.dart';
 import 'package:get/get.dart';
 
 import '../screens/workout/select_exercise_screen.dart';

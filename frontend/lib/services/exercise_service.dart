@@ -35,8 +35,8 @@ class ExerciseService {
   ///
 
   Future<List<Exercise>> fetchExercises(
-      {required int page, required int limit}) {
-    return repository.fetchExercises(page: page, limit: limit);
+      {required int offset, required int limit}) {
+    return repository.fetchExercises(offset: offset, limit: limit);
   }
 
   Future<List<Exercise>> searchExercises({

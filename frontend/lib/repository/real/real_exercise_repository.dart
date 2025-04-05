@@ -14,12 +14,12 @@ class RealExerciseRepository implements ExerciseRepository {
 
   @override
   Future<List<Exercise>> fetchExercises({
-    required int page,
+    required int offset,
     required int limit,
   }) async {
     try {
       final response = await get(
-        Uri.parse('$baseUrl/exercises'),
+        Uri.parse('$baseUrl/exercises?offset=$offset'),
         headers: {
           "x-rapidapi-host": apiHost,
           "x-rapidapi-key": apiKey,

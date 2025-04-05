@@ -42,7 +42,7 @@ class SelectExerciseController extends GetxController {
 
       // Fetch exercises from the service
       final fetchedExercises = await ExerciseService.instance.fetchExercises(
-        page: page.value,
+        offset: page.value,
         limit: limit,
       );
 
@@ -77,7 +77,7 @@ class SelectExerciseController extends GetxController {
 
       // Fetch all exercises (or a large number) for searching
       final allFetchedExercises = await ExerciseService.instance.fetchExercises(
-        page: 0,
+        offset: 0,
         limit: 100, // Adjust this limit as needed
       );
 

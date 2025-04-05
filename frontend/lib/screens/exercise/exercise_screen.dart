@@ -16,6 +16,7 @@ class ExerciseScreen extends StatelessWidget {
   final ExerciseController exerciseController = Get.put(ExerciseController());
   final SelectExerciseController controller =
       Get.put(SelectExerciseController());
+  final ScrollController _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -28,11 +29,22 @@ class ExerciseScreen extends StatelessWidget {
           CustomSearchExercisses(),
           const SizedBox(height: JimSpacings.m),
           Expanded(
-            child: JimListView(
-              items: exerciseController.exercises,
-              isLoading: exerciseController.isLoading,
-              emptyMessage: "No exercises found.",
-              itemBuilder: (exercise) => ExerciseCard(exercise: exercise),
+            child: NotificationListener<ScrollNotification>(
+              onNotification: (ScrollNotification scrollInfo) {
+                if (!exerciseController.isLoading.value &&
+                    scrollInfo.metrics.pixels ==
+                        scrollInfo.metrics.maxScrollExtent) {
+                  exerciseController.fetchExercises(); // Load next page
+                }
+                return false;
+              },
+              child: JimListView(
+                items: exerciseController.exercises,
+                isLoading: exerciseController.isLoading,
+                emptyMessage: "No exercises found.",
+                itemBuilder: (exercise) => ExerciseCard(exercise: exercise),
+                scrollController: _scrollController,
+              ),
             ),
           ),
         ],
