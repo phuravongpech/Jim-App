@@ -49,7 +49,7 @@ class RealExerciseRepository implements ExerciseRepository {
       final response = await get(
           Uri.parse('$baseUrl/exercises/name/$bestMatchStr'),
           headers: {
-            "x-rapidapi-host": baseUrl,
+            "x-rapidapi-host": apiHost,
             "x-rapidapi-key": apiKey,
           });
 

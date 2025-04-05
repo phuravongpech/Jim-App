@@ -44,11 +44,9 @@ class ExerciseController extends GetxController {
     }
   }
 
-  Future<void> searchExercises(String query, {bool reset = false}) async {
-    if (reset) {
-      exercises.clear();
-      offset.value = 0;
-    }
+  Future<void> searchExercises(String query) async {
+    exercises.clear();
+    offset.value = 0;
 
     try {
       isLoading.value = true;
@@ -61,10 +59,11 @@ class ExerciseController extends GetxController {
 
       if (searchedExercises.isNotEmpty) {
         exercises.addAll(searchedExercises);
-        offset.value++; // Increment page for the next fetch
-      } else if (reset) {
+        offset.value += 10;
+      } else  {
         log.i('No exercises found for "$query".');
       }
+      
     } catch (e) {
       log.e('Error searching exercises: $e');
     } finally {

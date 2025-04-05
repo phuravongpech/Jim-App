@@ -29,7 +29,7 @@ class JimListView<T> extends StatelessWidget {
       }
 
       if (empty) {
-        return Center(child: Text("No more Exercises"));
+        return Center(child: Text("No more Exercises found"));
       }
 
       return _buildListView();
