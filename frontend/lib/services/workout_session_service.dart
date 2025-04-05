@@ -4,7 +4,6 @@ import 'package:logger/logger.dart';
 import '../models/exercise.dart';
 import '../models/logged_set.dart';
 import '../models/workout.dart';
-import '../models/workout_exercise.dart';
 import '../repository/workout_repository.dart';
 
 class WorkoutSessionService {

@@ -1,5 +1,4 @@
 import 'package:frontend/models/exercise.dart';
-import 'package:frontend/models/logged_exercise.dart';
 import 'package:frontend/models/logged_set.dart';
 import 'package:frontend/models/workout_exercise.dart';
 import 'package:frontend/models/workout_session.dart';

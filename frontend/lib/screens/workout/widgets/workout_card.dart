@@ -25,7 +25,7 @@ class WorkoutCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(JimSpacings.radius),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withAlpha(13),
             blurRadius: 6,
             offset: const Offset(0, 4),
           ),

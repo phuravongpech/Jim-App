@@ -1,6 +1,3 @@
-// workout_session.dart
-import 'package:flutter/foundation.dart';
-import 'package:frontend/models/logged_set.dart';
 import 'package:frontend/models/session_exercise.dart';
 import 'package:intl/intl.dart';
 

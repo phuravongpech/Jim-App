@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:frontend/models/exercise.dart';
-import 'package:frontend/models/logged_exercise.dart';
 import 'package:frontend/models/logged_set.dart';
 import 'package:frontend/models/workout.dart';
 import 'package:frontend/models/workout_exercise.dart';
@@ -46,7 +45,9 @@ class RealWorkoutRepository implements WorkoutRepository {
       // We want the new id assigned at the backend immediately
       // So that we can push the workout card with id attaced without having to hot reload the app
       final Map<String, dynamic> responseBody = json.decode(response.body);
+
       return responseBody['id'].toString();
+      
     } catch (e) {
       throw Exception('Error saving workouts: $e');
     }
@@ -195,7 +196,9 @@ class RealWorkoutRepository implements WorkoutRepository {
         final List<dynamic> data = json.decode(response.body);
         return data.map((json) => WorkoutSession.fromJson(json)).toList();
       }
+
       throw Exception('Failed to load sessions: ${response.statusCode}');
+
     } catch (e) {
       Logger().e('Error fetching sessions: $e');
       throw Exception('Failed to load workout sessions');
@@ -209,13 +212,12 @@ class RealWorkoutRepository implements WorkoutRepository {
         Uri.parse('$backendUrl/workout-sessions/$sessionId'),
       );
 
-      Logger().d(
-        'Response from getWorkoutSessionDetail: ${response.statusCode} ${response.body}',
-      );
       if (response.statusCode == 200) {
         return WorkoutSessionDetail.fromJson(json.decode(response.body));
       }
+
       throw Exception('Failed to load session: ${response.statusCode}');
+      
     } catch (e) {
       throw Exception('Error fetching session details: $e');
     }

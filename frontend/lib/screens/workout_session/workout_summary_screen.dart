@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/models/exercise.dart';
 import 'package:frontend/models/logged_set.dart';
-import 'package:frontend/models/workout_exercise.dart';
 import 'package:frontend/models/workout_with_exercise.dart';
 import 'package:frontend/services/workout_session_service.dart';
 import 'package:frontend/theme/theme.dart';
@@ -46,7 +45,7 @@ class WorkoutSummaryScreen extends StatelessWidget {
                           .toList();
 
                       return _buildExerciseCard(workoutExercise, exerciseSets);
-                    }).toList(),
+                    })
                   ],
                 ),
               ),
@@ -87,7 +86,7 @@ class WorkoutSummaryScreen extends StatelessWidget {
               width: 100,
               height: 100,
               decoration: BoxDecoration(
-                color: JimColors.primary.withOpacity(0.1),
+                color: JimColors.primary.withAlpha(26),
                 shape: BoxShape.circle,
                 border: Border.all(color: JimColors.primary, width: 2),
               ),

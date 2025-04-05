@@ -4,7 +4,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/models/logged_exercise.dart';
 import 'package:frontend/models/logged_set.dart';
-import 'package:frontend/models/workout_session.dart';
 import 'package:frontend/models/workout_session_detail.dart';
 import 'package:frontend/repository/workout_repository.dart';
 import 'package:frontend/theme/theme.dart';

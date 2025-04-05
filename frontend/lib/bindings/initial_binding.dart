@@ -1,4 +1,3 @@
-import 'package:frontend/repository/mock/mock_workout_repository.dart';
 import 'package:frontend/controller/workout_session_controller.dart';
 import 'package:frontend/repository/real/real_workout_repository.dart';
 import 'package:get/get.dart';

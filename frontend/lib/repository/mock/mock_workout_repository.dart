@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:frontend/models/exercise.dart';
-import 'package:frontend/models/logged_exercise.dart';
 import 'package:frontend/models/logged_set.dart';
 import 'package:frontend/models/workout.dart';
 import 'package:frontend/models/workout_exercise.dart';
@@ -61,28 +60,20 @@ class MockWorkoutRepository extends WorkoutRepository {
     }
   }
 
-  @override
-  // ignore: override_on_non_overriding_member
-  Future<List<Workout>> getExerciseForWorkout(String workoutId) {
-    // TODO: implement getExerciseForWorkout
-    throw UnimplementedError();
-  }
-
+  // Below method was not needed after we have backend
+  // So not implemented properly
   @override
   Future<List<Workout>> getWorkoutWithExercises() {
-    // TODO: implement getWorkoutWithExercises
     throw UnimplementedError();
   }
 
   @override
   Future<WorkoutWithExercise> getWorkoutWithExercisesFor(String workoutId) {
-    // TODO: implement getWorkoutWithExercisesFor
     throw UnimplementedError();
   }
 
   @override
   Future<void> deleteWorkout(String workoutId) {
-    // TODO: implement deleteWorkout
     throw UnimplementedError();
   }
 
@@ -93,7 +84,6 @@ class MockWorkoutRepository extends WorkoutRepository {
       required String description,
       required List<Exercise> exercises,
       required List<WorkoutExercise> workoutExercises}) {
-    // TODO: implement updateWorkout
     throw UnimplementedError();
   }
 
@@ -103,19 +93,16 @@ class MockWorkoutRepository extends WorkoutRepository {
       required DateTime startWorkout,
       required DateTime endWorkout,
       required List<LoggedSet> loggedSets}) {
-    // TODO: implement saveLoggedSets
     throw UnimplementedError();
   }
 
   @override
   Future<List<WorkoutSession>> getWorkoutSessions() {
-    // TODO: implement getWorkoutSessions
     throw UnimplementedError();
   }
 
   @override
   Future<WorkoutSessionDetail> getWorkoutSessionDetail(int sessionId) {
-    // TODO: implement getWorkoutSessionDetail
     throw UnimplementedError();
   }
 }
