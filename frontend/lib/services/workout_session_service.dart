@@ -1,3 +1,4 @@
+import 'package:frontend/models/workout_with_exercise.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import '../models/exercise.dart';
@@ -27,7 +28,7 @@ class WorkoutSessionService {
 
   // Observable states using GetX
   final activeWorkout = Rxn<Workout>();
-  final activeWorkoutExercises = <WorkoutExercise>[].obs;
+  final activeWorkoutExercises = <CustomWorkoutExercise>[].obs;
   final currentExerciseIndex = 0.obs;
   final currentSetIndex = 0.obs;
   final loggedSets = <LoggedSet>[].obs;
@@ -42,7 +43,7 @@ class WorkoutSessionService {
 
   // Computed properties
   //this one refers to workoutExercises
-  WorkoutExercise? get currentExercise =>
+  CustomWorkoutExercise? get currentExercise =>
       currentExerciseIndex.value < activeWorkoutExercises.length
           ? activeWorkoutExercises[currentExerciseIndex.value]
           : null;
@@ -83,7 +84,10 @@ class WorkoutSessionService {
           .toList());
 
       final workoutExercises = workoutDetails.workoutExercises
-          .map((we) => WorkoutExercise(
+          .map((we) => CustomWorkoutExercise(
+                id: we.id,
+                workoutId: workoutDetails.id,
+                exercise: we.exercise,
                 exerciseId: we.exerciseId,
                 restTimeSecond: we.restTimeSecond,
                 setCount: we.setCount,
@@ -111,7 +115,8 @@ class WorkoutSessionService {
   }
 
   // Session management
-  void startWorkoutSession(Workout workout, List<WorkoutExercise> exercises) {
+  void startWorkoutSession(
+      Workout workout, List<CustomWorkoutExercise> exercises) {
     activeWorkout.value = workout;
     activeWorkoutExercises.assignAll(exercises);
     currentExerciseIndex.value = 0;
@@ -157,13 +162,15 @@ class WorkoutSessionService {
     if (currentExercise == null) return;
 
     final loggedSet = LoggedSet(
-      workoutExerciseId: currentExercise?.id,
+      workoutExerciseId: currentExercise!.id,
       setNumber: currentSetIndex.value + 1,
       rep: reps,
       weight: weight,
     );
 
     log.d(' now just logged set = $loggedSet');
+    log.d('current exercise = $currentExercise');
+    log.d('current exercise id = ${currentExercise!.id}');
 
     loggedSets.add(loggedSet);
   }

@@ -127,8 +127,7 @@ class EditExerciseScreen extends StatelessWidget {
           child: Text(
               'No exercises added yet.\nTap the button below to add exercises.',
               textAlign: TextAlign.center,
-              style:
-                  JimTextStyles.body.copyWith(color: JimColors.error)),
+              style: JimTextStyles.body.copyWith(color: JimColors.error)),
         );
       }
       return ReorderableListView.builder(

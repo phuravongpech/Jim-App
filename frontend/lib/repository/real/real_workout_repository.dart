@@ -2,9 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:frontend/models/exercise.dart';
+import 'package:frontend/models/logged_exercise.dart';
 import 'package:frontend/models/logged_set.dart';
 import 'package:frontend/models/workout.dart';
 import 'package:frontend/models/workout_exercise.dart';
+import 'package:frontend/models/workout_session.dart';
+import 'package:frontend/models/workout_session_detail.dart';
 import 'package:frontend/repository/workout_repository.dart';
 import 'package:http/http.dart';
 import 'package:logger/logger.dart';
@@ -155,21 +158,6 @@ class RealWorkoutRepository implements WorkoutRepository {
     required DateTime endWorkout,
     required List<LoggedSet> loggedSets,
   }) async {
-    Logger().d('Saving logged sets: $workoutId, $startWorkout, $endWorkout');
-    final data = json.encode({
-      'workoutId': int.parse(workoutId),
-      'startWorkout': startWorkout.toUtc().toIso8601String(),
-      'endWorkout': endWorkout.toUtc().toIso8601String(),
-      'loggedSets': loggedSets
-          .map((set) => {
-                'workoutExerciseId': set.workoutExerciseId,
-                'weight': set.weight,
-                'rep': set.rep,
-                'setNumber': set.setNumber,
-              })
-          .toList(),
-    });
-    Logger().d('Data to send: $data');
     try {
       final response = await post(
         Uri.parse('$backendUrl/LoggedSets'),
@@ -177,12 +165,12 @@ class RealWorkoutRepository implements WorkoutRepository {
           'Content-Type': 'application/json',
         },
         body: json.encode({
-          'workoutId': int.parse(workoutId), // Ensure workoutId is an integer
+          'workoutId': int.parse(workoutId),
           'startWorkout': startWorkout.toUtc().toIso8601String(),
           'endWorkout': endWorkout.toUtc().toIso8601String(),
           'loggedSets': loggedSets
               .map((set) => {
-                    'workoutExerciseId': set.workoutExercise?.exerciseId,
+                    'workoutExerciseId': set.workoutExerciseId,
                     'weight': set.weight,
                     'rep': set.rep,
                     'setNumber': set.setNumber,
@@ -191,13 +179,45 @@ class RealWorkoutRepository implements WorkoutRepository {
         }),
       );
 
-      Logger().d('Response: ${response.body}');
-
       if (response.statusCode != 201) {
         throw Exception('Failed to save logged sets');
       }
     } catch (e) {
       throw Exception('Error saving logged sets: $e');
+    }
+  }
+
+  @override
+  Future<List<WorkoutSession>> getWorkoutSessions() async {
+    try {
+      final response = await get(Uri.parse('$backendUrl/workout-sessions'));
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body);
+        return data.map((json) => WorkoutSession.fromJson(json)).toList();
+      }
+      throw Exception('Failed to load sessions: ${response.statusCode}');
+    } catch (e) {
+      Logger().e('Error fetching sessions: $e');
+      throw Exception('Failed to load workout sessions');
+    }
+  }
+
+  @override
+  Future<WorkoutSessionDetail> getWorkoutSessionDetail(int sessionId) async {
+    try {
+      final response = await get(
+        Uri.parse('$backendUrl/workout-sessions/$sessionId'),
+      );
+
+      Logger().d(
+        'Response from getWorkoutSessionDetail: ${response.statusCode} ${response.body}',
+      );
+      if (response.statusCode == 200) {
+        return WorkoutSessionDetail.fromJson(json.decode(response.body));
+      }
+      throw Exception('Failed to load session: ${response.statusCode}');
+    } catch (e) {
+      throw Exception('Error fetching session details: $e');
     }
   }
 }

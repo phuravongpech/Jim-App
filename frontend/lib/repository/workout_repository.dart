@@ -1,6 +1,9 @@
 import 'package:frontend/models/exercise.dart';
+import 'package:frontend/models/logged_exercise.dart';
 import 'package:frontend/models/logged_set.dart';
 import 'package:frontend/models/workout_exercise.dart';
+import 'package:frontend/models/workout_session.dart';
+import 'package:frontend/models/workout_session_detail.dart';
 
 import '../models/workout.dart';
 import '../models/workout_with_exercise.dart';
@@ -37,4 +40,8 @@ abstract class WorkoutRepository {
     required DateTime endWorkout,
     required List<LoggedSet> loggedSets,
   });
+
+  Future<List<WorkoutSession>> getWorkoutSessions();
+
+  Future<WorkoutSessionDetail> getWorkoutSessionDetail(int sessionId);
 }

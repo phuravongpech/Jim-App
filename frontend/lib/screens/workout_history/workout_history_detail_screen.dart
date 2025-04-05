@@ -1,58 +1,78 @@
+// workout_history_detail_screen.dart
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
+import 'package:frontend/models/logged_exercise.dart';
+import 'package:frontend/models/logged_set.dart';
+import 'package:frontend/models/workout_session.dart';
+import 'package:frontend/models/workout_session_detail.dart';
+import 'package:frontend/repository/workout_repository.dart';
 import 'package:frontend/theme/theme.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class WorkoutHistoryDetailScreen extends StatelessWidget {
-  final Map<String, dynamic> session = {
-    'id': Get.arguments,
-    'name': 'Full Body Strength',
-    'date': 'Feb 15, 2024',
-    'exercises': [
-      {
-        'name': 'Barbell Squats',
-        'sets': [
-          {'weight': 60, 'reps': 8, 'restTime': 90},
-          {'weight': 65, 'reps': 8, 'restTime': 90},
-          {'weight': 70, 'reps': 6, 'restTime': 90},
-        ]
-      },
-      {
-        'name': 'Bench Press',
-        'sets': [
-          {'weight': 80, 'reps': 5, 'restTime': 120},
-          {'weight': 85, 'reps': 4, 'restTime': 120},
-        ]
-      },
-    ]
-  };
+  final int sessionId;
+  final DateFormat dateFormat = DateFormat('MMM dd,  yyyy');
+  final DateFormat timeFormat = DateFormat('HH:mm');
 
-  WorkoutHistoryDetailScreen({super.key});
+  WorkoutHistoryDetailScreen({
+    super.key,
+    required this.sessionId,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final repository = Get.find<WorkoutRepository>();
+
     return Scaffold(
       backgroundColor: JimColors.backgroundAccent,
       appBar: AppBar(
-        title: Text(session['name'], style: JimTextStyles.heading),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: JimColors.textPrimary),
+          onPressed: () {
+            Get.back();
+          }, // Change this line
+        ),
+        title: Text('Workout Details', style: JimTextStyles.heading),
         centerTitle: true,
         backgroundColor: JimColors.white,
         elevation: 2,
-        shadowColor: JimColors.whiteGrey,
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(JimSpacings.m),
+      body: FutureBuilder<WorkoutSessionDetail>(
+        future: repository.getWorkoutSessionDetail(sessionId),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
+          return _buildDetailContent(snapshot.data!);
+        },
+      ),
+    );
+  }
+
+  Widget _buildDetailContent(WorkoutSessionDetail session) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(JimSpacings.m),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: JimSpacings.s,
+        ),
         child: Column(
           children: [
-            _buildSessionCard(),
+            _buildSessionHeader(session),
             const SizedBox(height: JimSpacings.xl),
-            ..._buildExerciseCards(),
+            ..._buildExerciseCards(session.loggedExercises),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildSessionCard() {
+  Widget _buildSessionHeader(WorkoutSessionDetail session) {
     return Container(
       decoration: BoxDecoration(
         color: JimColors.white,
@@ -65,16 +85,40 @@ class WorkoutHistoryDetailScreen extends StatelessWidget {
           ),
         ],
       ),
-      padding: const EdgeInsets.all(JimSpacings.m),
+      padding: const EdgeInsets.all(JimSpacings.l),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text(session.workoutName,
+              style: JimTextStyles.title.copyWith(
+                fontSize: 22,
+              )),
+          if (session.workoutDescription.isNotEmpty) ...[
+            const SizedBox(height: JimSpacings.xs),
+            Text(
+              session.workoutDescription,
+              style: JimTextStyles.body.copyWith(
+                color: JimColors.textSecondary,
+              ),
+            ),
+          ],
+          const SizedBox(height: JimSpacings.m),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _buildInfoItem(Icons.calendar_today, session['date']),
-              _buildInfoItem(
-                  Icons.list_alt, '${session['exercises'].length} exercises'),
+              _buildInfoItem(Icons.calendar_today,
+                  dateFormat.format(session.startWorkout)),
+              _buildInfoItem(Icons.access_time, session.duration),
+            ],
+          ),
+          const SizedBox(height: JimSpacings.s),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _buildInfoItem(Icons.timer,
+                  '${timeFormat.format(session.startWorkout)}  -  ${timeFormat.format(session.endWorkout)}'),
+              _buildInfoItem(Icons.list_alt,
+                  '${session.loggedExercises.length} exercises'),
             ],
           ),
         ],
@@ -85,17 +129,15 @@ class WorkoutHistoryDetailScreen extends StatelessWidget {
   Widget _buildInfoItem(IconData icon, String text) {
     return Row(
       children: [
-        const SizedBox(width: JimSpacings.m),
-        Icon(icon, size: JimIconSizes.small, color: JimColors.primary),
+        Icon(icon, size: 20, color: JimColors.primary),
         const SizedBox(width: JimSpacings.xs),
         Text(text, style: JimTextStyles.body),
-        const SizedBox(width: JimSpacings.m),
       ],
     );
   }
 
-  List<Widget> _buildExerciseCards() {
-    return (session['exercises'] as List)
+  List<Widget> _buildExerciseCards(List<LoggedExercise> exercises) {
+    return exercises
         .map((exercise) => Container(
               margin: const EdgeInsets.only(bottom: JimSpacings.m),
               decoration: BoxDecoration(
@@ -109,44 +151,45 @@ class WorkoutHistoryDetailScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              padding: const EdgeInsets.all(JimSpacings.m),
+              padding: const EdgeInsets.all(JimSpacings.l),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(exercise['name'], style: JimTextStyles.title),
-                  const SizedBox(height: JimSpacings.m),
-                  _buildSetTable(exercise['sets']),
+                  Text(exercise.exerciseName, style: JimTextStyles.title),
+                  _buildSetTable(exercise.sets),
+                  const SizedBox(height: JimSpacings.s),
+                  Text('Rest Time: ${exercise.restTime}s',
+                      style: JimTextStyles.label),
                 ],
               ),
             ))
         .toList();
   }
 
-  Widget _buildSetTable(List<dynamic> sets) {
+  Widget _buildSetTable(List<LoggedSet> sets) {
     return Table(
       columnWidths: const {
         0: FlexColumnWidth(2),
         1: FlexColumnWidth(3),
         2: FlexColumnWidth(3),
-        3: FlexColumnWidth(3),
       },
       children: [
         TableRow(
           decoration: BoxDecoration(
-              border: Border(bottom: BorderSide(color: JimColors.stroke))),
+            border: Border(bottom: BorderSide(color: JimColors.stroke)),
+          ),
           children: [
             _buildTableHeader('Set'),
             _buildTableHeader('Weight (kg)'),
             _buildTableHeader('Reps'),
-            _buildTableHeader('Rest Time'),
           ],
         ),
         ...sets.map((set) => TableRow(
               children: [
-                _buildTableCell('${sets.indexOf(set) + 1}'),
-                _buildTableCell(set['weight'].toString()),
-                _buildTableCell(set['reps'].toString()),
-                _buildTableCell('${set['restTime']}s'),
+                _buildTableCell(set.setNumber.toString()),
+                _buildTableCell(
+                    set.weight != null ? set.weight.toString() : '0'),
+                _buildTableCell(set.rep.toString()),
               ],
             )),
       ],

@@ -1,36 +1,28 @@
-// workout_history_screen.dart
 import 'package:flutter/material.dart';
-import 'package:frontend/screens/workout_history/workout_history_detail_screen.dart';
+import 'package:frontend/models/workout_session.dart';
+import 'package:frontend/repository/workout_repository.dart';
 import 'package:frontend/theme/theme.dart';
-import 'package:frontend/widgets/action/jim_text_button.dart';
 import 'package:frontend/widgets/navigation/jim_nav_bar.dart';
 import 'package:frontend/widgets/navigation/jim_top_bar.dart';
+import 'package:get/get.dart';
+import 'workout_history_detail_screen.dart';
 
-class WorkoutHistoryScreen extends StatelessWidget {
-  // Static data for demonstration
-  final List<Map<String, dynamic>> workoutSessions = [
-    {
-      'id': '1',
-      'name': 'Full Body Strength',
-      'date': 'Feb 15, 2024',
-      'exercises': [
-        {'name': 'Barbell Squats', 'sets': 3, 'restTime': 90},
-        {'name': 'Bench Press', 'sets': 4, 'restTime': 60},
-        {'name': 'Deadlift', 'sets': 3, 'restTime': 120},
-      ]
-    },
-    {
-      'id': '2',
-      'name': 'Upper Body Focus',
-      'date': 'Feb 12, 2024',
-      'exercises': [
-        {'name': 'Pull Ups', 'sets': 4, 'restTime': 90},
-        {'name': 'Shoulder Press', 'sets': 3, 'restTime': 60},
-      ]
-    },
-  ];
+class WorkoutHistoryScreen extends StatefulWidget {
+  const WorkoutHistoryScreen({super.key});
 
-  WorkoutHistoryScreen({super.key});
+  @override
+  State<WorkoutHistoryScreen> createState() => _WorkoutHistoryScreenState();
+}
+
+class _WorkoutHistoryScreenState extends State<WorkoutHistoryScreen> {
+  late Future<List<WorkoutSession>> _sessionsFuture;
+  final _repository = Get.find<WorkoutRepository>();
+
+  @override
+  void initState() {
+    super.initState();
+    _sessionsFuture = _repository.getWorkoutSessions();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,40 +30,57 @@ class WorkoutHistoryScreen extends StatelessWidget {
       backgroundColor: JimColors.backgroundAccent,
       appBar: JimTopBar(
         title: 'Workout History',
-        actions: [
-          JimTextButton(
-            text: 'Filter',
-            onPressed: () {/* Implement filtering */},
-          ),
-        ],
       ),
-      body: ListView.builder(
-        itemCount: workoutSessions.length,
-        itemBuilder: (context, index) {
-          final session = workoutSessions[index];
-          return WorkoutHistoryCard(session: session);
+      body: FutureBuilder<List<WorkoutSession>>(
+        future: _sessionsFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
+          return _buildSessionList(snapshot.data ?? []);
         },
       ),
-      bottomNavigationBar: JimNavBar(),
+      bottomNavigationBar: const JimNavBar(),
+    );
+  }
+
+  Widget _buildSessionList(List<WorkoutSession> sessions) {
+    // Sort sessions by date, newest first
+    final sortedSessions = List<WorkoutSession>.from(sessions)
+      ..sort((a, b) => b.startWorkout.compareTo(a.startWorkout));
+
+    return ListView.builder(
+      itemCount: sortedSessions.length,
+      itemBuilder: (context, index) {
+        final session = sortedSessions[index];
+        return WorkoutHistoryCard(
+          session: session,
+          date: session.startWorkout.day == DateTime.now().day
+              ? 'Today'
+              : session.formattedDate,
+        );
+      },
     );
   }
 }
 
 class WorkoutHistoryCard extends StatelessWidget {
-  final Map<String, dynamic> session;
+  final WorkoutSession session;
+  final String date;
 
-  const WorkoutHistoryCard({super.key, required this.session});
+  const WorkoutHistoryCard({
+    super.key,
+    required this.session,
+    required this.date,
+  });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => WorkoutHistoryDetailScreen(),
-          ),
-        );
-      },
+      onTap: () => _navigateToDetail(context, session),
       child: Container(
         margin: const EdgeInsets.symmetric(
             vertical: JimSpacings.s, horizontal: JimSpacings.l),
@@ -95,36 +104,38 @@ class WorkoutHistoryCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                  child: Text(session['name'],
+                  child: Text(session.workoutName,
                       style: JimTextStyles.heading,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis),
                 ),
-                Text(session['date'],
+                Text(date,
                     style:
                         JimTextStyles.label.copyWith(color: JimColors.primary)),
               ],
             ),
-            Text(session['description'] ?? 'No description available',
-                style: JimTextStyles.subBody
-                    .copyWith(color: JimColors.textSecondary),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis),
+            if (session.workoutDescription.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(top: JimSpacings.xs),
+                child: Text(
+                  session.workoutDescription,
+                  style: JimTextStyles.subBody
+                      .copyWith(color: JimColors.textSecondary),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
             const SizedBox(height: JimSpacings.xs),
-            Divider(
-              color: JimColors.stroke,
-              thickness: 1,
-            ),
-            Column(
-              children: _buildExerciseList(),
-            ),
-            if ((session['exercises'] as List).length > 3)
+            const Divider(color: JimColors.stroke, thickness: 1),
+            Column(children: _buildExerciseList()),
+            if (session.exercises.length > 3)
               Padding(
                 padding: const EdgeInsets.only(top: JimSpacings.s),
                 child: Text(
-                    '+ ${(session['exercises'] as List).length - 3} more exercises',
-                    style: JimTextStyles.label
-                        .copyWith(color: JimColors.textSecondary)),
+                  '+ ${session.exercises.length - 3} more exercises',
+                  style: JimTextStyles.label
+                      .copyWith(color: JimColors.textSecondary),
+                ),
               ),
           ],
         ),
@@ -133,25 +144,25 @@ class WorkoutHistoryCard extends StatelessWidget {
   }
 
   List<Widget> _buildExerciseList() {
-    final displayedExercises = (session['exercises'] as List).take(3).toList();
-    return displayedExercises
+    return session.exercises
+        .take(3)
         .map((exercise) => Padding(
               padding: const EdgeInsets.symmetric(vertical: JimSpacings.xs),
               child: Row(
                 children: [
                   Expanded(
                     flex: 3,
-                    child: Text(exercise['name'],
+                    child: Text(exercise.exerciseName,
                         style: JimTextStyles.subBody
                             .copyWith(color: JimColors.textPrimary)),
                   ),
                   Expanded(
-                    child: Text('${exercise['sets']} sets',
+                    child: Text('${exercise.setCount} sets',
                         style: JimTextStyles.label
                             .copyWith(color: JimColors.textSecondary)),
                   ),
                   Expanded(
-                    child: Text('${exercise['restTime']}s',
+                    child: Text('${exercise.restTimeSecond}s',
                         style: JimTextStyles.label
                             .copyWith(color: JimColors.textSecondary)),
                   ),
@@ -159,5 +170,14 @@ class WorkoutHistoryCard extends StatelessWidget {
               ),
             ))
         .toList();
+  }
+
+  void _navigateToDetail(BuildContext context, WorkoutSession session) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => WorkoutHistoryDetailScreen(sessionId: session.id),
+      ),
+    );
   }
 }

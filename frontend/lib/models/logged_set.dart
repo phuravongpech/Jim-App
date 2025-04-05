@@ -1,18 +1,22 @@
+import 'package:frontend/models/workout_with_exercise.dart';
+
 import '../utils/uuid_utils.dart';
 import 'workout_exercise.dart';
 
 class LoggedSet {
   final String id; // Unique identifier for the workout log
-  late int? workoutExerciseId;
+  final int? workoutExerciseId;
   final WorkoutExercise? workoutExercise;
-  late double? weight;
-  late int? rep;
+  final CustomWorkoutExercise? customWorkoutExercise;
+  final double? weight;
+  final int? rep;
   final int setNumber;
 
   LoggedSet({
     String? id,
     this.workoutExerciseId,
     this.workoutExercise,
+    this.customWorkoutExercise,
     this.weight,
     this.rep,
     required this.setNumber,
@@ -22,7 +26,7 @@ class LoggedSet {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'workoutExerciseId': workoutExercise?.exerciseId,
+      'workoutExerciseId': workoutExerciseId,
       'weight': weight,
       'rep': rep,
       'setNumber': setNumber,
@@ -33,7 +37,7 @@ class LoggedSet {
     return LoggedSet(
       id: json['id'],
       workoutExerciseId: json['workoutExerciseId'],
-      weight: json['weight']?.toDouble(),
+      weight: json['weight'].toDouble(),
       rep: json['rep'],
       setNumber: json['setNumber'],
     );
@@ -49,6 +53,6 @@ class LoggedSet {
 
   @override
   String toString() {
-    return 'LoggedSet {{\n  workoutExercise: $workoutExercise,\n  weight: $weight,\n  rep: $rep,\n  setNumber: $setNumber\n}';
+    return 'LoggedSet{id: $id, workoutExerciseId: $workoutExerciseId, weight: $weight, rep: $rep, setNumber: $setNumber}';
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/models/exercise.dart';
 import 'package:frontend/models/logged_set.dart';
 import 'package:frontend/models/workout_exercise.dart';
+import 'package:frontend/models/workout_with_exercise.dart';
 import 'package:frontend/services/workout_session_service.dart';
 import 'package:frontend/theme/theme.dart';
 import 'package:get/get.dart';
@@ -41,8 +42,7 @@ class WorkoutSummaryScreen extends StatelessWidget {
                       // Filter logged sets for this workout exercise
                       final exerciseSets = loggedSets
                           .where((set) =>
-                              set.workoutExercise?.exerciseId ==
-                              workoutExercise.exerciseId)
+                              set.workoutExerciseId == workoutExercise.id)
                           .toList();
 
                       return _buildExerciseCard(workoutExercise, exerciseSets);
@@ -110,7 +110,7 @@ class WorkoutSummaryScreen extends StatelessWidget {
   }
 
   Widget _buildExerciseCard(
-      WorkoutExercise workoutExercise, List<LoggedSet> sets) {
+      CustomWorkoutExercise workoutExercise, List<LoggedSet> sets) {
     // Get exercise details from service
     final exercise = _service.xExercise.firstWhere(
       (e) => e.id == workoutExercise.exerciseId,
@@ -202,7 +202,6 @@ class WorkoutSummaryScreen extends StatelessWidget {
           _service.clearSessionData();
           // Then navigate to home using GetX navigation
           Get.offAllNamed('/workout');
-          
         },
         child: Text('Back to Home', style: JimTextStyles.button),
       ),

@@ -1,11 +1,11 @@
 class WorkoutExercise {
-  final int? id;
+  late int id;
   final String exerciseId;
   int setCount;
   int restTimeSecond;
 
   WorkoutExercise({
-    this.id,
+    this.id = 0,
     required this.exerciseId,
     required this.setCount,
     required this.restTimeSecond,
@@ -41,7 +41,7 @@ class WorkoutExercise {
     return json
         .map((item) => WorkoutExercise(
               id: item['id'],
-              exerciseId: item['id'],
+              exerciseId: item['exerciseId'],
               setCount: item['setCount'],
               restTimeSecond: item['restTimeSecond'],
             ))
