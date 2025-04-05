@@ -7,6 +7,7 @@ export class WorkoutSessionDto {
         public startWorkout: string,
         public endWorkout: string,
         public workoutName: string,
+        public workoutDescription: string,
         public workoutExercises: WorkoutExerciseDto[]
     ) { }
 }
@@ -18,6 +19,7 @@ export class WorkoutDto {
     constructor(
         public id: number,
         public name: string,
+        public descriptions: string,
         public workoutExercises: WorkoutExerciseDto[]
     ) { }
 }
@@ -28,6 +30,7 @@ export class WorkoutDto {
 export class WorkoutExerciseDto {
     constructor(
         public exerciseId: string,
+        public exerciseName: string,
         public restTimeSecond: number,
         public setCount: number
     ) { }

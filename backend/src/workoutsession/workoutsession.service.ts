@@ -71,16 +71,18 @@ export class WorkoutSessionService {
 
   async findAll(): Promise<WorkoutSessionDto[]> {
     const workoutSessions = await this.workoutSessionRepository.find({
-      relations: ['workout', 'workout.workoutExercises'],
+      relations: ['workout', 'workout.workoutExercises.exercise'],
     });
 
     return workoutSessions.map((workoutSession) => {
       const workoutDto = new WorkoutDto(
         workoutSession.workout.id,
         workoutSession.workout.name,
+        workoutSession.workout.description,
         workoutSession.workout.workoutExercises.map((exercise) =>
           new WorkoutExerciseDto(
             exercise.exerciseId,
+            exercise.exercise.name,
             exercise.restTimeSecond,
             exercise.setCount
           )
@@ -92,6 +94,7 @@ export class WorkoutSessionService {
         workoutSession.startWorkout,
         workoutSession.endWorkout,
         workoutDto.name,
+        workoutDto.descriptions,
         workoutDto.workoutExercises
       );
     });
