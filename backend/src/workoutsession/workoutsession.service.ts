@@ -42,6 +42,7 @@ export class WorkoutSessionService {
           group[workoutExerciseId] = new GroupedLoggedSetDto(
             workoutExerciseId,
             currentSet.workoutExercise.exercise.name,
+            currentSet.workoutExercise.restTimeSecond,
             []
           );
         }
@@ -65,6 +66,7 @@ export class WorkoutSessionService {
       workoutSession.startWorkout,
       workoutSession.endWorkout,
       workoutSession.workout.name,
+      workoutSession.workout.description,
       groupedLoggedSets
     );
   }

@@ -36,6 +36,8 @@ export class WorkoutExerciseDto {
     ) { }
 }
 
+/***************************************************************************/
+
 /**
  * DTO for representing a workout session's detail.
  * Detail include workout name, time related data 
@@ -47,6 +49,7 @@ export class WorkoutSessionDetailDto {
         public startWorkout: string,
         public endWorkout: string,
         public workoutName: string,
+        public workoutDescription: string,
         public loggedSets: GroupedLoggedSetDto[]
     ) { }
 }
@@ -58,6 +61,7 @@ export class GroupedLoggedSetDto {
     constructor(
         public workoutExerciseId: number,
         public exerciseName: string,
+        public restTime: number,
         public sets: LoggedSetDto[]
     ) { }
 }
