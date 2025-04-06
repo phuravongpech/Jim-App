@@ -11,7 +11,6 @@ import { Exercise } from '@src/typeorm/entities/exercise.entity';
 import axios from 'axios';
 import { Repository } from 'typeorm';
 import { CreateExerciseDto } from './dto/create-exercises.dto';
-import { UpdateExerciseDto } from './dto/update-exercises.dto';
 
 @Injectable()
 export class ExercisesService {
@@ -25,27 +24,6 @@ export class ExercisesService {
     @InjectRepository(Exercise)
     private exerciseRepository: Repository<Exercise>,
   ) {}
-  //get api header from env
-  private getApiOptions() {
-    return {
-      headers: {
-        'X-RapidAPI-KEY': this.configService.get<string>('EXERCISE_DB_API_KEY'),
-        'X-RapidAPI-Host': this.configService.get<string>(
-          'EXERCISE_DB_API_HOST',
-        ),
-      },
-    };
-  }
-  // fetch all exercise
-  async fetchAllExercisesFromApi(): Promise<any> {
-    try {
-      const response = await axios.get(this.apiUrl, this.getApiOptions());
-      return response.data;
-    } catch (error) {
-      this.logger.error('Error fetching exercises :', error);
-      throw error;
-    }
-  }
 
   async create(createExerciseDto: CreateExerciseDto): Promise<Exercise | null> {
     try {
@@ -82,31 +60,5 @@ export class ExercisesService {
       throw new NotFoundException(`Exercise with ID ${id} Not Found`);
     }
     return exercise;
-  }
-
-  async update(
-    id: string,
-    updateExerciseDto: UpdateExerciseDto,
-  ): Promise<Exercise> {
-    try {
-      const result = await this.exerciseRepository.update(
-        id,
-        updateExerciseDto,
-      );
-      if (result.affected === 0) {
-        throw new NotFoundException(`Exercise with ID ${id} not found`);
-      }
-      return this.findOne(id);
-    } catch (e) {
-      console.error(e);
-      throw new InternalServerErrorException('Failed to update Exercise');
-    }
-  }
-
-  async delete(id: string): Promise<void> {
-    const result = await this.exerciseRepository.delete(id);
-    if (result.affected === 0) {
-      throw new NotFoundException(`Exercise with ID ${id} not found`);
-    }
   }
 }
