@@ -29,7 +29,22 @@ class JimListView<T> extends StatelessWidget {
       }
 
       if (empty) {
-        return Center(child: Text("No more Exercises found"));
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                "No workouts available.",
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+              Text(
+                "Why not create one to get started?",
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+            ],
+          ),
+        );
       }
 
       return _buildListView();

@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/controller/workout_controller.dart';
-import 'package:frontend/screens/workout_session/set_log_screen.dart';
-import 'package:frontend/services/workout_session_service.dart';
 import 'package:frontend/controller/workout_session_controller.dart';
+import 'package:frontend/screens/workout_session/set_log_screen.dart';
 import 'package:frontend/screens/workout_session/widgets/set_log_button.dart';
+import 'package:frontend/services/workout_session_service.dart';
 import 'package:frontend/theme/theme.dart';
 import 'package:frontend/widgets/action/jim_icon_button.dart';
+import 'package:frontend/widgets/navigation/jim_top_bar.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
-import '../../widgets/navigation/jim_top_bar.dart';
 
 class WorkoutDetailScreen extends StatelessWidget {
-  WorkoutDetailScreen({super.key}) {
+  WorkoutDetailScreen({Key? key}) : super(key: key) {
     _service = WorkoutSessionService.instance;
     final workoutId = Get.arguments as String?;
     if (workoutId != null) {
@@ -23,7 +23,6 @@ class WorkoutDetailScreen extends StatelessWidget {
   final isLoading = true.obs;
   final hasError = false.obs;
   final errorMessage = ''.obs;
-
   final log = Logger();
 
   Future<void> _loadWorkout(String id) async {
@@ -31,7 +30,6 @@ class WorkoutDetailScreen extends StatelessWidget {
       isLoading(true);
       hasError(false);
       errorMessage('');
-
       final success = await _service.loadWorkout(id);
       if (!success) {
         throw Exception('Failed to load workout');
@@ -55,14 +53,12 @@ class WorkoutDetailScreen extends StatelessWidget {
       log.w('Loading workout data, please wait...');
       return false;
     }
-
     if (hasError.value ||
         _service.activeWorkout.value == null ||
         _service.activeWorkoutExercises.isEmpty) {
       log.w('No workout data available or workout is empty');
       return false;
     }
-
     return true;
   }
 
@@ -83,16 +79,14 @@ class WorkoutDetailScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               ElevatedButton(
-                onPressed: () {
-                  Get.back();
-                },
+                onPressed: () => Get.back(),
                 style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.black,
-                  backgroundColor: Colors.white,
-                  side: BorderSide(color: Colors.black),
-                  minimumSize: Size(120, 50),
+                  foregroundColor: JimColors.black,
+                  backgroundColor: JimColors.white,
+                  side: const BorderSide(color: Colors.black),
+                  minimumSize: const Size(120, 50),
                 ),
-                child: Text('Cancel', style: TextStyle(fontSize: 16)),
+                child: const Text('Cancel', style: TextStyle(fontSize: 16)),
               ),
               ElevatedButton(
                 onPressed: () {
@@ -100,11 +94,11 @@ class WorkoutDetailScreen extends StatelessWidget {
                   Get.offNamed('/workout');
                 },
                 style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  backgroundColor: Colors.red,
-                  minimumSize: Size(120, 50),
+                  foregroundColor: JimColors.white,
+                  backgroundColor: JimColors.error,
+                  minimumSize: const Size(120, 50),
                 ),
-                child: Text('Yes', style: TextStyle(fontSize: 16)),
+                child: const Text('Yes', style: TextStyle(fontSize: 16)),
               ),
             ],
           )
@@ -138,7 +132,7 @@ class WorkoutDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: JimColors.backgroundAccent,
       appBar: JimTopBar(
         title: "",
         leading: JimIconButton(
@@ -158,14 +152,13 @@ class WorkoutDetailScreen extends StatelessWidget {
         if (isLoading.value) {
           return const Center(child: CircularProgressIndicator());
         }
-
         if (hasError.value) {
           return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(errorMessage.value),
-                const SizedBox(height: 16),
+                Text(errorMessage.value, style: JimTextStyles.body),
+                const SizedBox(height: JimSpacings.m),
                 ElevatedButton(
                   onPressed: () => _loadWorkout(Get.arguments),
                   child: const Text('Retry'),
@@ -174,64 +167,59 @@ class WorkoutDetailScreen extends StatelessWidget {
             ),
           );
         }
-
         final workout = _service.activeWorkout.value;
         if (workout == null) {
           return const Center(child: Text('No workout data available'));
         }
-
         return Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(JimSpacings.m),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 workout.name,
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                style: JimTextStyles.heading.copyWith(fontSize: 22),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: JimSpacings.s),
               if (workout.description.isNotEmpty) ...[
-                Text(
-                  workout.description,
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-                const SizedBox(height: 16),
+                Text(workout.description, style: JimTextStyles.body),
+                const SizedBox(height: JimSpacings.m),
               ],
-              Text(
-                'Exercises',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              const SizedBox(height: 8),
+              const SizedBox(height: JimSpacings.l),
+              Text('Exercises', style: JimTextStyles.title),
               Expanded(
-                child: Obx(() => ListView.separated(
-                      itemCount: _service.activeWorkoutExercises.length,
-                      separatorBuilder: (context, index) => const Divider(),
-                      itemBuilder: (context, index) {
-                        final workoutExercise =
-                            _service.activeWorkoutExercises[index];
-
-                        final exercise = _service.xExercise[index];
-
-                        return ListTile(
-                          title: Text(exercise.name),
-                          subtitle: Text(
-                            'Sets: ${workoutExercise.setCount} | Rest: ${workoutExercise.restTimeSecond}s',
-                          ),
-                          trailing: const Icon(Icons.chevron_right),
-                          onTap: () {
-                            // Handle exercise tap
-                          },
-                        );
-                      },
-                    )),
+                child: Obx(() {
+                  return ListView.separated(
+                    itemCount: _service.activeWorkoutExercises.length,
+                    separatorBuilder: (context, index) =>
+                        const Divider(color: JimColors.stroke),
+                    itemBuilder: (context, index) {
+                      final workoutExercise =
+                          _service.activeWorkoutExercises[index];
+                      final exercise = _service.xExercise[index];
+                      return ListTile(
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 0),
+                        title: Text(exercise.name, style: JimTextStyles.body),
+                        subtitle: Text(
+                          'Sets: ${workoutExercise.setCount} | Rest: ${workoutExercise.restTimeSecond}s',
+                          style: JimTextStyles.label,
+                        ),
+                        trailing: const Icon(Icons.chevron_right,
+                            color: JimColors.textSecondary),
+                        onTap: () {
+                          // Optionally handle tap on individual exercise
+                        },
+                      );
+                    },
+                  );
+                }),
               ),
               SetLogButton(
                 text: "Start Workout",
                 onPressed: _startWorkout,
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: JimSpacings.xl),
             ],
           ),
         );
