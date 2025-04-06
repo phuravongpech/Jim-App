@@ -1,65 +1,49 @@
-import 'dart:convert';
-
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:frontend/models/exercise.dart';
 import 'package:frontend/repository/exercise_repository.dart';
-import 'package:frontend/utils/fuzzywuzzy.dart';
-import 'package:http/http.dart';
-import 'package:logger/logger.dart';
 
-class ExerciseService implements ExerciseRepository {
-  final log = Logger();
-  final String baseUrl = dotenv.env['BASE_URL'] ?? 'default_url';
-  final String apiKey = dotenv.env['API_KEY'] ?? 'default_key';
+class ExerciseService {
+  static ExerciseService? _instance;
 
-  /// Get exercises from the API
-  @override
-  Future<List<Exercise>> getExercises({
-    required int page,
-    required int limit,
-  }) async {
-    try {
-      final response = await get(
-        Uri.parse('$baseUrl/exercises?offset=${page * limit}&limit=$limit'),
-        headers: {
-          'X-RapidAPI-Key': apiKey,
-          'X-RapidAPI-Host': 'exercisedb.p.rapidapi.com',
-        },
-      );
+  final ExerciseRepository repository;
 
-      if (response.statusCode == 200) {
-        final List<dynamic> data = json.decode(response.body);
-        return data.map((json) => Exercise.fromJson(json)).toList();
-      } else {
-        throw Exception('Failed to load exercises');
-      }
-    } catch (e) {
-      throw Exception('Error fetching exercises: $e');
+  ExerciseService._internal(this.repository);
+
+  ///
+  /// Initialize
+  ///
+  static void initialize(ExerciseRepository repository) {
+    if (_instance == null) {
+      _instance = ExerciseService._internal(repository);
+    } else {
+      throw Exception("ExerciseService is already initialized");
     }
   }
 
-  /// Search exercises from the API
-  @override
-  Future<List<Exercise>> searchExercises({required String query}) async {
-    String newQuery = Fuzzywuzzy.searchForExercise(query);
-
-    try {
-      final response = await get(
-        Uri.parse('$baseUrl/exercises/name/$newQuery?offset=0&limit=10'),
-        headers: {
-          'X-RapidAPI-Key': apiKey,
-          'X-RapidAPI-Host': 'exercisedb.p.rapidapi.com',
-        },
-      );
-
-      if (response.statusCode == 200) {
-        final List<dynamic> data = json.decode(response.body);
-        return data.map((json) => Exercise.fromJson(json)).toList();
-      } else {
-        throw Exception('Failed to search exercises');
-      }
-    } catch (e) {
-      throw Exception('Error searching exercises: $e');
+  ///
+  /// Singleton accessor
+  ///
+  static ExerciseService get instance {
+    if (_instance == null) {
+      throw Exception(
+          "ExerciseService is not initialized. Call initialize() first.");
     }
+    return _instance!;
+  }
+
+  ///
+  /// fetchExercises
+  ///
+
+  Future<List<Exercise>> fetchExercises(
+      {required int offset, required int limit}) {
+    return repository.fetchExercises(offset: offset, limit: limit);
+  }
+
+  Future<List<Exercise>> searchExercises({
+    required int page,
+    required int limit,
+    required String query,
+  }) {
+    return repository.searchExercises(page: page, limit: limit, query: query);
   }
 }

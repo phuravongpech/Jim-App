@@ -1,13 +1,12 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppConfig, DatabaseConfig } from './config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ExercisesModule } from './exercises/exercises.module';
 import { WorkoutsModule } from './workouts/workouts.module';
-import { ActivitylogModule } from './activitylog/activitylog.module';
+import { LoggedSetModule } from './loggedset/loggedset.module';
 import { WorkoutexerciseModule } from './workoutexercise/workoutexercise.module';
+import { WorkoutsessionModule } from './workoutsession/workoutsession.module';
 
 @Module({
   imports: [
@@ -26,9 +25,8 @@ import { WorkoutexerciseModule } from './workoutexercise/workoutexercise.module'
     ExercisesModule,
     WorkoutsModule,
     WorkoutexerciseModule,
-    ActivitylogModule,
-  ],
-  controllers: [AppController],
-  providers: [AppService],
+    LoggedSetModule,
+    WorkoutsessionModule
+  ]
 })
 export class AppModule {}

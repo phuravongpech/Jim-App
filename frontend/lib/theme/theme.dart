@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class JimColors {
-  static const Color primary = Color(0xFF4ADE80);
+  static const Color primary = Color(0xFF4DD0E1);
   static const Color backgroundAccent = Color(0xFFEDEDED);
   static const Color white = Colors.white;
   static const Color placeholder = Color(0xFFCCCCCC);

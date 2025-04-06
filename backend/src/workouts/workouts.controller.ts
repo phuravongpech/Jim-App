@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, Patch, UseInterceptors, ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, UseInterceptors, ClassSerializerInterceptor, ValidationPipe, Put } from '@nestjs/common';
 import { WorkoutsService } from './workouts.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Workout } from '@src/typeorm/entities/workout.entity';
@@ -29,6 +29,14 @@ export class WorkoutsController {
     return this.workoutsService.findAll();
   }
 
+  @Get('exercises')
+  @ApiOperation({ summary: 'Get all workouts with exercises' })
+  @ApiResponse({ status: 200, description: 'Found workouts with exercises', type: Workout })
+  @ApiResponse({ status: 404, description: 'No workout not found' })
+  async findWithExercises(): Promise<Workout[]> {
+    return this.workoutsService.findWithExercises();
+  }
+
   @Get(':id')
   @ApiOperation({ summary: 'Find a workout by ID' })
   @ApiResponse({ status: 200, description: 'Found Wokrout', type: Workout })
@@ -38,7 +46,7 @@ export class WorkoutsController {
     return this.workoutsService.findOne(id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   @ApiOperation({ summary: 'Update a workout' })
   @ApiResponse({ status: 200, description: 'Updated workout sucessfully', type: Workout })
   @ApiResponse({ status: 400, description: 'Invalid request', type: Workout })
@@ -53,7 +61,15 @@ export class WorkoutsController {
   @ApiResponse({ status: 200, description: 'Workout deleted', type: Workout })
   @ApiResponse({ status: 204, description: 'Workout deleted, no response body', type: Workout })
   @ApiResponse({ status: 404, description: 'Workout does not exist', type: Workout })
-  async delete(@Param('id') id: number): Promise<void> {
+  async delete(@Param('id') id: number): Promise<{ message: string }> {
     return this.workoutsService.delete(id);
+  }
+
+  @Get('exercises/:id')
+  @ApiOperation({ summary: 'Find a workout by ID with exercises' })
+  @ApiResponse({ status: 200, description: 'Found Workout with exercises', type: Workout })
+  @ApiResponse({ status: 404, description: 'Workout not found' })
+  async findOneWithExercises(@Param('id') id: number): Promise<Workout> {
+    return this.workoutsService.findOneWithExercises(id);
   }
 }

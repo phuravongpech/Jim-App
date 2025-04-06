@@ -26,6 +26,7 @@ class ExerciseDetailController extends GetxController {
       .split(' ')
       .map((word) => word[0].toUpperCase() + word.substring(1))
       .join(' ');
-  /// Get the instructions of the exercise    
-  List<String> get instructions => exercise.instructions ?? [];
+
+  /// Get the instructions of the exercise
+  List<String> get instructions => exercise.instructions;
 }

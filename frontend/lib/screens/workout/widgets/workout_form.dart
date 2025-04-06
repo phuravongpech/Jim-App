@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/controller/edit_exercise_controller.dart';
 import 'package:frontend/models/workout_exercise.dart';
 import 'package:frontend/widgets/action/jim_icon_button.dart';
 import 'package:get/get.dart';
@@ -14,6 +15,8 @@ class WorkoutForm extends StatelessWidget {
   final WorkoutController workoutController = Get.find<WorkoutController>();
   final SelectExerciseController selectExerciseController =
       Get.find<SelectExerciseController>();
+  final EditExerciseController editExerciseController =
+      Get.put(EditExerciseController());
 
   // Add GlobalKey for form validation
   final _formKey = GlobalKey<FormState>();
@@ -22,15 +25,29 @@ class WorkoutForm extends StatelessWidget {
     // Determine the appropriate route and arguments
     final isSelectedEmpty = workoutController.xSelectedExercises.isEmpty;
     final routeName = isSelectedEmpty ? '/select-exercises' : '/edit-exercises';
+
+    // Prepare arguments for the edit screen
     final arguments = isSelectedEmpty
         ? null
         : workoutController.xSelectedExercises.map((exercise) {
-            return WorkoutExercise(
-              exerciseId: exercise.id,
-              set: 4,
-              restTimeSecond: 90,
+            // Check if the exercise already has edited values in the EditExerciseController
+            final existingWorkoutExercise =
+                editExerciseController.exercises.firstWhere(
+              (e) => e.exerciseId == exercise.id,
+              orElse: () => WorkoutExercise(
+                exerciseId: exercise.id,
+                setCount: 4,
+                restTimeSecond: 90,
+              ),
             );
+
+            return existingWorkoutExercise;
           }).toList();
+
+    // Initialize the EditExerciseController with the current exercises
+    if (!isSelectedEmpty) {
+      editExerciseController.initializeExercises(arguments!);
+    }
 
     // Navigate to the screen and await the result
     final result = await Get.toNamed(routeName, arguments: arguments);
@@ -41,6 +58,16 @@ class WorkoutForm extends StatelessWidget {
         // If coming from the SelectExerciseScreen, update the selected exercises
         final selectedExercises = result as List<Exercise>;
         workoutController.xSelectedExercises.value = selectedExercises;
+
+        // Also Initialize the EditExerciseController with the newly selected exercises
+        final newArguments = selectedExercises.map((exercise) {
+          return WorkoutExercise(
+            exerciseId: exercise.id,
+            setCount: 4,
+            restTimeSecond: 90,
+          );
+        }).toList();
+        editExerciseController.initializeExercises(newArguments);
       } else {
         // If coming from the EditExerciseScreen, update the selected exercises
         final updatedExercises =
@@ -60,6 +87,11 @@ class WorkoutForm extends StatelessWidget {
     }
   }
 
+  /// Validate and clean the input
+  String validateInput(String input) {
+    return input.trim().replaceAll(RegExp(r'\s+'), ' ');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -77,18 +109,26 @@ class WorkoutForm extends StatelessWidget {
             ),
           ),
           TextFormField(
-            onChanged: (value) => workoutController.xWorkoutTitle.value = value,
+            onChanged: (value) {
+              final cleanedValue = validateInput(value);
+              workoutController.xWorkoutTitle.value = cleanedValue;
+            },
             decoration: InputDecoration(
               hintText: 'Input Workout Title',
               border: OutlineInputBorder(),
+              focusedBorder: OutlineInputBorder(  
+                borderSide: BorderSide(color: JimColors.primary),
+              ),
               hintStyle: JimTextStyles.subBody
                   .copyWith(color: JimColors.textSecondary),
             ),
             validator: (value) {
-              // Check if value is null or empty
-              if (value == null || value.isEmpty) {
+              final cleanedValue = value == null ? '' : validateInput(value);
+              // Check if the cleaned value is empty
+              if (cleanedValue.isEmpty) {
                 return 'Please enter a title';
               }
+              return null;
             },
           ),
 
@@ -110,6 +150,9 @@ class WorkoutForm extends StatelessWidget {
             decoration: InputDecoration(
               hintText: 'Description...',
               border: OutlineInputBorder(),
+              focusedBorder: OutlineInputBorder(  
+                borderSide: BorderSide(color: JimColors.primary),
+              ),
               hintStyle: JimTextStyles.subBody
                   .copyWith(color: JimColors.textSecondary),
             ),
@@ -161,7 +204,6 @@ class WorkoutForm extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final exerciseId =
                         workoutController.xSelectedExercises[index].id;
-
                     final Exercise? exercise =
                         selectExerciseController.getExerciseById(exerciseId);
 
@@ -169,11 +211,15 @@ class WorkoutForm extends StatelessWidget {
                       return Container();
                     }
 
-                    // Create a WorkoutExercise instance dynamically
-                    final workoutExercise = WorkoutExercise(
-                      exerciseId: exercise.id,
-                      set: 4,
-                      restTimeSecond: 90,
+                    // Get the edited workout exercise from the EditExerciseController
+                    final workoutExercise =
+                        editExerciseController.exercises.firstWhere(
+                      (e) => e.exerciseId == exerciseId,
+                      orElse: () => WorkoutExercise(
+                        exerciseId: exerciseId,
+                        setCount: 4,
+                        restTimeSecond: 90,
+                      ),
                     );
 
                     return Padding(
@@ -181,15 +227,6 @@ class WorkoutForm extends StatelessWidget {
                           const EdgeInsets.symmetric(vertical: JimSpacings.s),
                       child: Row(
                         children: [
-                          // Menu/Edit Icon
-                          JimIconButton(
-                            icon: Icons.menu,
-                            color: JimColors.textSecondary,
-                            onPressed: () {
-                              // Handle edit action
-                            },
-                          ),
-
                           // Exercise Image
                           Container(
                             width: 70,
@@ -222,7 +259,7 @@ class WorkoutForm extends StatelessWidget {
                                 Row(
                                   children: [
                                     Text(
-                                      "${workoutExercise.set} sets",
+                                      "${workoutExercise.setCount} sets",
                                       style: JimTextStyles.subBody.copyWith(
                                         fontSize: 14,
                                         color: JimColors.textSecondary,

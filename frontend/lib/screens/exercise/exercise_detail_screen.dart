@@ -33,19 +33,20 @@ class ExerciseDetail extends StatelessWidget {
   Widget _buildSliverAppBar(ExerciseDetailController controller) {
     return SliverAppBar(
       expandedHeight: 400,
-      pinned: true,
       backgroundColor: JimColors.white,
       elevation: 0,
-      leading: Container(
-        margin: const EdgeInsets.all(JimSpacings.s),
-        decoration: BoxDecoration(
-          color: JimColors.white,
-          shape: BoxShape.circle,
-        ),
-        child: JimIconButton(
-          icon: Icons.arrow_back,
-          color: JimColors.black,
-          onPressed: () => Get.back(),
+      leading: GestureDetector(
+        onTap: () => Get.back(),
+        child: Container(
+          decoration: BoxDecoration(
+            color: JimColors.white,
+            shape: BoxShape.circle,
+          ),
+          child: JimIconButton(
+            icon: Icons.arrow_back,
+            color: JimColors.black,
+            onPressed: () => Get.back(),
+          ),
         ),
       ),
       flexibleSpace: FlexibleSpaceBar(
@@ -58,7 +59,8 @@ class ExerciseDetail extends StatelessWidget {
               fit: BoxFit.contain,
               placeholder: (context, url) => const Center(
                 child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(JimColors.placeholder),
+                  valueColor:
+                      AlwaysStoppedAnimation<Color>(JimColors.placeholder),
                 ),
               ),
             ),

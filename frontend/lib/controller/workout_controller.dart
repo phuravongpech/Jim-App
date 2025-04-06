@@ -1,30 +1,28 @@
-import 'package:frontend/controller/select_exercise_controller.dart';
+import 'package:frontend/controller/edit_exercise_controller.dart';
 import 'package:frontend/models/exercise.dart';
+import 'package:frontend/services/workout_service.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 
 import '../models/workout.dart';
-import '../repository/workout_repository.dart';
-import '../services/mock_workout_service.dart';
+import '../models/workout_with_exercise.dart';
 
 class WorkoutController extends GetxController {
-  //
-  // Flag used for swicthing between mock service and real service
-  //
-  static bool useMock = true;
-
-  late final WorkoutRepository _workoutService;
-
   var xWorkoutTitle = ''.obs;
   var xWorkoutDescription = ''.obs;
   var xSelectedExercises = <Exercise>[].obs; // List of selected exercise IDs
   var xWorkoutList = <Workout>[].obs; // List to store workouts
   var workout = Rxn<Workout>(); // Store workout details
 
+  final log = Logger();
+
+  final service = WorkoutService.instance;
+
   @override
   void onInit() {
     super.onInit();
-    _workoutService = MockWorkoutService();
     fetchExercises();
+    fetchWorkouts();
 
     String? workoutId = Get.arguments;
     if (workoutId != null) {
@@ -32,79 +30,89 @@ class WorkoutController extends GetxController {
     }
   }
 
+  // Fetch workouts
+  void fetchWorkouts() async {
+    try {
+      final fetchedWorkouts =
+          await WorkoutService.instance.getWorkoutWithExercises();
+      xWorkoutList.assignAll(fetchedWorkouts);
+    } catch (e) {
+      log.e('Error fetching workouts: $e');
+    }
+  }
+
   // Fetch workout details by ID
   void fetchWorkoutDetail(String id) async {
     try {
-      Workout fetchedWorkout = await _workoutService.getWorkoutById(id);
-      workout.value = fetchedWorkout;
+      WorkoutWithExercise fetchedWorkout =
+          await WorkoutService.instance.getWorkoutWithExercisesFor(id);
+      workout.value = Workout(
+          id: id,
+          name: fetchedWorkout.name,
+          description: fetchedWorkout.description,
+          exerciseCount: fetchedWorkout.workoutExercises.length);
     } catch (e) {
-      Get.snackbar('Error', 'Failed to load workout details: $e');
-    } 
+      log.e('Error fetching workout details: $e');
+    }
   }
 
   fetchExercises() async {
     try {
-      final fetchedExercises = await _workoutService.getWorkouts();
+      final fetchedExercises =
+          await WorkoutService.instance.getWorkoutWithExercises();
 
       // Add the fetched exercises to the list
       xWorkoutList.addAll(fetchedExercises);
     } catch (e) {
-      Get.snackbar('Error', 'Failed to load workouts: $e');
+      log.e('Error fetching exercises: $e');
     }
-  }
-
-  // Add an exercise to the selected exercises list
-  void addExercise(Exercise exercise) {
-    xSelectedExercises.add(exercise);
-  }
-
-  // Remove an exercise from the selected exercises list
-  void removeExercise(Exercise exercise) {
-    xSelectedExercises.remove(exercise);
   }
 
   // Save the workout data and perform validation
-  void saveWorkout() {
-    if (xWorkoutTitle.value.isEmpty) {
-      Get.snackbar('Error', 'Workout Title is required!');
-      return;
-    }
+  void saveWorkout() async{
+    final EditExerciseController editExerciseController =
+        Get.put(EditExerciseController());
 
-    if (xSelectedExercises.isEmpty) {
-      Get.snackbar('Error', 'At least one exercise must be added!');
-      return;
-    }
-
-    // Get the selected exercises from the SelectExerciseController
-    //final selectExerciseController = Get.find<SelectExerciseController>();
-    //final selectedExercises = selectExerciseController.getSelectedExercises();
-
-    // Create the workout data
-    final workoutData = Workout(
+    try {
+    // Save the workout and get the response from the backend
+    final savedWorkoutId = await WorkoutService.instance.saveWorkout(
       name: xWorkoutTitle.value,
       description: xWorkoutDescription.value,
       exercises: xSelectedExercises.toList(),
+      workoutExercises: editExerciseController.exercises,
     );
 
-    // Add the workout to the list
-    addWorkout(workoutData);
+    // Create a new workout object with the returned ID
+    final newWorkout = Workout(
+      id: savedWorkoutId, // Use the ID returned by the backend
+      name: xWorkoutTitle.value,
+      description: xWorkoutDescription.value,
+      exerciseCount: xSelectedExercises.length,
+    );
+
+    // Add the new workout to the list
+    xWorkoutList.add(newWorkout);
 
     // Clear the form fields after saving
     xWorkoutTitle.value = '';
     xWorkoutDescription.value = '';
     xSelectedExercises.clear();
 
-    // Return the workout data when saved
-    Get.back(result: workoutData);
+    // Exit create workout form
+    Get.back();
+  } catch (e) {
+    log.e('Error saving workout: $e');
   }
+}
 
-  // Add a new workout to the list
-  void addWorkout(Workout workoutData) {
-    xWorkoutList.add(workoutData);
+  Future<void> deleteWorkout(String workoutId) async {
+    try {
+      await service.deleteWorkout(workoutId);
+      xWorkoutList.removeWhere((workout) => workout.id == workoutId);
+      log.i('Workout deleted successfully!');
+    } catch (e) {
+      log.e('Error deleting workout: $e');
+      throw Exception('Failed to delete workout: $e');
+    }
   }
-
-  // // Optionally, remove a workout by title
-  // void removeWorkout(String title) {
-  //   xWorkoutList.removeWhere((workout) => workout['title'] == title);
-  // }
 }

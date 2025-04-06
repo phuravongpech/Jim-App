@@ -34,6 +34,6 @@ export class CreateExerciseDto {
 
   @ApiProperty({ description: 'Instructions for performing the exercise' })
   @IsNotEmpty()
-  @IsString()
-  instruction: string;
+  @IsString({ each: true })
+  instructions: string[];
 }

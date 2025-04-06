@@ -1,78 +1,71 @@
 import 'package:frontend/models/exercise.dart';
 import 'package:frontend/services/exercise_service.dart';
-import 'package:frontend/services/mock_exercise_service.dart'; // Import Mock service
 import 'package:get/get.dart';
-
-import '../repository/exercise_repository.dart';
+import 'package:logger/logger.dart';
 
 class ExerciseController extends GetxController {
-  //
-  // Flag used for swicthing between mock service and real service
-  //
-  static bool useMock = true;
-
-  late final ExerciseRepository _exerciseService;
-
   RxList<Exercise> exercises = <Exercise>[].obs;
   RxBool isLoading = false.obs;
-  RxString selectedBodyPart = 'chest'.obs;
-  RxInt page = 0.obs;
+  RxInt offset = 0.obs;
+  final log = Logger();
 
   final int limit = 10;
 
   @override
   void onInit() {
     super.onInit();
-    _exerciseService = useMock ? MockExerciseService() : ExerciseService();
     fetchExercises();
   }
 
   Future<void> fetchExercises({bool reset = false}) async {
     if (reset) {
       exercises.clear();
-      page.value = 0;
+      offset.value = 0;
     }
 
     try {
       isLoading.value = true;
 
-      final fetchedExercises = await _exerciseService.getExercises(
-        page: page.value,
+      final fetchedExercises = await ExerciseService.instance.fetchExercises(
+        offset: offset.value,
         limit: limit,
       );
 
       if (fetchedExercises.isNotEmpty) {
         exercises.addAll(fetchedExercises);
-        page.value++; // Increment page for the next fetch
+        offset.value += 10;
       } else {
-        Get.snackbar('End of List', 'No more exercises available.');
+        log.i('No more exercises available.');
       }
     } catch (e) {
-      Get.snackbar('Error', 'Failed to load exercises: $e');
+      log.e('Error fetching exercises: $e');
     } finally {
       isLoading.value = false;
     }
   }
 
   Future<void> searchExercises(String query) async {
-    if (query.isEmpty) {
-      fetchExercises(reset: true);
-      return;
-    }
+    exercises.clear();
+    offset.value = 0;
 
     try {
       isLoading.value = true;
 
-      final allExercises = await _exerciseService.searchExercises(query: query);
+      final searchedExercises = await ExerciseService.instance.searchExercises(
+        query: query,
+        page: offset.value,
+        limit: limit,
+      );
 
-      exercises.value = allExercises;
-
-      if (exercises.isEmpty) {
-        Get.snackbar('No Results', 'No exercises found for "$query".');
+      if (searchedExercises.isNotEmpty) {
+        exercises.addAll(searchedExercises);
+        offset.value += 10;
+      } else  {
+        log.i('No exercises found for "$query".');
       }
+      
     } catch (e) {
-      exercises.clear();
-      Get.snackbar('Error', 'Failed to search exercises: $e');
+      log.e('Error searching exercises: $e');
     } finally {
       isLoading.value = false;
     }

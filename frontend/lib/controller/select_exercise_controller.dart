@@ -1,18 +1,10 @@
 import 'package:frontend/models/exercise.dart';
-import 'package:frontend/services/exercise_service.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 
-import '../repository/exercise_repository.dart';
-import '../services/mock_exercise_service.dart';
+import '../services/exercise_service.dart';
 
 class SelectExerciseController extends GetxController {
-  //
-  // Flag used for swicthing between mock service and real service
-  //
-  bool useMock = true;
-
-  late final ExerciseRepository _exerciseService;
-
   RxList<Exercise> exercises = <Exercise>[].obs; // List of exercises
   RxSet<String> selectedExercises =
       <String>{}.obs; // Set of selected exercise IDs
@@ -22,11 +14,18 @@ class SelectExerciseController extends GetxController {
   final int limit = 10; // Number of exercises per page
   var allExercises = <Exercise>[].obs;
 
+  final log = Logger();
+
   @override
   void onInit() {
     super.onInit();
-    _exerciseService = useMock ? MockExerciseService() : ExerciseService();
-    fetchExercises(); // Fetch exercises on initialization
+    final initialSelectedIds = Get.arguments as List<String>? ?? [];
+    selectedExercises.value = Set.from(initialSelectedIds);
+    fetchExercises();
+  }
+
+  void setInitialSelectedExercises(List<String> initialIds) {
+    selectedExercises.value = Set.from(initialIds);
   }
 
   /// Fetches exercises from the service with pagination and filtering.
@@ -42,8 +41,8 @@ class SelectExerciseController extends GetxController {
       isLoading.value = true;
 
       // Fetch exercises from the service
-      final fetchedExercises = await _exerciseService.getExercises(
-        page: page.value,
+      final fetchedExercises = await ExerciseService.instance.fetchExercises(
+        offset: page.value,
         limit: limit,
       );
 
@@ -52,13 +51,12 @@ class SelectExerciseController extends GetxController {
         allExercises.addAll(fetchedExercises); // Populate allExercises
         page.value++; // Increment the page for the next fetch
       } else if (reset) {
-        Get.snackbar(
-            'No Exercises', 'No exercises found for the selected body part.');
+        log.i('No more exercises available.');
       } else {
-        Get.snackbar('End of List', 'No more exercises available.');
+        log.i('No more exercises available for the current filter.');
       }
     } catch (e) {
-      Get.snackbar('Error', 'Failed to load exercises: $e');
+      log.e('Error fetching exercises: $e');
     } finally {
       isLoading.value = false; // Reset loading state
     }
@@ -78,8 +76,8 @@ class SelectExerciseController extends GetxController {
       isLoading.value = true;
 
       // Fetch all exercises (or a large number) for searching
-      final allFetchedExercises = await _exerciseService.getExercises(
-        page: 0,
+      final allFetchedExercises = await ExerciseService.instance.fetchExercises(
+        offset: 0,
         limit: 100, // Adjust this limit as needed
       );
 
@@ -96,11 +94,11 @@ class SelectExerciseController extends GetxController {
       allExercises.addAll(allFetchedExercises);
 
       if (exercises.isEmpty) {
-        Get.snackbar('No Results', 'No exercises found for "$query".');
+        log.i('No exercises found for "$query".');
       }
     } catch (e) {
       exercises.clear(); // Clear the list on error
-      Get.snackbar('Error', 'Failed to search exercises: $e');
+      log.e('Error searching exercises: $e');
     } finally {
       isLoading.value = false; // Reset loading state
     }

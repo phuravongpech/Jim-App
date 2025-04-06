@@ -2,13 +2,11 @@ import {
   ConflictException,
   Injectable,
   InternalServerErrorException,
-  NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateWorkoutExerciseDto } from './dto/create-workoutexercise.dto';
 import { WorkoutExercise } from '@src/typeorm/entities/workoutexercise.entity';
-import { UpdateWorkoutExerciseDto } from './dto/update-workoutexercise.dto';
 
 @Injectable()
 export class WorkoutExerciseService {
@@ -36,45 +34,18 @@ export class WorkoutExerciseService {
     }
   }
 
-  async findAll(): Promise<WorkoutExercise[]> {
-    return this.workoutExerciseRepository.find();
-  }
-
-  async findOne(id: number): Promise<WorkoutExercise> {
-    const workoutExercise = await this.workoutExerciseRepository.findOne({
-      where: { id },
-    });
-    if (!workoutExercise) {
-      throw new NotFoundException(`Workout Exercise with ID ${id} Not Found`);
-    }
-    return workoutExercise;
-  }
-
-  async update(
-    id: number,
-    updateWorkoutExerciseDto: UpdateWorkoutExerciseDto,
-  ): Promise<WorkoutExercise> {
+  async deleteByWorkoutId(workoutId: number): Promise<void> {
     try {
-      const result = await this.workoutExerciseRepository.update(
-        id,
-        updateWorkoutExerciseDto,
-      );
+      const result = await this.workoutExerciseRepository.delete({ workoutId });
+  
       if (result.affected === 0) {
-        throw new NotFoundException(`Workout Exercise with ID ${id} not found`);
+        console.warn(`No WorkoutExercise entries found for workoutId ${workoutId}`);
       }
-      return this.findOne(id);
     } catch (e) {
       console.error(e);
       throw new InternalServerErrorException(
-        'Failed to update Workout Exercise',
+        `Failed to delete Workout Exercises for workoutId ${workoutId}`,
       );
-    }
-  }
-
-  async delete(id: number): Promise<void> {
-    const result = await this.workoutExerciseRepository.delete(id);
-    if (result.affected === 0) {
-      throw new NotFoundException(`Workout Exercise with ID ${id} not found`);
     }
   }
 }

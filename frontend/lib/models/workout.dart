@@ -1,36 +1,32 @@
-import '../utils/uuid_utils.dart';
-import 'exercise.dart';
-
 class Workout {
   final String id;
   final String name;
   final String description;
-  final List<Exercise> exercises;
+  final int exerciseCount;
 
   Workout({
-    String? id,
+    required this.id,
     required this.name,
     required this.description,
-    required this.exercises,
-  }) : id = id ?? UuidUtils.generateUuid();
+    required this.exerciseCount,
+  });
 
   @override
   String toString() {
     return 'Workout{\n'
+        '  id: $id,\n'
         '  name: $name,\n'
         '  description: $description,\n'
-        '  exercises: $exercises,\n'
+        '  exercises: $exerciseCount,\n'
         '}';
   }
 
   factory Workout.fromJson(Map<String, dynamic> json) {
     return Workout(
-      id: json['id'],
+      id: json['id'].toString(),
       name: json['name'],
       description: json['description'],
-      exercises: (json['exercises'] as List)
-          .map((exercise) => Exercise.fromJson(exercise))
-          .toList(),
+      exerciseCount: json['exerciseCount'],
     );
   }
 }

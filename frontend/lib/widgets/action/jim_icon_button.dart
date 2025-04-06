@@ -19,10 +19,19 @@ class JimIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-          onTap: onPressed, child: Icon(icon, size: JimIconSizes.small)),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: JimSpacings.m),
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: GestureDetector(
+          onTap: onPressed,
+          child: Icon(
+            icon,
+            size: JimIconSizes.medium,
+            color: color,
+          ),
+        ),
+      ),
     );
   }
 }
