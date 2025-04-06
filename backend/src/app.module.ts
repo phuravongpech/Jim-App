@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppConfig, DatabaseConfig } from './config';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -28,9 +26,7 @@ import { WorkoutsessionModule } from './workoutsession/workoutsession.module';
     WorkoutsModule,
     WorkoutexerciseModule,
     LoggedSetModule,
-    WorkoutsessionModule,
-  ],
-  controllers: [AppController],
-  providers: [AppService],
+    WorkoutsessionModule
+  ]
 })
 export class AppModule {}
