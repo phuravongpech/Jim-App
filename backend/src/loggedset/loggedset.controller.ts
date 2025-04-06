@@ -1,7 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, ValidationPipe } from '@nestjs/common';
 import { LoggedSetService } from './loggedset.service';
 import { CreateWorkoutSessionWithSetsDto } from './dto/create-loggedset.dto';
-import { UpdateLoggedSetDto } from './dto/update-loggedset.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LoggedSet } from '@src/typeorm/entities/loggedset.entity';
 
@@ -76,31 +75,6 @@ export class LoggedSetController {
   })
   async findOne(@Param('id') id: number): Promise<LoggedSet> {
     return this.loggedSetService.findOne(id);
-  }
-
-  @Patch(':id')
-  @ApiOperation({ summary: 'Update a LoggedSet' })
-  @ApiResponse({
-    status: 200,
-    description: 'Updated LoggedSet',
-    type: LoggedSet,
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'Invalid request',
-    type: LoggedSet,
-  })
-  @ApiResponse({
-    status: 404,
-    description: 'LoggedSet does not exist',
-    type: LoggedSet,
-  })
-  @ApiResponse({ status: 409, description: 'Conflict', type: LoggedSet })
-  async update(
-    @Param('id') id: number,
-    @Body(new ValidationPipe()) updateLoggedSetDto: UpdateLoggedSetDto,
-  ): Promise<LoggedSet> {
-    return this.loggedSetService.update(id, updateLoggedSetDto);
   }
 
   @Delete(':id')

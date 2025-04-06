@@ -2,8 +2,7 @@ import { ConflictException, Injectable, InternalServerErrorException, Logger, No
 import { InjectRepository } from '@nestjs/typeorm';
 import { LoggedSet } from '@src/typeorm/entities/loggedset.entity';
 import { In, Repository } from 'typeorm';
-import { CreateLoggedSetDto, CreateWorkoutSessionWithSetsDto } from './dto/create-loggedset.dto';
-import { UpdateLoggedSetDto } from './dto/update-loggedset.dto';
+import { CreateWorkoutSessionWithSetsDto } from './dto/create-loggedset.dto';
 import { WorkoutExercise } from '@src/typeorm/entities/workoutexercise.entity';
 import { WorkoutSession } from '@src/typeorm/entities/workoutsession.entity';
 
@@ -78,20 +77,6 @@ export class LoggedSetService {
       throw new NotFoundException(`Logged Set with ID ${id} Not Found`);
     }
     return LoggedSet;
-  }
-
-  async update(id: number, updateLoggedSetDto: UpdateLoggedSetDto): Promise<LoggedSet> {
-    try {
-      const result = await this.loggedSetRepository.update(id, updateLoggedSetDto);
-      if (result.affected === 0) {
-        throw new NotFoundException(`Logged Set with ID ${id} not found`);
-      }
-      return this.findOne(id);
-    }
-    catch (e) {
-      console.error(e);
-      throw new InternalServerErrorException('Failed to update Logged Set');
-    }
   }
 
   async delete(id: number): Promise<void> {
