@@ -5,6 +5,7 @@ import 'package:frontend/models/workout_with_exercise.dart';
 import 'package:frontend/services/workout_session_service.dart';
 import 'package:frontend/theme/theme.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class WorkoutSummaryScreen extends StatelessWidget {
   final WorkoutSessionService _service = WorkoutSessionService.instance;
@@ -62,6 +63,10 @@ class WorkoutSummaryScreen extends StatelessWidget {
   }
 
   Widget _buildSummaryHeader() {
+    final startTime = _service.startTime;
+    final endTime = _service.endTime;
+    final duration = endTime?.difference(startTime ?? endTime) ?? Duration.zero;
+
     return Card(
       color: JimColors.white,
       elevation: 0,
@@ -74,11 +79,31 @@ class WorkoutSummaryScreen extends StatelessWidget {
         child: Column(
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _buildInfoItem(Icons.calendar_today,
-                    '${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}'),
-                // _buildInfoItem(Icons.access_time, '69h 30m'),
+                _buildInfoItem(
+                  Icons.calendar_today,
+                  DateFormat('MMM dd, yyyy')
+                      .format(startTime ?? DateTime.now()),
+                ),
+                _buildInfoItem(
+                  Icons.list_alt,
+                  '${_service.activeWorkoutExercises.length} exercises',
+                ),
+              ],
+            ),
+            SizedBox(height: JimSpacings.s),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _buildInfoItem(
+                  Icons.timer,
+                  '${duration.inMinutes}m ${duration.inSeconds % 60}s',
+                ),
+                _buildInfoItem(
+                  Icons.schedule,
+                  '${DateFormat('HH:mm').format(startTime ?? DateTime.now())} - ${DateFormat('HH:mm').format(endTime ?? DateTime.now())}',
+                ),
               ],
             ),
             const SizedBox(height: JimSpacings.l),

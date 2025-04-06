@@ -40,6 +40,10 @@ class WorkoutSessionService {
   DateTime? _startTime;
   DateTime? _endTime;
 
+  // Getters
+  DateTime? get startTime => _startTime;
+  DateTime? get endTime => _endTime;
+
   // Computed properties
   //this one refers to workoutExercises
   CustomWorkoutExercise? get currentExercise =>
