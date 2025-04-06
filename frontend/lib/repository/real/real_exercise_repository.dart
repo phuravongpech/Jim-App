@@ -7,7 +7,7 @@ import 'package:frontend/utils/fuzzywuzzy.dart';
 import 'package:http/http.dart';
 
 class RealExerciseRepository implements ExerciseRepository {
-  final String baseUrl = dotenv.env['BASE_URL'] ?? '';
+  final String baseUrl = dotenv.env['API_BASE_URL'] ?? '';
   final String apiHost = dotenv.env['API_HOST'] ?? '';
   final String apiKey = dotenv.env['API_KEY'] ?? '';
   final String backendUrl = dotenv.env['BACKEND_URL'] ?? '';
