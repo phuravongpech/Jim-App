@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsInt, IsNumber, IsOptional } from 'class-validator';
+import { IsInt, IsOptional } from 'class-validator';
 
 export class UpdateWorkoutExerciseDto {
   @ApiProperty({ description: 'The rest time in seconds', required: false })
