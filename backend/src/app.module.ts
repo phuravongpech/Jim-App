@@ -7,6 +7,8 @@ import { WorkoutsModule } from './workouts/workouts.module';
 import { LoggedSetModule } from './loggedset/loggedset.module';
 import { WorkoutexerciseModule } from './workoutexercise/workoutexercise.module';
 import { WorkoutsessionModule } from './workoutsession/workoutsession.module';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
@@ -27,6 +29,8 @@ import { WorkoutsessionModule } from './workoutsession/workoutsession.module';
     WorkoutexerciseModule,
     LoggedSetModule,
     WorkoutsessionModule
-  ]
+  ],
+  controllers: [AppController],
+  providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }
