@@ -79,4 +79,6 @@ Once the setup is complete, you should be able to use the app.
 
 ## Additional Notes
 
+You can easily get free api key from [Rapid API (ExerciseDB)](https://rapidapi.com/justin-WFnsXH_t6/api/exercisedb) for new registraion, but for your convenience, you can also contact our telegram (@rivath) to get the api key from us.
+
 For any troubleshooting or additional configuration, refer to the project's documentation or reach out to the development team.
