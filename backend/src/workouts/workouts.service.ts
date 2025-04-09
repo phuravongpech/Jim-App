@@ -178,7 +178,7 @@ export class WorkoutsService {
   }
 
   async delete(id: number): Promise<{ message: string }> {
-    const result = await this.workoutRepository.delete(id);
+    const result = await this.workoutRepository.softDelete(id);
     if (result.affected === 0) {
       throw new NotFoundException(`Workout with ID ${id} not found`);
     }

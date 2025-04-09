@@ -5,6 +5,7 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  DeleteDateColumn,
 } from 'typeorm';
 import { WorkoutExercise } from './workoutexercise.entity';
 import { WorkoutSession } from './workoutsession.entity';
@@ -26,13 +27,16 @@ export class Workout {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @OneToMany(
-    () => WorkoutExercise,
-    (workoutExercise) => workoutExercise.workout,
-    { cascade: true },
+  @DeleteDateColumn()
+  deletedAt: Date;
+
+  @OneToMany(() => WorkoutExercise, (workoutExercise) => workoutExercise.workout,
+    { cascade: true, onDelete: 'CASCADE' }
   )
   workoutExercises: WorkoutExercise[];
 
-  @OneToMany(() => WorkoutSession, (workoutSession) => workoutSession.workout)
+  @OneToMany(() => WorkoutSession, (workoutSession) => workoutSession.workout,
+    { cascade: true, onDelete: 'CASCADE' }
+  )
   workoutSessions: WorkoutSession[];
 }

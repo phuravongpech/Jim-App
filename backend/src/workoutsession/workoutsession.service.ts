@@ -15,6 +15,7 @@ export class WorkoutSessionService {
     const workoutSession = await this.workoutSessionRepository.findOne({
       where: { id: sessionId },
       relations: ['workout', 'loggedSets.workoutExercise.exercise'],
+      withDeleted: true
     });
 
     if (!workoutSession) {
@@ -64,6 +65,7 @@ export class WorkoutSessionService {
   async findAll(): Promise<WorkoutSessionDto[]> {
     const workoutSessions = await this.workoutSessionRepository.find({
       relations: ['workout', 'workout.workoutExercises.exercise'],
+      withDeleted: true
     });
 
     return workoutSessions.map((workoutSession) => {

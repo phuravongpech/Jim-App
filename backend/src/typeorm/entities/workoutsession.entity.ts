@@ -4,7 +4,6 @@ import {
   Column,
   ManyToOne,
   JoinColumn,
-  CreateDateColumn,
   OneToMany,
 } from 'typeorm';
 import { Workout } from './workout.entity';
@@ -24,7 +23,7 @@ export class WorkoutSession {
   @Column()
   endWorkout: string;
 
-  @ManyToOne(() => Workout, (workout) => workout.workoutSessions, { onDelete: 'SET NULL' })
+  @ManyToOne(() => Workout, (workout) => workout.workoutSessions)
   @JoinColumn({ name: 'workoutId' })
   workout: Workout;
 

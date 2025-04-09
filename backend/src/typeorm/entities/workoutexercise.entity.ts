@@ -26,18 +26,17 @@ export class WorkoutExercise {
 
   @Column({ type: 'int' })
   setCount: number;
-  @ManyToOne(() => Workout, (workout) => workout.workoutExercises, {
-    onDelete: 'CASCADE',
-  })
+
+  @ManyToOne(() => Workout, (workout) => workout.workoutExercises,
+    { onDelete: 'CASCADE' }
+  )
   @JoinColumn({ name: 'workoutId' })
   workout: Workout;
 
-  @ManyToOne(() => Exercise, (exercise) => exercise.workoutExercises, {
-    onDelete: 'CASCADE',
-  })
+  @ManyToOne(() => Exercise, (exercise) => exercise.workoutExercises)
   @JoinColumn({ name: 'exerciseId' })
   exercise: Exercise;
 
-  @OneToMany(() => LoggedSet, (loggedSet) => loggedSet.workoutExerciseId)
+  @OneToMany(() => LoggedSet, (loggedSet) => loggedSet.workoutExercise)
   loggedSet: LoggedSet[];
 }

@@ -22,7 +22,7 @@ export class LoggedSet {
   @Column({ type: 'int' })
   setNumber: number;
 
-  @ManyToOne(() => WorkoutExercise, { onDelete: 'SET NULL' })
+  @ManyToOne(() => WorkoutExercise, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'workoutExerciseId' })
   workoutExercise: WorkoutExercise;
 
