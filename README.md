@@ -15,7 +15,7 @@ Ensure the following dependencies are installed on your system before proceeding
 Clone the repository and navigate into the project directory:
 
 ```bash
-git clone <your_repository_url>
+git clone <repository_url>
 cd <your_project_directory>
 ```
 
@@ -53,9 +53,8 @@ where `<BACKEND_PORT>` is the port specified in your `.env` file.
 Change into the Flutter app directory:
 
 ```bash
-cd <flutter_project_directory>
+cd frontend
 ```
-
 
 ### 2. Install Dependencies
 

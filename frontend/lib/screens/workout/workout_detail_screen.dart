@@ -11,7 +11,7 @@ import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 
 class WorkoutDetailScreen extends StatelessWidget {
-  WorkoutDetailScreen({Key? key}) : super(key: key) {
+  WorkoutDetailScreen({super.key}) {
     _service = WorkoutSessionService.instance;
     final workoutId = Get.arguments as String?;
     if (workoutId != null) {
