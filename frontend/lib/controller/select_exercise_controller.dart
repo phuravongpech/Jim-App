@@ -49,7 +49,7 @@ class SelectExerciseController extends GetxController {
       if (fetchedExercises.isNotEmpty) {
         exercises.addAll(fetchedExercises); // Add fetched exercises to the list
         allExercises.addAll(fetchedExercises); // Populate allExercises
-        page.value++; // Increment the page for the next fetch
+        page.value += 10; // Increment the page for the next fetch
       } else if (reset) {
         log.i('No more exercises available.');
       } else {
@@ -65,42 +65,38 @@ class SelectExerciseController extends GetxController {
   /// Searches exercises by name.
   Future<void> searchExercises(String query) async {
     if (query.isEmpty) {
-      fetchExercises(
-          reset: true); // Reset and fetch all exercises if query is empty
+      fetchExercises(reset: true);
       return;
     }
 
-    if (isLoading.value) return; // Prevent multiple simultaneous searches
+    if (isLoading.value) return;
 
     try {
       isLoading.value = true;
 
-      // Fetch all exercises (or a large number) for searching
-      final allFetchedExercises = await ExerciseService.instance.fetchExercises(
-        offset: 0,
-        limit: 100, // Adjust this limit as needed
+      // Clear previous results
+      exercises.clear();
+      allExercises.clear();
+      page.value = 0;
+
+      final searchedExercises = await ExerciseService.instance.searchExercises(
+        query: query,
+        page: page.value,
+        limit: limit,
       );
 
-      // Filter exercises by name
-      final filteredExercises = allFetchedExercises
-          .where((exercise) =>
-              exercise.name.toLowerCase().contains(query.toLowerCase()))
-          .toList();
-
-      // Update the exercises list with the filtered results
-      exercises.value = filteredExercises;
-
-      // Update the allExercises list with the fetched exercises
-      allExercises.addAll(allFetchedExercises);
-
-      if (exercises.isEmpty) {
-        log.i('No exercises found for "$query".');
+      if (searchedExercises.isNotEmpty) {
+        exercises.addAll(searchedExercises);
+        allExercises.addAll(searchedExercises);
+        page.value += 10;
+      } else {
+        log.i('No search results.');
       }
     } catch (e) {
-      exercises.clear(); // Clear the list on error
+      exercises.clear();
       log.e('Error searching exercises: $e');
     } finally {
-      isLoading.value = false; // Reset loading state
+      isLoading.value = false;
     }
   }
 
@@ -118,28 +114,11 @@ class SelectExerciseController extends GetxController {
     selectedExercises.clear(); // Clear the set of selected exercises
   }
 
-  /// Changes the selected body part and fetches exercises.
-  void changeBodyPart(String bodyPart) {
-    selectedBodyPart.value = bodyPart; // Update the selected body part
-    fetchExercises(
-        reset: true); // Reset and fetch exercises for the new body part
-  }
-
-  List<Exercise> getAllExercises() {
-    return allExercises;
-  }
-
   Exercise? getExerciseById(String id) {
     try {
       return allExercises.firstWhere((e) => e.id == id);
     } catch (e) {
       return null;
     }
-  }
-
-  List<Exercise> getSelectedExercises() {
-    return selectedExercises
-        .map((id) => allExercises.firstWhere((exercise) => exercise.id == id))
-        .toList();
   }
 }

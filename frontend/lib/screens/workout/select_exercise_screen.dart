@@ -29,8 +29,7 @@ class SelectExerciseScreen extends StatelessWidget {
 
   void _onClearSearch() {
     _searchController.clear();
-    // controller.fetchExercises(
-    //     reset: true); // Clear search and fetch all exercises
+    controller.fetchExercises(reset: true);
   }
 
   void _navigateToExerciseDetails(Exercise exercise) {
@@ -53,7 +52,7 @@ class SelectExerciseScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final initialSelectedIds = Get.arguments as List<String>? ?? [];
     controller.setInitialSelectedExercises(initialSelectedIds);
-    
+
     return Scaffold(
       appBar: JimTopBar(
         title: 'Select Exercises',
@@ -75,24 +74,35 @@ class SelectExerciseScreen extends StatelessWidget {
           const SizedBox(height: JimSpacings.m),
           _buildNumberSelectedExercises(),
           Expanded(
-            child: JimListView(
-              items: controller.exercises,
-              isLoading: controller.isLoading,
-              emptyMessage: 'No exercises found.',
-              itemBuilder: (exercise) {
-                return Obx(() {
-                  final isSelected =
-                      controller.selectedExercises.contains(exercise.id);
-                  return SelectExerciseCard(
-                    exercise: exercise,
-                    isSelected: isSelected,
-                    onSelected: (isSelected) {
-                      controller.toggleExerciseSelection(exercise.id);
-                    },
-                    onTap: () => _navigateToExerciseDetails(exercise),
-                  );
-                });
+            child: NotificationListener<ScrollNotification>(
+              onNotification: (ScrollNotification scrollInfo) {
+                if (!controller.isLoading.value &&
+                    scrollInfo.metrics.pixels ==
+                        scrollInfo.metrics.maxScrollExtent) {
+                  controller
+                      .fetchExercises(); // Load next page only if not searching
+                }
+                return false;
               },
+              child: JimListView(
+                items: controller.exercises,
+                isLoading: controller.isLoading,
+                emptyMessage: 'No exercises found.',
+                itemBuilder: (exercise) {
+                  return Obx(() {
+                    final isSelected =
+                        controller.selectedExercises.contains(exercise.id);
+                    return SelectExerciseCard(
+                      exercise: exercise,
+                      isSelected: isSelected,
+                      onSelected: (isSelected) {
+                        controller.toggleExerciseSelection(exercise.id);
+                      },
+                      onTap: () => _navigateToExerciseDetails(exercise),
+                    );
+                  });
+                },
+              ),
             ),
           ),
         ],
